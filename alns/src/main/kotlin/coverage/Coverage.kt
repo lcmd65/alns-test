@@ -10,7 +10,7 @@ data class Coverage(
     var staffGroup: List<String>,
     var shifts: MutableList<String>,
     var day: Int,
-    var type: List<CompareOperators>,
+    var type: List<String>,
     var desireValue: Int,
     var penalty: Int,
     var dayTypes: String,

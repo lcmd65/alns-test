@@ -9,6 +9,8 @@ import com.ft.aio.template.adapter.output.web.scrippt.engine.PreProcess
 fun main() {
 
     var data = PreProcess().dataPreprocessing()
+
+    data.validateInputData()
     var optimizer = Alns(data)
     println(optimizer.runAlns())
 }
