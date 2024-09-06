@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54adbb02-94e4-4e06-b098-5255a4ef24e3" name="Changes" comment="minor change" />
+    <list default="true" id="54adbb02-94e4-4e06-b098-5255a4ef24e3" name="Changes" comment="[ADR-2614] create repo">
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/dirty-sources.txt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/dirty-sources.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/coverage/HorizontalCoverage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/coverage/HorizontalCoverage.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/input/data_dummy.json" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/input/data_dummy.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/shift/Shift.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/shift/Shift.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -57,18 +70,31 @@
         <entry key="$PROJECT_DIR$/lib-ai-lua-scripts" value="master" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/lib-ai-lua-scripts" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "lcmd65"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/lcmd65/alns-test",
+    "accountId": "f2293a00-ba35-4d2e-bd3d-dd3840ceceb7"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/lib-ai-lua-scripts/StarHub/Python for TS/schedule_asap_obj.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2kJtSnbBgDNuDulKu2ZKqQRAs1R" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="flattenModules" value="true" />
     <option name="flattenPackages" value="true" />
@@ -80,13 +106,14 @@
   "keyToString": {
     "Gradle.Build alns.executor": "Run",
     "JUnit.All in alns-test.executor": "Run",
+    "JUnit.All in alns.main.executor": "Run",
     "Kotlin.MainKt.executor": "Run",
     "Python.run (1).executor": "Run",
     "Python.run.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Test-obj",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/lechonminhdat/Documents/alns-test",
+    "last_opened_file_path": "/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -96,19 +123,30 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.32528734",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "project.propDebugger",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/alns/src/main/kotlin" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib-ai-lua-scripts/StarHub/Test Data" />
       <recent name="$PROJECT_DIR$/lib-ai-lua-scripts/StarHub" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in alns-test">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="All in alns-test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="alns-test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in alns.main" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alns.main" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
@@ -170,8 +208,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in alns-test" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="JUnit.All in alns.main" />
+        <item itemvalue="JUnit.All in alns-test" />
         <item itemvalue="Python.run (1)" />
         <item itemvalue="Python.run" />
       </list>
@@ -197,7 +236,7 @@
       <workItem from="1723094698340" duration="43466000" />
       <workItem from="1723444752756" duration="13148000" />
       <workItem from="1723514711569" duration="6431000" />
-      <workItem from="1724652971593" duration="25721000" />
+      <workItem from="1724652971593" duration="98682000" />
     </task>
     <task id="LOCAL-00001" summary="create Python for TS">
       <option name="closed" value="true" />
@@ -263,7 +302,23 @@
       <option name="project" value="LOCAL" />
       <updated>1723516430606</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="[ADR-2614] create repo">
+      <option name="closed" value="true" />
+      <created>1725603657492</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1725603657493</updated>
+    </task>
+    <task id="LOCAL-00010" summary="[ADR-2614] create repo">
+      <option name="closed" value="true" />
+      <created>1725612892053</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1725612892053</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,25 +343,36 @@
     <MESSAGE value="minor change in lua file" />
     <MESSAGE value="add data test" />
     <MESSAGE value="minor change" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor change" />
+    <MESSAGE value="[ADR-2614] create repo" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ADR-2614] create repo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/Main.kt</url>
-          <line>8</line>
+          <line>22</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/Main.kt</url>
-          <line>11</line>
+          <line>24</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/Main.kt</url>
-          <line>14</line>
+          <line>25</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>128</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>30</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/input/InputData.kt</url>
@@ -319,12 +385,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/Main.kt</url>
-          <line>7</line>
+          <line>20</line>
           <properties method="main">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

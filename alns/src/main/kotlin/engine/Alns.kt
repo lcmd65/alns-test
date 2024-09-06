@@ -15,15 +15,17 @@ open class Alns(val data: InputData) {
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
 
-    //score 𝑔(𝑖,𝑗+1)  := 𝑔(i,j)(1-ρ) + ρ Score_i/Time_i
+    open fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double{
+        var score: Int = Int.MAX_VALUE
 
-    open fun caculateScore(scheduled: MutableMap<Int, MutableList<Staff>>): Double{
-        //TODO
-
-        return -1.0
+        for (coverage in data.coverages) {
+            score -= caculateCoverageFulllillment(schedules, coverage.id, coverage.day)*coverage.penalty
+        }
+        return score.toDouble()
     }
 
-    open fun caculateSimulatedAnealing(currentScheduled: MutableMap<Int, MutableList<Staff>>, nextScheduled:MutableMap<Int, MutableList<Staff>>): MutableMap<Int, MutableList<Staff>>{
+    open fun caculateSimulatedAnealing(currentScheduled: MutableMap<String, MutableMap<Int, String>>, nextScheduled:MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+        deltaE = caculateScore(currentScheduled)- caculateScore(nextScheduled)
         if (deltaE < 0){
             return nextScheduled
         }
@@ -123,25 +125,26 @@ open class Alns(val data: InputData) {
         var repairedSchedule = schedules.toMutableMap()
 
         for (staffId in repairedSchedule.keys) {
-
-
+            for (dayId in repairedSchedule[staffId]!!.keys) {
+                if (repairedSchedule[staffId]?.get(dayId) == ""){
+                    repairedSchedule[staffId]?.set(dayId, data.shifts.random().id)
+                }
+            }
         }
         return repairedSchedule
     }
 
-    open fun runAlns(): MutableMap<Int, MutableList<Staff>>{
+    open fun runAlns(): MutableMap<String, MutableMap<Int, String>>{
         var initialSolution = inititalSolution()
         for (item in initialSolution){
-            //println(item.value)
+            println(item.value)
         }
         var currentSolution = initialSolution
         try {
             for (i in 1..numberIterations) {
                 var tempSolution = currentSolution
                 currentSolution = destroySolution(currentSolution)
-
-                val employeeIds = data.employees.map { it.id }.toSet()
-                currentSolution = repairSolution(currentSolution, employeeIds)
+                currentSolution = repairSolution(currentSolution)
                 currentSolution = caculateSimulatedAnealing(tempSolution, currentSolution)
             }
         }
