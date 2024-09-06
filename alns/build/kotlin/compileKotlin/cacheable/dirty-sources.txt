@@ -6,8 +6,8 @@
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/staff/Staff.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/engine/PreProcess.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/engine/Alns.kt
-/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/engine/SimulatedAnealing.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/coverage/Coverage.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/objective/Obj.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/operator/CompareOperators.kt
 /Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/utils/ReadJSON.kt
+/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/coverage/HorizontalCoverage.kt

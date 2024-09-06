@@ -89,7 +89,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 4,
       "day": 1,
       "dayTypes": "wd",
@@ -99,7 +99,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 4,
       "day": 2,
       "dayTypes": "wd",
@@ -109,7 +109,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 4,
       "day": 3,
       "dayTypes": "wd",
@@ -119,7 +119,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 4,
       "day": 4,
       "dayTypes": "wd",
@@ -129,7 +129,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 4,
       "day": 5,
       "dayTypes": "wd",
@@ -139,7 +139,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 3,
       "day": 1,
       "dayTypes": "wd",
@@ -149,7 +149,7 @@
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 3,
       "day": 7,
       "dayTypes": "wd",
@@ -159,7 +159,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 1,
       "dayTypes": "wd",
@@ -169,7 +169,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 2,
       "dayTypes": "wd",
@@ -179,7 +179,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 3,
       "dayTypes": "wd",
@@ -189,7 +189,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 4,
       "dayTypes": "wd",
@@ -199,7 +199,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 5,
       "dayTypes": "wd",
@@ -209,7 +209,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 6,
       "dayTypes": "wd",
@@ -219,7 +219,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 3,
       "day": 7,
       "dayTypes": "wd",
@@ -229,7 +229,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -239,7 +239,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -249,7 +249,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -259,7 +259,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -269,7 +269,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -279,7 +279,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -289,7 +289,7 @@
     {
       "id": "AM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",
@@ -299,7 +299,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -309,7 +309,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -319,7 +319,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -329,7 +329,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -339,7 +339,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -349,7 +349,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -359,7 +359,7 @@
     {
       "id": "PM-AG1",
       "staffGroups": ["AG1"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",
@@ -369,7 +369,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -379,7 +379,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -389,7 +389,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -399,7 +399,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -409,7 +409,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -419,7 +419,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -429,7 +429,7 @@
     {
       "id": "AM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",
@@ -439,7 +439,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -449,7 +449,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -459,7 +459,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -469,7 +469,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -479,7 +479,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -489,7 +489,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -499,7 +499,7 @@
     {
       "id": "PM-AG2",
       "staffGroups": ["AG2"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",
@@ -509,7 +509,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -519,7 +519,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -529,7 +529,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -539,7 +539,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -549,7 +549,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -559,7 +559,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -569,7 +569,7 @@
     {
       "id": "AM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "AM",
+      "shift": ["M1", "M2", "M3"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",
@@ -579,7 +579,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 1,
       "dayTypes": "wd",
@@ -589,7 +589,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 2,
       "dayTypes": "wd",
@@ -599,7 +599,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 3,
       "dayTypes": "wd",
@@ -609,7 +609,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 4,
       "dayTypes": "wd",
@@ -619,7 +619,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 5,
       "dayTypes": "wd",
@@ -629,7 +629,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 6,
       "dayTypes": "wd",
@@ -639,7 +639,7 @@
     {
       "id": "PM-AG3",
       "staffGroups": ["AG3"],
-      "shift": "PM",
+      "shift": ["A1", "A2"],
       "desireValue": 1,
       "day": 7,
       "dayTypes": "wd",

@@ -9,7 +9,6 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(val data: InputData) {
-
     var numberIterations: Int = 100
     var temperature: Double = 100.0
     var alpha: Double = 0.9
@@ -89,50 +88,43 @@ open class Alns(val data: InputData) {
 
         for (coverage in data.coverages) {
             for (staff in data.staffs) {
-                if(caculateCoverageFulllillment(schedule, coverage.id, coverage.day) < coverage.desireValue && staff.)
+                if(caculateCoverageFulllillment(schedule, coverage.id, coverage.day) < coverage.desireValue &&
+                    checkIfStaffInStaffGroup(staff, coverage.staffGroup) &&
+                    checkIfStaffInStaffGroup(staff, coverage.staffGroup) &&
+                    schedule[staff.id]?.get(coverage.day) == ""){
+                    schedule[staff.id]?.set(coverage.day, coverage.shifts.random())
+                }
             }
         }
-            if (shift.employeesNeeded > schedule[shift.id]!!.size && temp <= data.employees.size) {
-                    for (staff in data.employees) {
-                        if (schedule[shift.id]?.none { it.id == staff.id } == true) {
-                            // add this staff to list
-                            schedule[shift.id]?.add(staff)
-
-                            if (schedule[shift.id]!!.size >= shift.employeesNeeded) {
-                                break
-                            }
-                        }
-                    }
-
-            temp += 1
+        for (coverage in data.coverages){
+            for (staff in data.staffs){
+                if(schedule[staff.id]?.get(coverage.day) == ""){
+                    schedule[staff.id]?.set(coverage.day, data.shifts.random().id)
+                }
             }
         }
         return schedule
     }
 
-    open fun destroySolution(schedule: MutableMap<Int, MutableList<Staff>>): MutableMap<Int, MutableList<Staff>> {
-        val mutableSchedule = schedule.toMutableMap()
+    open fun destroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        val mutableSchedule = schedules.toMutableMap()
         if (mutableSchedule.isNotEmpty()) {
-            val randomScheduleShift = mutableSchedule.keys.random()
-            mutableSchedule[randomScheduleShift] = mutableListOf()
+
+            val randomScheduleStaff = mutableSchedule.keys.random()
+            val randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
+            if (randomScheduleDay != null) {
+                mutableSchedule[randomScheduleStaff]?.set(randomScheduleDay.toInt(), "")
+            }
         }
         return mutableSchedule
     }
 
-    open fun repairSolution(schedule: MutableMap<Int, MutableList<Staff>>, originalSet: Set<Int>): MutableMap<Int, MutableList<Staff>> {
-        var repairedSchedule = schedule.toMutableMap()
+    open fun repairSolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var repairedSchedule = schedules.toMutableMap()
 
-        for (shift_id in repairedSchedule.keys) {
-            var requiredEmployees = data.shifts.find { it.id == shift_id }?.employeesNeeded ?: 0
-            var currentEmployees = repairedSchedule[shift_id]?.size ?: 0
+        for (staffId in repairedSchedule.keys) {
 
-            if (currentEmployees < requiredEmployees) {
-                var availableEmployees = data.employees.filter { it.id in originalSet && it.skill == data.shifts[shift_id].requiredSkill }
-                var employeesToAdd = availableEmployees.take(requiredEmployees - currentEmployees)
-                repairedSchedule[shift_id] = (repairedSchedule[shift_id]?.toMutableList() ?: mutableListOf()).apply {
-                    addAll(employeesToAdd)
-                }
-            }
+
         }
         return repairedSchedule
     }
