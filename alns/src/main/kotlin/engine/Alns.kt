@@ -15,7 +15,7 @@ open class Alns(val data: InputData) {
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
 
-    open fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double{
+    open fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
         var score: Int = Int.MAX_VALUE
 
         for (coverage in data.coverages) {
@@ -24,7 +24,10 @@ open class Alns(val data: InputData) {
         return score.toDouble()
     }
 
-    open fun caculateSimulatedAnealing(currentScheduled: MutableMap<String, MutableMap<Int, String>>, nextScheduled:MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+    open fun caculateSimulatedAnealing(
+        currentScheduled: MutableMap<String, MutableMap<Int, String>>,
+        nextScheduled:MutableMap<String, MutableMap<Int, String>>
+    ): MutableMap<String, MutableMap<Int, String>> {
         deltaE = caculateScore(currentScheduled)- caculateScore(nextScheduled)
         if (deltaE < 0){
             return nextScheduled
@@ -45,28 +48,43 @@ open class Alns(val data: InputData) {
         }
     }
 
-    fun getShiftInfoFromCoverage(coverageId: String): String{
+    fun getShiftInfoFromCoverage(coverageId: String): String {
         return coverageId.take(2)
     }
 
-    fun checkIfStaffInStaffGroup(staff: Staff, staffGroups: List<String>): Boolean{
-        var result: Boolean = false
+    fun checkIfStaffInStaffGroup(
+        staff: Staff,
+        staffGroups: List<String>
+    ): Boolean {
+        var result = false
         for (staffGroupId in staffGroups) {
-            for (staffInfo in data.staffGroups.find{ it.id == staffGroupId }?.staffList!!) {
-                if (staff.id == staffInfo.id) {
-                    result == true
+            val staffGroup = data.staffGroups.find { it.id == staffGroupId }
+
+            if (staffGroup != null) {
+                for (staffInfo in staffGroup.staffList) {
+                    if (staff.id == staffInfo) {
+                        result = true
+                        break
+                    }
                 }
+            }
+
+            if (result) {
+                break
             }
         }
         return result
     }
 
-    fun caculateCoverageFulllillment(schedules: MutableMap<String, MutableMap<Int, String>>, coverageId: String, dayId:Int): Int{
+    fun caculateCoverageFulllillment(
+        schedules: MutableMap<String, MutableMap<Int, String>>,
+        coverageId: String, dayId: Int
+    ): Int {
         val coverage = data.coverages.find { it.id == coverageId && it.day == dayId }
-        var temp =0
+        var temp = 0
         if (coverage != null){
             for (staff in data.staffs){
-                if (schedules[staff.id]?.get(dayId) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroup)) {
+                if (schedules[staff.id]?.get(dayId) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                     temp += 1
                 }
             }
@@ -75,7 +93,7 @@ open class Alns(val data: InputData) {
         return temp
     }
 
-    open fun inititalSolution(): MutableMap<String, MutableMap<Int, String>>{
+    open fun inititalSolution(): MutableMap<String, MutableMap<Int, String>> {
         val schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
 
@@ -90,10 +108,10 @@ open class Alns(val data: InputData) {
         for (coverage in data.coverages) {
             for (staff in data.staffs) {
                 if(caculateCoverageFulllillment(schedule, coverage.id, coverage.day) < coverage.desireValue &&
-                    checkIfStaffInStaffGroup(staff, coverage.staffGroup) &&
-                    checkIfStaffInStaffGroup(staff, coverage.staffGroup) &&
+                    checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
+                    checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
                     schedule[staff.id]?.get(coverage.day) == ""){
-                    schedule[staff.id]?.set(coverage.day, coverage.shifts.random())
+                    schedule[staff.id]?.set(coverage.day, coverage.shift.random())
                 }
             }
         }
@@ -133,7 +151,7 @@ open class Alns(val data: InputData) {
         return repairedSchedule
     }
 
-    open fun runAlns(): MutableMap<String, MutableMap<Int, String>>{
+    open fun runAlns(): MutableMap<String, MutableMap<Int, String>> {
         var initialSolution = inititalSolution()
         for (item in initialSolution){
             println(item.value)

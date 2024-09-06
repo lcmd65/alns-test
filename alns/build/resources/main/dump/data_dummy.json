@@ -40,7 +40,7 @@
   "staffGroups": [
     {
       "id": "AG1",
-      "staff_list": [
+      "staffList": [
         "Staff_1",
         "Staff_2",
         "Staff_3",
@@ -49,35 +49,35 @@
     },
     {
       "id": "AG2",
-      "staff_list": [
+      "staffList": [
         "Staff_7",
         "Staff_8",
         "Staff_9"
       ]
     },{
       "id": "AG3",
-      "staff_list": [
+      "staffList": [
         "Staff_5",
         "Staff_6"
       ]
     },
     {
       "id": "AG3",
-      "staff_list": [
+      "staffList": [
         "Staff_5",
         "Staff_6"
       ]
     },
     {
       "id": "FSG",
-      "staff_list": [
+      "staffList": [
         "Staff_1",
         "Staff_6"
       ]
     },
     {
       "id": "OPH",
-      "staff_list": [
+      "staffList": [
         "Staff_2",
         "Staff_3",
         "Staff_4",

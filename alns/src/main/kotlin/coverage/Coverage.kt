@@ -7,8 +7,8 @@ import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 
 
 data class Coverage(
-    var staffGroup: List<String>,
-    var shifts: MutableList<String>,
+    var staffGroups: List<String>,
+    var shift: MutableList<String>,
     var day: Int,
     var type: List<String>,
     var desireValue: Int,
