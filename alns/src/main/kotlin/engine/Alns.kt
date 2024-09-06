@@ -52,7 +52,7 @@ open class Alns(val data: InputData) {
     fun checkIfStaffInStaffGroup(staff: Staff, staffGroups: List<String>): Boolean{
         var result: Boolean = false
         for (staffGroupId in staffGroups) {
-            for (staffInfo in data.staffsGroup.find{ it.id == staffGroupId }?.staffList!!) {
+            for (staffInfo in data.staffGroups.find{ it.id == staffGroupId }?.staffList!!) {
                 if (staff.id == staffInfo.id) {
                     result == true
                 }
@@ -86,7 +86,6 @@ open class Alns(val data: InputData) {
                 schedule[staff.id]?.set(day, "")
             }
         }
-        var temp = 0
 
         for (coverage in data.coverages) {
             for (staff in data.staffs) {

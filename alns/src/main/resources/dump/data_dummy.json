@@ -85,7 +85,7 @@
       ]
     }
   ],
-  "coverage": [
+  "coverages": [
     {
       "id": "AM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
@@ -647,7 +647,7 @@
       "type": ["hard", "at least"]
     }
   ],
-  "shift": [
+  "shifts": [
     {
       "id": "M1",
       "name": "Morning shift 1",

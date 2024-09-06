@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "1.9.0"
-    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "com.ft.aio.template.adapter.output.web.scrippt"
@@ -21,5 +20,5 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(11) //
 }

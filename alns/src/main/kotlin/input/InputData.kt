@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 data class InputData (
     var staffs: List<Staff>,
-    var staffsGroup: List<StaffGroup>,
+    var staffGroups: List<StaffGroup>,
     var shifts: List<Shift>,
     var coverages: List<Coverage>,
 )
