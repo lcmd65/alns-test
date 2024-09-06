@@ -6,12 +6,13 @@ import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
 
 import kotlin.random.Random
-@Serializable
+
+
 data class InputData (
     var staffs: List<Staff>,
-    var staffsGroup: StaffGroup,
+    var staffsGroup: List<StaffGroup>,
     var shifts: List<Shift>,
-    var coverage: List<Coverage>,
+    var coverages: List<Coverage>,
 )
 
 

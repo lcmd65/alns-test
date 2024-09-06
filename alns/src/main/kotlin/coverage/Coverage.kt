@@ -5,10 +5,7 @@ import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
 import com.ft.aio.template.adapter.output.web.scrippt.operator.CompareOperators
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
 
-@Serializable
 data class Coverage(
     var staffGroup: List<String>,
     var shifts: MutableList<String>,

@@ -2,6 +2,8 @@ package com.ft.aio.template.adapter.output.web.script.engine.Alns
 
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
+import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
+import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
 
 import kotlin.random.Random
 import kotlin.math.exp
@@ -42,26 +44,68 @@ open class Alns(val data: InputData) {
         }
     }
 
-    open fun inititalSolution(): MutableMap<Int, MutableList<Staff>>{
-        val schedule : MutableMap<Int, MutableList<Staff>>
-        schedule = mutableMapOf()
-        var temp = 0
-        for (shift in data.shifts) {
-            schedule[shift.id] = mutableListOf()
+    fun getShiftInfoFromCoverage(coverageId: String): String{
+        return coverageId.take(2)
+    }
 
-            if (shift.employeesNeeded > schedule[shift.id]!!.size && temp <= data.employees.size) {
-                for (staff in data.employees) {
-                    if (schedule[shift.id]?.none { it.id == staff.id } == true) {
-                        // add this staff to list
-                        schedule[shift.id]?.add(staff)
-
-                        if (schedule[shift.id]!!.size >= shift.employeesNeeded) {
-                            break
-                        }
-                    }
+    fun checkIfStaffInStaffGroup(staff: Staff, staffGroups: List<String>): Boolean{
+        var result: Boolean = false
+        for (staffGroupId in staffGroups) {
+            for (staffInfo in data.staffsGroup.find{ it.id == staffGroupId }?.staffList!!) {
+                if (staff.id == staffInfo.id) {
+                    result == true
                 }
             }
+        }
+        return result
+    }
+
+    fun caculateCoverageFulllillment(schedules: MutableMap<String, MutableMap<Int, String>>, coverageId: String, dayId:Int): Int{
+        val coverage = data.coverages.find { it.id == coverageId && it.day == dayId }
+        var temp =0
+        if (coverage != null){
+            for (staff in data.staffs){
+                if (schedules[staff.id]?.get(dayId) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroup)) {
+                    temp += 1
+                }
+            }
+        }
+
+        return temp
+    }
+
+    open fun inititalSolution(): MutableMap<String, MutableMap<Int, String>>{
+        val schedule : MutableMap<String, MutableMap<Int, String>>
+        schedule = mutableMapOf()
+
+        // create blank schedule for caculating
+        for (staff in data.staffs) {
+            schedule[staff.id] = mutableMapOf()
+            for (day in 1..7){
+                schedule[staff.id]?.set(day, "")
+            }
+        }
+        var temp = 0
+
+        for (coverage in data.coverages) {
+            for (staff in data.staffs) {
+                if(caculateCoverageFulllillment(schedule, coverage.id, coverage.day) < coverage.desireValue && staff.)
+            }
+        }
+            if (shift.employeesNeeded > schedule[shift.id]!!.size && temp <= data.employees.size) {
+                    for (staff in data.employees) {
+                        if (schedule[shift.id]?.none { it.id == staff.id } == true) {
+                            // add this staff to list
+                            schedule[shift.id]?.add(staff)
+
+                            if (schedule[shift.id]!!.size >= shift.employeesNeeded) {
+                                break
+                            }
+                        }
+                    }
+
             temp += 1
+            }
         }
         return schedule
     }

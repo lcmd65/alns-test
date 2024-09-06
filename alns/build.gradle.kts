@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "com.ft.aio.template.adapter.output.web.scrippt"
@@ -13,17 +13,13 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(8)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"  // Ensure Kotlin targets JVM 8
-    }
 }

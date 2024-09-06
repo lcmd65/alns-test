@@ -1,31 +1,40 @@
 {
   "staffs":[
     {
-      "id": "Staff_1"
+      "id": "Staff_1",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_2"
+      "id": "Staff_2",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_3"
+      "id": "Staff_3",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_4"
+      "id": "Staff_4",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_5"
+      "id": "Staff_5",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_6"
+      "id": "Staff_6",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_7"
+      "id": "Staff_7",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_8"
+      "id": "Staff_8",
+      "name": "Dat09"
     },
     {
-      "id": "Staff_9"
+      "id": "Staff_9",
+      "name": "Dat09"
     }
   ],
   "staffGroups": [
@@ -150,7 +159,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 1,
       "dayTypes": "wd",
@@ -160,7 +169,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 2,
       "dayTypes": "wd",
@@ -170,7 +179,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 3,
       "dayTypes": "wd",
@@ -180,7 +189,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 4,
       "dayTypes": "wd",
@@ -190,7 +199,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 5,
       "dayTypes": "wd",
@@ -200,7 +209,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 6,
       "dayTypes": "wd",
@@ -210,7 +219,7 @@
     {
       "id": "PM-ALL",
       "staffGroups": ["AG1", "AG2", "AG3"],
-      "shift": "AM",
+      "shift": "PM",
       "desireValue": 3,
       "day": 7,
       "dayTypes": "wd",
@@ -218,59 +227,423 @@
       "type": ["hard", "equal to"]
     },
     {
-      "id": "PM-ALL",
-      "name": "PM-ALL",
-      "duration": 8,
-      "coverage": [3,3,3,3,3,3,3],
-      "penalty": 10,
-      "type": ["hard", "equal to"]
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
     },
     {
       "id": "AM-AG1",
-      "name": "AM-AG1",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["soft", "at least"]
     },
     {
       "id": "PM-AG1",
-      "name": "PM-AG1",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG1",
+      "staffGroups": ["AG1"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["hard", "at least"]
     },
     {
       "id": "AM-AG2",
-      "name": "AM-AG2",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["soft", "at least"]
     },
     {
       "id": "PM-AG2",
-      "name": "PM-AG2",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG2",
+      "staffGroups": ["AG2"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["hard", "at least"]
     },
     {
       "id": "AM-AG3",
-      "name": "AM-AG3",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["soft", "at least"]
+    },
+    {
+      "id": "AM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "AM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["soft", "at least"]
     },
     {
       "id": "PM-AG3",
-      "name": "PM-AG3",
-      "duration": 8,
-      "coverage": [1,1,1,1,1,1,1],
-      "penalty": 10,
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 1,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 2,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 3,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 4,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 5,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 6,
+      "dayTypes": "wd",
+      "penalty": 5,
+      "type": ["hard", "at least"]
+    },
+    {
+      "id": "PM-AG3",
+      "staffGroups": ["AG3"],
+      "shift": "PM",
+      "desireValue": 1,
+      "day": 7,
+      "dayTypes": "wd",
+      "penalty": 5,
       "type": ["hard", "at least"]
     }
   ],
