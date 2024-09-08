@@ -12,5 +12,7 @@ fun main() {
 
     data.validateInputData()
     var optimizer = Alns(data)
-    println(optimizer.runAlns())
+    optimizer.runAlns()
+    println("Optimize score " + optimizer.score)
+    println(optimizer.solution)
 }

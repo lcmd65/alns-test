@@ -14,6 +14,8 @@ open class Alns(val data: InputData) {
     var alpha: Double = 0.9
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
+    var solution: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
+    var score: Double = 0.0
 
     open fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
         var score: Int = Int.MAX_VALUE
@@ -151,11 +153,8 @@ open class Alns(val data: InputData) {
         return repairedSchedule
     }
 
-    open fun runAlns(): MutableMap<String, MutableMap<Int, String>> {
+    open fun runAlns(){
         var initialSolution = inititalSolution()
-        for (item in initialSolution){
-            println(item.value)
-        }
         var currentSolution = initialSolution
         try {
             for (i in 1..numberIterations) {
@@ -167,6 +166,8 @@ open class Alns(val data: InputData) {
         }
         catch (e: Exception){}
 
-        return currentSolution
+        this.solution = currentSolution
+        this.score = caculateScore(this.solution)
     }
 }
+
