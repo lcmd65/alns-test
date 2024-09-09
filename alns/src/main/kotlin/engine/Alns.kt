@@ -20,10 +20,11 @@ open class Alns(val data: InputData) {
     var deltaE: Double = 0.0
     var score: Double = 0.0
     var penalty: Double = Int.MAX_VALUE.toDouble()
-    var probabilitiesOfOperator: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
-    var operatorScore: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
-    var operatorTimes: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
-    var operatorSelection: MutableMap<String, MutableMap<Int, Int>> = mutableMapOf()
+    var probabilitiesOfOperator: MutableMap<Int, Double> = mutableMapOf()
+    var operatorScore: MutableMap<Int, Double> = mutableMapOf()
+    var operatorWeight: MutableMap<Int, Double> = mutableMapOf()
+    var operatorTimes: MutableMap<Int, Double> = mutableMapOf()
+    var operatorSelection: MutableMap<Int, Int> = mutableMapOf()
     var solution: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
 
     private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
@@ -35,63 +36,36 @@ open class Alns(val data: InputData) {
         return score.toDouble()
     }
 
-    private fun createWeightOperators(){
-        for (staff in data.staffs) {
-            this.operatorScore[staff.id] = mutableMapOf()
-            for (day in 1..7){
-                if(day != 6 && day != 7) {
-                    this.operatorScore[staff.id]?.set(day, 1.0)
-                }
-                else{
-                    this.operatorScore[staff.id]?.set(day, 0.5)
-                }
+    private fun createWeightOperators() {
+        for (index in 1..3) {
+            if (this.operatorWeight.get(index) != null){
+                this.operatorWeight.set(
+                    index,
+                    this.operatorWeight.get(index)!! * 0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
+            }
+            else{
+                this.operatorWeight.set(
+                    index,
+                    0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
             }
         }
     }
 
-    private fun createOperatorTimes(){
-        for (staff in data.staffs) {
-            this.operatorTimes[staff.id] = mutableMapOf()
-            for (day in 1..7) {
-                this.operatorTimes[staff.id]?.set(day, 1.0)
-            }
+    private fun createScoreOperator() {
+        this.operatorScore.set(0, 1.0)
+        this.operatorScore.set(1, 0.5)
+        this.operatorScore.set(2, 0.5)
+    }
+
+    private fun createOperatorSelection() {
+        for (index in 1..3) {
+            this.operatorSelection?.set(index, 0)
         }
     }
 
-    private fun createProbabilitiesOfOperator(){
-        for (staff in data.staffs) {
-            this.probabilitiesOfOperator[staff.id] = mutableMapOf()
-            for (day in 1..7) {
-                val probabilities = this.probabilitiesOfOperator[staff.id]?.get(day)
-                if (probabilities != null) {
-                    this.probabilitiesOfOperator[staff.id]?.set(day,
-                        probabilities * 0.2 + 0.8 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!
-                    )
-                }
-                else {
-                    this.probabilitiesOfOperator[staff.id]?.set(day, 0.2 + 0.8 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!)
-                }
-            }
-        }
-    }
-
-    private fun createOperatorSelection(){
-        for (staff in data.staffs) {
-            this.operatorSelection[staff.id] = mutableMapOf()
-            for (day in 1..7) {
-                this.operatorSelection[staff.id]?.set(day, 0)
-                val acceptanceVariable = Random.nextDouble(0.0, 1.0)
-                if (acceptanceVariable <= this.probabilitiesOfOperator[staff.id]?.get(day)!!){
-                    this.operatorSelection[staff.id]?.set(day, 1)
-                    val temp = this.operatorTimes[staff.id]?.get(day)?.plus(1.0)
-                    if (temp != null) {
-                        this.operatorTimes[staff.id]?.set(day, temp.toDouble())
-                    }
-                }
-                else{
-                    this.operatorSelection[staff.id]?.set(day, 0)
-                }
-            }
+    private fun createOperatorTimes() {
+        for (index in 1..3) {
+            this.operatorTimes.set(index, 1.0)
         }
     }
 
@@ -197,11 +171,6 @@ open class Alns(val data: InputData) {
         return schedule
     }
 
-    private fun routewheel(){
-        createProbabilitiesOfOperator()
-        createOperatorSelection()
-    }
-
     private fun randomDestroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         val mutableSchedule = schedules.toMutableMap()
         if (mutableSchedule.isNotEmpty()) {
@@ -210,22 +179,6 @@ open class Alns(val data: InputData) {
             val randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
             if (randomScheduleDay != null) {
                 mutableSchedule[randomScheduleStaff]?.set(randomScheduleDay.toInt(), "")
-            }
-        }
-        return mutableSchedule
-    }
-
-    private fun routewheelDestroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        routewheel()
-        val mutableSchedule = schedules.toMutableMap()
-        if (mutableSchedule.isNotEmpty()) {
-
-            for (staff in data.staffs){
-                for (day in 1..7){
-                    if (this.operatorSelection[staff.id]?.get(day) == 1){
-                        mutableSchedule[staff.id]?.set(day, "")
-                    }
-                }
             }
         }
         return mutableSchedule
@@ -244,18 +197,77 @@ open class Alns(val data: InputData) {
         return repairedSchedule
     }
 
+    private fun randomSwapStaffShift(currentSolution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var tempSolution = currentSolution
+        var newSolution = randomDestroySolution(currentSolution)
+        newSolution = repairSolution(newSolution)
+        newSolution = caculateSimulatedAnealing(tempSolution, newSolution)
+        return newSolution
+    }
+
+    private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+
+        return schedules
+    }
+
+    private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+
+        return schedules
+    }
+
+    private fun routewheel(): Int{
+        createWeightOperators()
+
+        var rand = Random.nextDouble()
+        var S = 0.0
+
+        for (index in 0 until this.operatorScore.size){
+            S += this.operatorWeight.get(index)!!
+        }
+        this.probabilitiesOfOperator.set(0 , this.operatorWeight.get(0)?.div(S)!!)
+        for (index in 1 until this.operatorWeight.size){
+            this.probabilitiesOfOperator.set(index, this.probabilitiesOfOperator.get(index - 1)!! + this.operatorWeight.get(index)!!/S)
+        }
+
+        if (rand <= this.probabilitiesOfOperator.get(0)!!){
+            this.operatorTimes.set(0, this.operatorTimes.get(0)!! +1)
+            return this.probabilitiesOfOperator.get(0)!!.toInt()
+        }
+        else{
+            for(index in 1 until this.operatorScore.size ){
+                if (rand > this.probabilitiesOfOperator.get(index -1)!! && rand <= this.probabilitiesOfOperator.get(index -1)!!){
+                    this.operatorTimes.set(index, this.operatorTimes.get(index)!! +1)
+                    return this.probabilitiesOfOperator.get(index)!!.toInt()
+                }
+            }
+        }
+        return -1
+    }
+
+    private fun shakeAndRepair(schedules: MutableMap<String, MutableMap<Int, String>>, number: Int): MutableMap<String, MutableMap<Int, String>>{
+        when (number){
+            0 ->{
+                return randomSwapStaffShift(schedules)
+            }
+            1 ->{
+                return greedyCoverageEnhancement(schedules)
+            }
+            2 -> {
+                return greedyCoverageEnhancement(schedules)
+            }
+        }
+        return schedules
+    }
+
     open fun runAlns(){
         var initialSolution = inititalSolution()
         var currentSolution = initialSolution
-        createWeightOperators()
+        createScoreOperator()
         createOperatorTimes()
 
         for (i in 1..this.numberIterations) {
-            var tempSolution = currentSolution
-            //currentSolution = randomDestroySolution(currentSolution)
-            currentSolution = routewheelDestroySolution(currentSolution)
-            currentSolution = repairSolution(currentSolution)
-            currentSolution = caculateSimulatedAnealing(tempSolution, currentSolution)
+            val operatorIndex = routewheel()
+            currentSolution = shakeAndRepair(currentSolution, operatorIndex)
         }
 
         this.solution = currentSolution
