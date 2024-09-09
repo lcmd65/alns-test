@@ -6,6 +6,9 @@ import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
 import java.nio.DoubleBuffer
 
+// Adaptive large neighborhood search
+// **@author: Dat Le
+
 import kotlin.random.Random
 import kotlin.math.exp
 
@@ -103,7 +106,7 @@ open class Alns(val data: InputData) {
             val probability = exp(deltaE / temperature)
             val acceptanceVariable = Random.nextDouble(0.0, 1.0)
 
-            temperature = temperature * alpha
+            temperature *= alpha
             if (probability > acceptanceVariable) {
                 return currentScheduled
             } else {
