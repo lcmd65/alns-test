@@ -690,5 +690,23 @@
       "duration": 8,
       "shift-type": "nws"
     }
+  ],
+  "horizontalCoverages": [
+    {
+      "id":  1,
+      "shifts": ["DO"],
+      "type": ["hard", "equal to"],
+      "desireValue": 2,
+      "days": [1,2,3,4,5,6,7],
+      "penalty": 25
+    },
+    {
+      "id":  2,
+      "shifts": ["M1", "M2", "M3"],
+      "type": ["soft", "at least"],
+      "desireValue": 2,
+      "days": [1,2,3,4,5,6,7],
+      "penalty": 15
+    }
   ]
 }

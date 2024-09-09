@@ -5,6 +5,8 @@ import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
 import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
 import java.nio.DoubleBuffer
+import kotlin.math.abs
+import kotlin.math.max
 
 // Adaptive large neighborhood search
 // **@author: Dat Le
@@ -27,12 +29,37 @@ open class Alns(val data: InputData) {
     var solution: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
 
     private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
-        var score: Int = Int.MAX_VALUE
+        var scores = 0
 
+        // coverage
         for (coverage in data.coverages) {
-            score -= caculateCoverageFulllillment(schedules, coverage.id, coverage.day) * coverage.penalty
+            if (coverage.type.find { it == "hard" } != null ) {
+                scores += abs((caculateCoverageFullfillment(schedules, coverage.id, coverage.day) - coverage.desireValue))* coverage.penalty
+            }
+            else if(coverage.type.find { it == "soft" } != null){
+                scores += max((coverage.desireValue - caculateCoverageFullfillment(schedules, coverage.id, coverage.day))* coverage.penalty, 0)
+            }
         }
-        return score.toDouble()
+
+        // horizontal coverage
+        for (coverage in data.horizontalCoverages){
+            var horizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
+            if (coverage.type.find { it == "hard" } != null ) {
+                for (map in horizontalCoverage){
+                    scores += abs(map.value - coverage.desireValue)*coverage.penalty
+                }
+            }
+            else if(coverage.type.find { it == "soft" } != null){
+                if(coverage.type.find { it == "at least" } != null){
+                    for (map in horizontalCoverage){
+                        scores += max(0, map.value - coverage.desireValue)*coverage.penalty
+                    }
+                }
+            }
+        }
+
+        this.score = Int.MAX_VALUE.toDouble()- scores
+        return this.score.toDouble()
     }
 
     private fun createWeightOperators() {
@@ -114,7 +141,7 @@ open class Alns(val data: InputData) {
         return result
     }
 
-    private fun caculateCoverageFulllillment(
+    private fun caculateCoverageFullfillment(
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: String, dayId: Int
     ): Int {
@@ -131,6 +158,25 @@ open class Alns(val data: InputData) {
         return temp
     }
 
+    private fun caculateHorizontalCoverageFullfillment(
+        schedules: MutableMap<String, MutableMap<Int, String>>,
+        coverageId: Int
+    ): MutableMap<String, Int> {
+        var temp2: MutableMap<String, Int> = mutableMapOf()
+        val coverage = data.horizontalCoverages.find { it.id == coverageId }
+        for (staff in data.staffs){
+            temp2.set(staff.id, 0)
+            for (day in 1..7) {
+                if (coverage != null) {
+                    if (schedules[staff.id]?.get(day)!! in coverage.shifts && day in coverage.days) {
+                        temp2.set(staff.id, temp2.get(staff.id)!! +1 )
+                    }
+                }
+            }
+        }
+        return temp2
+    }
+
     private fun inititalSolution(): MutableMap<String, MutableMap<Int, String>> {
         var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
@@ -145,7 +191,7 @@ open class Alns(val data: InputData) {
 
         for (coverage in data.coverages) {
             for (staff in data.staffs) {
-                if(caculateCoverageFulllillment(schedule, coverage.id, coverage.day) < coverage.desireValue &&
+                if(caculateCoverageFullfillment(schedule, coverage.id, coverage.day) < coverage.desireValue &&
                     checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
                     checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
                     schedule[staff.id]?.get(coverage.day) == ""){

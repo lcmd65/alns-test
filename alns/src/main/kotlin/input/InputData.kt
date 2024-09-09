@@ -1,6 +1,7 @@
 package com.ft.aio.template.adapter.output.web.scrippt.input
 
 import com.ft.aio.template.adapter.output.web.scrippt.coverage.Coverage
+import com.ft.aio.template.adapter.output.web.scrippt.coverage.HorizontalCoverage
 import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
@@ -13,6 +14,7 @@ data class InputData (
     var staffGroups: List<StaffGroup>,
     var shifts: List<Shift>,
     var coverages: List<Coverage>,
+    var horizontalCoverages: List<HorizontalCoverage>
 )
 {
     fun validateInputData(): Boolean {
