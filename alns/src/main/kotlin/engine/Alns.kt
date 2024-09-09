@@ -24,7 +24,6 @@ open class Alns(val data: InputData) {
     var operatorScore: MutableMap<Int, Double> = mutableMapOf()
     var operatorWeight: MutableMap<Int, Double> = mutableMapOf()
     var operatorTimes: MutableMap<Int, Double> = mutableMapOf()
-    var operatorSelection: MutableMap<Int, Int> = mutableMapOf()
     var solution: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
 
     private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
@@ -37,7 +36,7 @@ open class Alns(val data: InputData) {
     }
 
     private fun createWeightOperators() {
-        for (index in 1..3) {
+        for (index in 0..2) {
             if (this.operatorWeight.get(index) != null){
                 this.operatorWeight.set(
                     index,
@@ -57,14 +56,8 @@ open class Alns(val data: InputData) {
         this.operatorScore.set(2, 0.5)
     }
 
-    private fun createOperatorSelection() {
-        for (index in 1..3) {
-            this.operatorSelection?.set(index, 0)
-        }
-    }
-
     private fun createOperatorTimes() {
-        for (index in 1..3) {
+        for (index in 0..2) {
             this.operatorTimes.set(index, 1.0)
         }
     }
@@ -207,11 +200,13 @@ open class Alns(val data: InputData) {
 
     private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
 
+        //TODO
         return schedules
     }
 
     private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
 
+        //TODO
         return schedules
     }
 
@@ -221,27 +216,28 @@ open class Alns(val data: InputData) {
         var rand = Random.nextDouble()
         var S = 0.0
 
-        for (index in 0 until this.operatorScore.size){
+        for (index in 0 until this.operatorWeight.size){
             S += this.operatorWeight.get(index)!!
         }
-        this.probabilitiesOfOperator.set(0 , this.operatorWeight.get(0)?.div(S)!!)
+        this.probabilitiesOfOperator.set(0 , this.operatorWeight.get(0)!!/S)
         for (index in 1 until this.operatorWeight.size){
             this.probabilitiesOfOperator.set(index, this.probabilitiesOfOperator.get(index - 1)!! + this.operatorWeight.get(index)!!/S)
         }
 
+        var choseValue = 0
+
         if (rand <= this.probabilitiesOfOperator.get(0)!!){
-            this.operatorTimes.set(0, this.operatorTimes.get(0)!! +1)
-            return this.probabilitiesOfOperator.get(0)!!.toInt()
+            choseValue = 0
         }
         else{
             for(index in 1 until this.operatorScore.size ){
-                if (rand > this.probabilitiesOfOperator.get(index -1)!! && rand <= this.probabilitiesOfOperator.get(index -1)!!){
-                    this.operatorTimes.set(index, this.operatorTimes.get(index)!! +1)
-                    return this.probabilitiesOfOperator.get(index)!!.toInt()
+                if (rand > this.probabilitiesOfOperator.get(index - 1)!! && rand <= this.probabilitiesOfOperator.get(index)!!){
+                    choseValue = index
                 }
             }
         }
-        return -1
+        this.operatorTimes.set(choseValue, this.operatorTimes.get(choseValue)!! + 1)
+        return choseValue
     }
 
     private fun shakeAndRepair(schedules: MutableMap<String, MutableMap<Int, String>>, number: Int): MutableMap<String, MutableMap<Int, String>>{
@@ -253,7 +249,7 @@ open class Alns(val data: InputData) {
                 return greedyCoverageEnhancement(schedules)
             }
             2 -> {
-                return greedyCoverageEnhancement(schedules)
+                return greedyCoverageHorizontalEnhancement(schedules)
             }
         }
         return schedules
