@@ -263,7 +263,8 @@ open class Alns(val data: InputData) {
 
         for (i in 1..this.numberIterations) {
             val operatorIndex = routewheel()
-            currentSolution = shakeAndRepair(currentSolution, operatorIndex)
+            var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
+            currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
         }
 
         this.solution = currentSolution
