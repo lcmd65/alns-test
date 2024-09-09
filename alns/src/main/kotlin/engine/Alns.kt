@@ -37,6 +37,7 @@ open class Alns(val data: InputData) {
 
     private fun createWeightOperators(){
         for (staff in data.staffs) {
+            this.operatorScore[staff.id] = mutableMapOf()
             for (day in 1..7){
                 if(day != 6 && day != 7) {
                     this.operatorScore[staff.id]?.set(day, 1.0)
@@ -50,6 +51,7 @@ open class Alns(val data: InputData) {
 
     private fun createOperatorTimes(){
         for (staff in data.staffs) {
+            this.operatorTimes[staff.id] = mutableMapOf()
             for (day in 1..7) {
                 this.operatorTimes[staff.id]?.set(day, 1.0)
             }
@@ -58,15 +60,16 @@ open class Alns(val data: InputData) {
 
     private fun createProbabilitiesOfOperator(){
         for (staff in data.staffs) {
+            this.probabilitiesOfOperator[staff.id] = mutableMapOf()
             for (day in 1..7) {
                 val probabilities = this.probabilitiesOfOperator[staff.id]?.get(day)
                 if (probabilities != null) {
                     this.probabilitiesOfOperator[staff.id]?.set(day,
-                        probabilities * 0.6 + 0.4 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!
+                        probabilities * 0.2 + 0.8 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!
                     )
                 }
                 else {
-                    this.probabilitiesOfOperator[staff.id]?.set(day, 0.6 + 0.4 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!)
+                    this.probabilitiesOfOperator[staff.id]?.set(day, 0.2 + 0.8 * this.operatorScore[staff.id]?.get(day)!! / this.operatorTimes[staff.id]?.get(day)!!)
                 }
             }
         }
@@ -74,14 +77,15 @@ open class Alns(val data: InputData) {
 
     private fun createOperatorSelection(){
         for (staff in data.staffs) {
+            this.operatorSelection[staff.id] = mutableMapOf()
             for (day in 1..7) {
                 this.operatorSelection[staff.id]?.set(day, 0)
                 val acceptanceVariable = Random.nextDouble(0.0, 1.0)
                 if (acceptanceVariable <= this.probabilitiesOfOperator[staff.id]?.get(day)!!){
                     this.operatorSelection[staff.id]?.set(day, 1)
-                    val temp = this.operatorTimes[staff.id]?.get(day)?.toDouble()?.plus(1.0)
+                    val temp = this.operatorTimes[staff.id]?.get(day)?.plus(1.0)
                     if (temp != null) {
-                        this.operatorTimes[staff.id]?.set(day, temp)
+                        this.operatorTimes[staff.id]?.set(day, temp.toDouble())
                     }
                 }
                 else{
@@ -161,7 +165,7 @@ open class Alns(val data: InputData) {
     }
 
     private fun inititalSolution(): MutableMap<String, MutableMap<Int, String>> {
-        val schedule : MutableMap<String, MutableMap<Int, String>>
+        var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
 
         // create blank schedule for caculating
@@ -246,16 +250,13 @@ open class Alns(val data: InputData) {
         createWeightOperators()
         createOperatorTimes()
 
-        try {
-            for (i in 1..numberIterations) {
-                var tempSolution = currentSolution
-                //currentSolution = randomDestroySolution(currentSolution)
-                currentSolution = routewheelDestroySolution(currentSolution)
-                currentSolution = repairSolution(currentSolution)
-                currentSolution = caculateSimulatedAnealing(tempSolution, currentSolution)
-            }
+        for (i in 1..this.numberIterations) {
+            var tempSolution = currentSolution
+            //currentSolution = randomDestroySolution(currentSolution)
+            currentSolution = routewheelDestroySolution(currentSolution)
+            currentSolution = repairSolution(currentSolution)
+            currentSolution = caculateSimulatedAnealing(tempSolution, currentSolution)
         }
-        catch (e: Exception){}
 
         this.solution = currentSolution
         this.score = caculateScore(this.solution)

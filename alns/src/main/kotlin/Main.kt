@@ -8,10 +8,11 @@ import com.ft.aio.template.adapter.output.web.scrippt.utils.DumpJson
 fun main() {
 
     var data = PreProcess().dataPreprocessing()
-
     data.validateInputData()
+
     var optimizer = Alns(data)
     optimizer.runAlns()
+
     println("Optimize score " + optimizer.score)
     println("Penalty " + optimizer.penalty)
     println(optimizer.solution)
