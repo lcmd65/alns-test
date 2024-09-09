@@ -13,7 +13,7 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(val data: InputData) {
-    var numberIterations: Int = 100
+    var numberIterations: Int = 1000
     var temperature: Double = 100.0
     var alpha: Double = 0.9
     var limit: Double = 1e-3
@@ -191,10 +191,8 @@ open class Alns(val data: InputData) {
     }
 
     private fun randomSwapStaffShift(currentSolution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        var tempSolution = currentSolution
         var newSolution = randomDestroySolution(currentSolution)
         newSolution = repairSolution(newSolution)
-        newSolution = caculateSimulatedAnealing(tempSolution, newSolution)
         return newSolution
     }
 
