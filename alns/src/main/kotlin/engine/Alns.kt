@@ -16,6 +16,7 @@ open class Alns(val data: InputData) {
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
     var score: Double = 0.0
+    var penalty: Double = Int.MAX_VALUE.toDouble()
     var probabilitiesOfOperator: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
     var operatorScore: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
     var operatorTimes: MutableMap<String, MutableMap<Int, Double>> = mutableMapOf()
@@ -255,5 +256,6 @@ open class Alns(val data: InputData) {
 
         this.solution = currentSolution
         this.score = caculateScore(this.solution)
+        this.penalty = this.penalty - this.score
     }
 }

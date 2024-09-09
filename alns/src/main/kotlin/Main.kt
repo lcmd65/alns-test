@@ -13,6 +13,7 @@ fun main() {
     var optimizer = Alns(data)
     optimizer.runAlns()
     println("Optimize score " + optimizer.score)
+    println("Penalty " + optimizer.penalty)
     println(optimizer.solution)
     DumpJson().dumpToJsonFile(optimizer.solution, "alns/src/main/kotlin/output/output.json")
 }
