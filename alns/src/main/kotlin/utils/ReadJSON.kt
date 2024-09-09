@@ -2,7 +2,7 @@ package com.ft.aio.template.adapter.output.web.scrippt.utils
 
 import java.io.File
 
-open class ReadJSON{
+class ReadJSON{
 
     fun readJson(path: String): String {
         val identifier = "[ReadJSON]"
@@ -13,10 +13,7 @@ open class ReadJSON{
                 return ""
             }
 
-            println("$identifier Found File: $file")
-
-            val jsonString = file.readText()  // Sử dụng readText để đọc toàn bộ nội dung file
-            println("$identifier JSON as String: $jsonString")
+            val jsonString = file.readText()
             return jsonString
         } catch (e: Exception) {
             println("$identifier Error reading JSON: $e")
