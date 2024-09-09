@@ -170,4 +170,3 @@ open class Alns(val data: InputData) {
         this.score = caculateScore(this.solution)
     }
 }
-

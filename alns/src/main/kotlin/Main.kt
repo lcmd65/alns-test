@@ -1,9 +1,8 @@
 package com.ft.aio.template.adapter.output.web.scrippt
 
-import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
 import com.ft.aio.template.adapter.output.web.script.engine.Alns.Alns
-import java.io.File
 import com.ft.aio.template.adapter.output.web.scrippt.engine.PreProcess
+import com.ft.aio.template.adapter.output.web.scrippt.utils.DumpJson
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
@@ -15,4 +14,5 @@ fun main() {
     optimizer.runAlns()
     println("Optimize score " + optimizer.score)
     println(optimizer.solution)
+    DumpJson().dumpToJsonFile(optimizer.solution, "alns/src/main/kotlin/output/output.json")
 }
