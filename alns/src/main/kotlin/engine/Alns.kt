@@ -34,10 +34,26 @@ open class Alns(val data: InputData) {
         // coverage
         for (coverage in data.coverages) {
             if (coverage.type.find { it == "hard" } != null ) {
-                scores += abs((caculateCoverageFullfillment(schedules, coverage.id, coverage.day) - coverage.desireValue))* coverage.penalty
+                if(coverage.type.find { it == "equal to" } != null) {
+                    scores += abs(
+                        (caculateCoverageFullfillment(
+                            schedules,
+                            coverage.id,
+                            coverage.day
+                        ) - coverage.desireValue)
+                    ) * coverage.penalty
+                }
             }
             else if(coverage.type.find { it == "soft" } != null){
-                scores += max((coverage.desireValue - caculateCoverageFullfillment(schedules, coverage.id, coverage.day))* coverage.penalty, 0)
+                if(coverage.type.find { it == "at least" } != null) {
+                    scores += max(
+                        (coverage.desireValue - caculateCoverageFullfillment(
+                            schedules,
+                            coverage.id,
+                            coverage.day
+                        )) * coverage.penalty, 0
+                    )
+                }
             }
         }
 
@@ -45,8 +61,10 @@ open class Alns(val data: InputData) {
         for (coverage in data.horizontalCoverages){
             var horizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
             if (coverage.type.find { it == "hard" } != null ) {
-                for (map in horizontalCoverage){
-                    scores += abs(map.value - coverage.desireValue)*coverage.penalty
+                if(coverage.type.find { it == "equal to" } != null) {
+                    for (map in horizontalCoverage) {
+                        scores += abs(coverage.desireValue - map.value) * coverage.penalty
+                    }
                 }
             }
             else if(coverage.type.find { it == "soft" } != null){
