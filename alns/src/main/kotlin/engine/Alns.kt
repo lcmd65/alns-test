@@ -104,9 +104,9 @@ open class Alns(val data: InputData) {
     }
 
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.5)
-        this.operatorScore.set(1, 0.25)
-        this.operatorScore.set(2, 0.25)
+        this.operatorScore.set(0, 0.33)
+        this.operatorScore.set(1, 0.33)
+        this.operatorScore.set(2, 0.33)
     }
 
     private fun createOperatorTimes() {
@@ -369,11 +369,9 @@ open class Alns(val data: InputData) {
 
         for (index in 1..this.numberIterations) {
             val operatorIndex = routewheel(index)
-            println(operatorIndex)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
-            println(currentSolution)
-            println(caculateScore(currentSolution) - this.penalty)
+            println("penalty: " + (caculateScore(currentSolution) - this.penalty))
         }
 
         this.solution = currentSolution
