@@ -104,9 +104,9 @@ open class Alns(val data: InputData) {
     }
 
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.5)
-        this.operatorScore.set(1, 0.25)
-        this.operatorScore.set(2, 0.25)
+        this.operatorScore.set(0, 0.33)
+        this.operatorScore.set(1, 0.33)
+        this.operatorScore.set(2, 0.33)
     }
 
     private fun createOperatorTimes() {
