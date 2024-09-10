@@ -697,12 +697,20 @@
       "shifts": ["DO"],
       "type": ["hard", "equal to"],
       "desireValue": 2,
-      "days": [1,2,3,4,5,6,7],
+      "days": [2,4,6,7],
       "penalty": 25
     },
     {
       "id":  2,
       "shifts": ["M1", "M2", "M3"],
+      "type": ["soft", "at least"],
+      "desireValue": 2,
+      "days": [1,2,3,4,5,6,7],
+      "penalty": 15
+    },
+    {
+      "id":  3,
+      "shifts": ["A1", "A2"],
       "type": ["soft", "at least"],
       "desireValue": 2,
       "days": [1,2,3,4,5,6,7],

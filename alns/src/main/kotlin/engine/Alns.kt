@@ -15,9 +15,9 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(val data: InputData) {
-    var numberIterations: Int = 1000
+    var numberIterations: Int = 2000
     var temperature: Double = 100.0
-    var alpha: Double = 0.9
+    var alpha: Double = 0.95
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
     var score: Double = 0.0
@@ -33,51 +33,50 @@ open class Alns(val data: InputData) {
 
         // coverage
         for (coverage in data.coverages) {
-            if (coverage.type.find { it == "hard" } != null ) {
-                if(coverage.type.find { it == "equal to" } != null) {
-                    scores += abs(
-                        (caculateCoverageFullfillment(
-                            schedules,
-                            coverage.id,
-                            coverage.day
-                        ) - coverage.desireValue)
-                    ) * coverage.penalty
-                }
+            if (coverage.type.contains("hard") && coverage.type.contains("equal to")){
+                scores += abs(coverage.desireValue -
+                        caculateCoverageFullfillment(
+                        schedules,
+                        coverage.id,
+                        coverage.day)
+                ) * coverage.penalty
             }
-            else if(coverage.type.find { it == "soft" } != null){
-                if(coverage.type.find { it == "at least" } != null) {
-                    scores += max(
-                        (coverage.desireValue - caculateCoverageFullfillment(
-                            schedules,
-                            coverage.id,
-                            coverage.day
-                        )) * coverage.penalty, 0
-                    )
-                }
+            else if (coverage.type.contains("hard") && coverage.type.contains("at least")){
+                scores += max(
+                    0,
+                    coverage.desireValue - caculateCoverageFullfillment(
+                        schedules,
+                        coverage.id,
+                        coverage.day)
+                ) * coverage.penalty
+            }
+            else if (coverage.type.contains("soft") && coverage.type.contains("at least")){
+                scores += max(
+                    0,
+                    coverage.desireValue - caculateCoverageFullfillment(
+                        schedules,
+                        coverage.id,
+                        coverage.day)
+                ) * coverage.penalty
             }
         }
 
         // horizontal coverage
         for (coverage in data.horizontalCoverages){
             var horizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
-            if (coverage.type.find { it == "hard" } != null ) {
-                if(coverage.type.find { it == "equal to" } != null) {
-                    for (map in horizontalCoverage) {
-                        scores += abs(coverage.desireValue - map.value) * coverage.penalty
-                    }
+            if (coverage.type.contains("hard") && coverage.type.contains("equal to")){
+                for (map in horizontalCoverage) {
+                    scores += abs(coverage.desireValue - map.value) * coverage.penalty
                 }
             }
-            else if(coverage.type.find { it == "soft" } != null){
-                if(coverage.type.find { it == "at least" } != null){
-                    for (map in horizontalCoverage){
-                        scores += max(0, map.value - coverage.desireValue)*coverage.penalty
-                    }
+            else if (coverage.type.contains("soft") && coverage.type.contains("at least")){
+                for (map in horizontalCoverage){
+                    scores += max(0, coverage.desireValue - map.value) * coverage.penalty
                 }
             }
         }
 
-        this.score = Int.MAX_VALUE.toDouble()- scores
-        return this.score.toDouble()
+        return Int.MAX_VALUE.toDouble() - scores
     }
 
     private fun createWeightOperators() {
@@ -95,10 +94,19 @@ open class Alns(val data: InputData) {
         }
     }
 
+    private fun resetWeightOperators(){
+        for(index in 0..2) {
+            this.operatorWeight.set(
+                index,
+                0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
+            )
+        }
+    }
+
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 1.0)
-        this.operatorScore.set(1, 0.5)
-        this.operatorScore.set(2, 0.5)
+        this.operatorScore.set(0, 0.5)
+        this.operatorScore.set(1, 0.25)
+        this.operatorScore.set(2, 0.25)
     }
 
     private fun createOperatorTimes() {
@@ -180,19 +188,21 @@ open class Alns(val data: InputData) {
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: Int
     ): MutableMap<String, Int> {
-        var temp2: MutableMap<String, Int> = mutableMapOf()
+        var temp: MutableMap<String, Int> = mutableMapOf()
         val coverage = data.horizontalCoverages.find { it.id == coverageId }
         for (staff in data.staffs){
-            temp2.set(staff.id, 0)
-            for (day in 1..7) {
-                if (coverage != null) {
-                    if (schedules[staff.id]?.get(day)!! in coverage.shifts && day in coverage.days) {
-                        temp2.set(staff.id, temp2.get(staff.id)!! +1 )
+            temp.set(staff.id, 0)
+            if (coverage != null) {
+                for (day in coverage.days) {
+                    if (coverage != null) {
+                        if (schedules[staff.id]?.get(day)!! in coverage.shifts && day in coverage.days) {
+                            temp.set(staff.id, temp.get(staff.id)!! + 1)
+                        }
                     }
                 }
             }
         }
-        return temp2
+        return temp
     }
 
     private fun inititalSolution(): MutableMap<String, MutableMap<Int, String>> {
@@ -260,20 +270,55 @@ open class Alns(val data: InputData) {
         return newSolution
     }
 
-    private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+    private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        for (coverage in data.coverages) {
+            val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day)
 
-        //TODO
+            if (currentFulfillment < coverage.desireValue) {
+                for (staff in data.staffs) {
+                    if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                        val shift = coverage.shift.random()
+                        val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                        tempSolution[staff.id]?.set(coverage.day, shift)
+                        if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                            return tempSolution
+                        }
+                    }
+                }
+            }
+        }
         return schedules
     }
 
-    private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+    private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        for (horizontalCover in data.horizontalCoverages) {
+            val horizontalCoverFullFill = caculateHorizontalCoverageFullfillment(schedules, horizontalCover.id)
 
-        //TODO
+            for (item in horizontalCoverFullFill) {
+                if (item.value < horizontalCover.desireValue) {
+                    for (shift in horizontalCover.shifts) {
+                        for (day in horizontalCover.days) {
+                            val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                            tempSolution[item.key]?.set(day, shift)
+                            if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                return tempSolution
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return schedules
     }
 
-    private fun routewheel(): Int{
-        createWeightOperators()
+
+    private fun routewheel(index: Int): Int{
+        if (index % 400 == 0){
+            resetWeightOperators()
+        }
+        else {
+            createWeightOperators()
+        }
 
         var rand = Random.nextDouble()
         var S = 0.0
@@ -318,19 +363,21 @@ open class Alns(val data: InputData) {
     }
 
     open fun runAlns(){
-        var initialSolution = inititalSolution()
-        var currentSolution = initialSolution
+        var currentSolution = inititalSolution()
         createScoreOperator()
         createOperatorTimes()
 
-        for (i in 1..this.numberIterations) {
-            val operatorIndex = routewheel()
+        for (index in 1..this.numberIterations) {
+            val operatorIndex = routewheel(index)
+            println(operatorIndex)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
+            println(currentSolution)
+            println(caculateScore(currentSolution) - this.penalty)
         }
 
         this.solution = currentSolution
         this.score = caculateScore(this.solution)
-        this.penalty = this.penalty - this.score
+        this.penalty = this.score - this.penalty
     }
 }
