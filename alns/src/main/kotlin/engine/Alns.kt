@@ -369,11 +369,9 @@ open class Alns(val data: InputData) {
 
         for (index in 1..this.numberIterations) {
             val operatorIndex = routewheel(index)
-            println(operatorIndex)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
-            println(currentSolution)
-            println(caculateScore(currentSolution) - this.penalty)
+            println("penalty: " + (caculateScore(currentSolution) - this.penalty))
         }
 
         this.solution = currentSolution
