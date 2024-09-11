@@ -14,7 +14,14 @@ fun main() {
     optimizer.runAlns()
 
     println("Optimize score " + optimizer.score)
-    println("Penalty " + optimizer.penalty)
-    println(optimizer.solution)
-    DumpJson().dumpToJsonFile(optimizer.solution, "alns/src/main/kotlin/output/output.json")
+    println("Penalty: " + optimizer.penalty)
+    println("Best Solution: " + optimizer.bestSolution)
+
+    var dump: MutableMap<String, Any> = mutableMapOf()
+    dump.set("score", optimizer.score)
+    dump.set("penalty", optimizer.penalty)
+    dump.set("solution", optimizer.bestSolution)
+    dump.set("horizontalCoverage", optimizer.horizontalCoverageFullFill)
+
+    DumpJson().dumpToJsonFile(dump,"alns/src/main/kotlin/output/output.json")
 }

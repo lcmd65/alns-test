@@ -5,7 +5,7 @@ import java.io.File
 
 class DumpJson {
 
-    fun dumpToJsonFile(schedules: MutableMap<String, MutableMap<Int, String>>, filePath: String) {
+    fun dumpToJsonFile(schedules: MutableMap<String, Any>, filePath: String) {
         val gson: Gson = GsonBuilder().setPrettyPrinting().create()
         val jsonString = gson.toJson(schedules)
         File(filePath).writeText(jsonString)
