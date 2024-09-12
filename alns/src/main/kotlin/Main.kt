@@ -3,6 +3,7 @@ package com.ft.aio.template.adapter.output.web.scrippt
 import com.ft.aio.template.adapter.output.web.script.engine.Alns.Alns
 import com.ft.aio.template.adapter.output.web.scrippt.engine.PreProcess
 import com.ft.aio.template.adapter.output.web.scrippt.utils.DumpJson
+import com.ft.aio.template.adapter.output.web.scrippt.utils.ToExcel
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
@@ -24,4 +25,5 @@ fun main() {
     dump.set("horizontalCoverage", optimizer.horizontalCoverageFullFill)
 
     DumpJson().dumpToJsonFile(dump,"alns/src/main/kotlin/output/output.json")
+    ToExcel().exportToExcel(optimizer.bestSolution, "alns/src/main/kotlin/output/output.xlsx")
 }
