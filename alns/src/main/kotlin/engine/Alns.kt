@@ -389,7 +389,7 @@ open class Alns(val data: InputData) {
     fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
         for ((key, innerMap) in solution) {
-            val copiedInnerMap = innerMap.toMutableMap()  // Tạo bản sao của innerMap
+            val copiedInnerMap = innerMap.toMutableMap()
             newSolution[key] = copiedInnerMap
         }
         return newSolution
