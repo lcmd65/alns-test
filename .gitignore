@@ -1,0 +1,58 @@
+# Kotlin specific files
+*.iml
+*.class
+*.log
+*.jar
+*.war
+*.ear
+
+# Bytecode and logs
+/build/
+out/
+*.class
+
+# IntelliJ IDEA specific files
+.idea/
+*.iws
+*.ipr
+*.iml
+
+# Gradle specific files
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# Maven specific files (if you're using Maven)
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Log files
+*.log
+
+# Temporary files
+*.swp
+*.tmp
+*.bak
+*.orig
+*.rej
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Spring Boot specific files
+/target/
+/build/
+/.mvn/
+/.mvnd/
+/spring-boot-loader/
+/!gradle-wrapper.jar
+/.mvn/wrapper/maven-wrapper.properties
+.springBeans
+*.war
+*.jar
