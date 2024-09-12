@@ -35,37 +35,44 @@ open class Alns(val data: InputData) {
         var scores = 0
 
         // coverage
-        for (coverage in data.coverages) {
-            if (coverage.type.contains("hard") && coverage.type.contains("equal to")){
-                scores += abs(coverage.desireValue -
-                        caculateCoverageFullfillment(
-                        schedules,
-                        coverage.id,
-                        coverage.day)
-                ) * coverage.penalty
-            }
-            else if (coverage.type.contains("hard") && coverage.type.contains("at least")){
-                scores += max(
-                    0,
-                    coverage.desireValue - caculateCoverageFullfillment(
-                        schedules,
-                        coverage.id,
-                        coverage.day)
-                ) * coverage.penalty
-            }
-            else if (coverage.type.contains("soft") && coverage.type.contains("at least")){
-                scores += max(
-                    0,
-                    coverage.desireValue - caculateCoverageFullfillment(
-                        schedules,
-                        coverage.id,
-                        coverage.day)
-                ) * coverage.penalty
+        for (week in 1..this.schedulePeriod) {
+            for (coverage in data.coverages) {
+                if (coverage.type.contains("hard") && coverage.type.contains("equal to")) {
+                    scores += abs(
+                        coverage.desireValue -
+                                caculateCoverageFullfillment(
+                                    schedules,
+                                    coverage.id,
+                                    coverage.day,
+                                    week
+                                )
+                    ) * coverage.penalty
+                } else if (coverage.type.contains("hard") && coverage.type.contains("at least")) {
+                    scores += max(
+                        0,
+                        coverage.desireValue - caculateCoverageFullfillment(
+                            schedules,
+                            coverage.id,
+                            coverage.day,
+                            week
+                        )
+                    ) * coverage.penalty
+                } else if (coverage.type.contains("soft") && coverage.type.contains("at least")) {
+                    scores += max(
+                        0,
+                        coverage.desireValue - caculateCoverageFullfillment(
+                            schedules,
+                            coverage.id,
+                            coverage.day,
+                            week
+                        )
+                    ) * coverage.penalty
+                }
             }
         }
 
-        // horizontal coverage
-        for (coverage in data.horizontalCoverages){
+            // horizontal coverage
+        for (coverage in data.horizontalCoverages) {
             var fullHorizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
             for (horizontalCoverage in fullHorizontalCoverage.values) {
                 if (coverage.type.contains("hard") && coverage.type.contains("equal to")) {
@@ -173,13 +180,15 @@ open class Alns(val data: InputData) {
 
     private fun caculateCoverageFullfillment(
         schedules: MutableMap<String, MutableMap<Int, String>>,
-        coverageId: String, dayId: Int
+        coverageId: String,
+        dayId: Int,
+        week: Int
     ): Int {
         val coverage = data.coverages.find { it.id == coverageId && it.day == dayId }
         var temp = 0
         if (coverage != null){
             for (staff in data.staffs){
-                if (schedules[staff.id]?.get(dayId) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                if (schedules[staff.id]?.get(dayId + 7*( week - 1)) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                     temp += 1
                 }
             }
@@ -225,24 +234,26 @@ open class Alns(val data: InputData) {
             }
         }
 
-        for (coverage in data.coverages) {
-            for (staff in data.staffs) {
-                if(caculateCoverageFullfillment(schedule, coverage.id, coverage.day) < coverage.desireValue &&
-                    checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
-                    checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
-                    schedule[staff.id]?.get(coverage.day) == ""){
-                    schedule[staff.id]?.set(coverage.day, coverage.shift.random())
+        for (week in 1..this.schedulePeriod) {
+            for (coverage in data.coverages) {
+                for (staff in data.staffs) {
+                    if (caculateCoverageFullfillment(schedule, coverage.id, coverage.day, week) < coverage.desireValue &&
+                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
+                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
+                        schedule[staff.id]?.get(coverage.day + 7*(week - 1)) == ""
+                    ) {
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), coverage.shift.random())
+                    }
+                }
+            }
+            for (coverage in data.coverages) {
+                for (staff in data.staffs) {
+                    if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.random().id)
+                    }
                 }
             }
         }
-        for (coverage in data.coverages){
-            for (staff in data.staffs){
-                if(schedule[staff.id]?.get(coverage.day) == ""){
-                    schedule[staff.id]?.set(coverage.day, data.shifts.random().id)
-                }
-            }
-        }
-
         return schedule
     }
 
@@ -279,17 +290,21 @@ open class Alns(val data: InputData) {
     }
 
     private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        for (coverage in data.coverages) {
-            val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day)
+        for (week in 1.. schedulePeriod) {
+            for (coverage in data.coverages) {
+                val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
 
-            if (currentFulfillment < coverage.desireValue) {
-                for (staff in data.staffs) {
-                    if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                        val shift = coverage.shift.random()
-                        val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                        tempSolution[staff.id]?.set(coverage.day, shift)
-                        if (caculateScore(schedules) < caculateScore(tempSolution)) {
-                            return tempSolution
+                if (currentFulfillment < coverage.desireValue) {
+                    for (staff in data.staffs) {
+                        if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                            for (shift in  coverage.shift) {
+                                val tempSolution =
+                                    schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                    return tempSolution
+                                }
+                            }
                         }
                     }
                 }
