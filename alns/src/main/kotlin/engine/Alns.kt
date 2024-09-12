@@ -371,9 +371,18 @@ open class Alns(val data: InputData) {
         return schedules
     }
 
+    fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
+        for ((key, innerMap) in solution) {
+            val copiedInnerMap = innerMap.toMutableMap()  // Tạo bản sao của innerMap
+            newSolution[key] = copiedInnerMap
+        }
+        return newSolution
+    }
+
     open fun runAlns(){
         var currentSolution = inititalSolution()
-        this.bestSolution = currentSolution.toMutableMap()
+        this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
 
@@ -384,9 +393,8 @@ open class Alns(val data: InputData) {
             println("penalty: " + (caculateScore(currentSolution) - this.penalty))
 
             if (caculateScore(currentSolution) > caculateScore(this.bestSolution)){
-                this.bestSolution = currentSolution.toMutableMap()
+                this.bestSolution = deepCopySolution(currentSolution)
             }
-            println(bestSolution)
         }
 
         this.score = caculateScore(this.bestSolution)
