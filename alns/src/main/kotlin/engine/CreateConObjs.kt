@@ -2,13 +2,13 @@ package com.ft.aio.template.adapter.output.web.scrippt.engine
 
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
 
-class CreateConObjs (val data: InputData) {
+class CreateConObjs (var data: InputData) {
 
     fun createConstrainScore(schedule: MutableMap<String, MutableMap<Int, String>>){
         for (constrain in data.constrains){
             when(constrain.id) {
-                "exactly-staff-working-time" -> {
 
+                "exactly-staff-working-time" -> {
                     var input : MutableMap<String, Double> = mutableMapOf()
                     for (week in 1..  data.schedulePeriod) {
 
@@ -66,9 +66,5 @@ class CreateConObjs (val data: InputData) {
                 }
             }
         }
-    }
-
-    fun createPatternConstrainScore(){
-
     }
 }

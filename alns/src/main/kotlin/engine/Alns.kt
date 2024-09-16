@@ -1,4 +1,4 @@
-package com.ft.aio.template.adapter.output.web.script.engine.Alns
+package com.ft.aio.template.adapter.output.web.scrippt.engine
 
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
@@ -30,6 +30,29 @@ open class Alns(val data: InputData) {
     var bestSolution: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
     var coverageFullFill: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
     var horizontalCoverageFullFill: MutableMap<String, MutableMap<Int, MutableMap<String, Int>>> = mutableMapOf()
+
+    fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        for (constrain in data.constrains) {
+            when (constrain.id) {
+                "exactly-staff-working-time" -> {
+                    var input : MutableMap<String, Double> = mutableMapOf()
+                    for (week in 1..  data.schedulePeriod) {
+
+                        for (staff in data.staffs) {
+                            var staffWokringTime : Double = 0.0
+                            for (day in 1 .. 7){
+                                staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                            }
+                            input.set(staff.id + week.toString(), staffWokringTime)
+                        }
+                    }
+
+
+                }
+            }
+        }
+        return schedule
+    }
 
     private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
         var scores = 0
@@ -505,13 +528,13 @@ open class Alns(val data: InputData) {
             val operatorIndex = routewheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
-            if (caculateScore(currentSolution) > caculateScore(this.bestSolution)){
+            if (CalculateScore(data, currentSolution).score() < CalculateScore(data, this.bestSolution).score()){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
         }
 
-        this.score = caculateScore(this.bestSolution)
-        this.penalty = this.score - this.penalty
+        this.penalty = CalculateScore(data, this.bestSolution).score()
+        this.score = Int.MAX_VALUE.toDouble() + this.penalty
         for (hcover in data.horizontalCoverages) {
             this.horizontalCoverageFullFill.set("h_cover_id " + hcover.id.toString(), caculateHorizontalCoverageFullfillment(bestSolution, hcover.id))
         }

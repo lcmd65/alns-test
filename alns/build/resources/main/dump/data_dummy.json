@@ -1,51 +1,118 @@
 {
-  "objective": [
+  "objs": [
+  ],
+  "constrains": [
     {
-      "id": "min-staff-working-time",
-      "scoreFormula": "formula(100, 44, 1)",
+      "id": "exactly-staff-working-time",
+      "scoreFormula": "formula(100, 44, 10, 1)",
       "description": "maximize working time of Staff (hours)",
-      "objectiveType": "staffTimeObj",
-      "priority": 1,
+      "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
+      "priority": 10,
+      "toMaximize": 0,
+      "isHard": 1
+    },
+    {
+      "id": "archive-0.5-day",
+      "scoreFormula": "formula(100, 5.5, 200, 1)",
+      "description": "maximize working time of Staff (hours)",
+      "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
+      "priority": 2,
+      "toMaximize": 0,
+      "isHard": 1
+    },
+    {
+      "id": "un-archive-0.5-day",
+      "scoreFormula": "formula(100, 6, 200, 1)",
+      "description": "maximize working time of Staff (hours)",
+      "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
+      "priority": 2,
       "toMaximize": 1,
       "isHard": 1
+    }
+  ],
+  "patternConstrains": [
+    {
+      "id": "undesired-after-off-day",
+      "description": "",
+      "constrainType": "shiftPattern",
+      "shiftPatterns": ["DO-AF", "PH-AF"],
+      "staffGroup": ["all_staffs"],
+      "priority": 2,
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
+    },
+    {
+      "id": "undesired-afternoon-shift",
+      "description": "",
+      "constrainType": "shiftPattern",
+      "shiftPatterns": ["AF-AF-AF"],
+      "staffGroup": ["all_staffs"],
+      "priority": 2,
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
+    },
+    {
+      "id": "undesired-fixed-shift",
+      "description": "",
+      "constrainType": "shiftPattern",
+      "shiftPatterns": ["MO-AF"],
+      "staffGroup": ["FSG"],
+      "priority": 2,
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
     }
   ],
   "staffs":[
     {
       "id": "Staff_1",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 5.5
     },
     {
       "id": "Staff_2",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     },
     {
       "id": "Staff_3",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 5.5
     },
     {
       "id": "Staff_4",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     },
     {
       "id": "Staff_5",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     },
     {
       "id": "Staff_6",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 5.5
     },
     {
       "id": "Staff_7",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     },
     {
       "id": "Staff_8",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     },
     {
       "id": "Staff_9",
-      "name": "Dat09"
+      "name": "Dat09",
+      "workDays": 6
     }
   ],
   "staffGroups": [
@@ -668,13 +735,13 @@
     {
       "id": "M2",
       "name": "Morning shift 2",
-      "duration": 8,
+      "duration": 7,
       "shift-type": "ws"
     },
     {
       "id": "M3",
       "name": "Morning shift 3",
-      "duration": 8,
+      "duration": 4,
       "shift-type": "ws"
     },
     {
@@ -686,13 +753,13 @@
     {
       "id": "A2",
       "name": "Afternoon shift 2",
-      "duration": 8,
+      "duration": 7,
       "shift-type": "ws"
     },
     {
       "id": "DO",
       "name": "Day Off",
-      "duration": 8,
+      "duration": 0,
       "shift-type": "nws"
     },
     {
@@ -702,30 +769,25 @@
       "shift-type": "nws"
     }
   ],
+  "shiftGroups": [
+    {
+      "id": "AF",
+      "shifts": ["A1", "A2"]
+    },
+    {
+      "id": "MO",
+      "shifts": ["M1", "M2", "M3"]
+    }
+  ],
   "horizontalCoverages": [
     {
       "id":  1,
       "shifts": ["DO"],
+      "staffs": ["all_staffs"],
       "type": ["hard", "equal to"],
-      "desireValue": 2,
-      "days": [2,4,6,7],
+      "desireValue": 1,
+      "days": [1,2,3,4,5,6,7],
       "penalty": 25
-    },
-    {
-      "id":  2,
-      "shifts": ["M1", "M2", "M3"],
-      "type": ["soft", "at least"],
-      "desireValue": 2,
-      "days": [1,2,3,4,5,6,7],
-      "penalty": 15
-    },
-    {
-      "id":  3,
-      "shifts": ["A1", "A2"],
-      "type": ["soft", "at least"],
-      "desireValue": 2,
-      "days": [1,2,3,4,5,6,7],
-      "penalty": 15
     }
   ]
 }
