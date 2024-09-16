@@ -1,7 +1,7 @@
 package com.ft.aio.template.adapter.output.web.scrippt
 
 
-import com.ft.aio.template.adapter.output.web.script.engine.Alns.Alns
+import com.ft.aio.template.adapter.output.web.scrippt.engine.Alns
 import com.ft.aio.template.adapter.output.web.scrippt.engine.PreProcess
 import com.ft.aio.template.adapter.output.web.scrippt.utils.DumpJson
 import com.ft.aio.template.adapter.output.web.scrippt.utils.ToExcel
