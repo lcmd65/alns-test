@@ -115,9 +115,9 @@ open class Alns(val data: InputData) {
     }
 
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.5)
-        this.operatorScore.set(1, 0.25)
-        this.operatorScore.set(2, 0.25)
+        this.operatorScore.set(0, 0.8)
+        this.operatorScore.set(1, 0.1)
+        this.operatorScore.set(2, 0.1)
     }
 
     private fun createOperatorTimes() {
@@ -292,17 +292,73 @@ open class Alns(val data: InputData) {
     private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         for (week in 1.. schedulePeriod) {
             for (coverage in data.coverages) {
-                val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+                if (coverage.type.contains("equal to")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
 
-                if (currentFulfillment < coverage.desireValue) {
-                    for (staff in data.staffs) {
-                        if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                            for (shift in  coverage.shift) {
-                                val tempSolution =
-                                    schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                if (caculateScore(schedules) < caculateScore(tempSolution)) {
-                                    return tempSolution
+                    if (currentFulfillment < coverage.desireValue) {
+                        for (staff in data.staffs) {
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                for (shift in  coverage.shift) {
+                                    val tempSolution =
+                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (currentFulfillment > coverage.desireValue) {
+                        for (staff in data.staffs) {
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                if (schedules[staff.id]?.get(coverage.day + 7 * (week - 1)) in coverage.shift) {
+                                    val tempSolution =
+                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    for (shiftFill in data.shifts){
+                                        if(shiftFill.id !in coverage.shift){
+                                            tempSolution[staff.id]?.set(coverage.day +7*(week - 1), shiftFill.id)
+                                            if(caculateScore(schedules) < caculateScore(tempSolution)) {
+                                                return tempSolution
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(coverage.type.contains("at least")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+
+                    if (currentFulfillment < coverage.desireValue) {
+                        for (staff in data.staffs) {
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                for (shift in  coverage.shift) {
+                                    val tempSolution =
+                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(coverage.type.contains("at most")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+
+                    if (currentFulfillment > coverage.desireValue) {
+                        for (staff in data.staffs) {
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                for (shift in  coverage.shift) {
+                                    val tempSolution =
+                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                        return tempSolution
+                                    }
                                 }
                             }
                         }
@@ -318,13 +374,64 @@ open class Alns(val data: InputData) {
             val fullHorizontalCoverFullFill = caculateHorizontalCoverageFullfillment(schedules, horizontalCover.id)
             for ((week, horizontalCoverFullFill) in fullHorizontalCoverFullFill){
                 for (item in horizontalCoverFullFill) {
-                    if (item.value < horizontalCover.desireValue) {
-                        for (shift in horizontalCover.shifts) {
-                            for (day in horizontalCover.days) {
-                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                tempSolution[item.key]?.set(day + 7*(week - 1), shift)
-                                if (caculateScore(schedules) < caculateScore(tempSolution)) {
-                                    return tempSolution
+                    if (horizontalCover.type.contains("at least")){
+                        if (item.value < horizontalCover.desireValue) {
+                            for (shift in horizontalCover.shifts) {
+                                for (day in horizontalCover.days) {
+                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
+                                    if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (horizontalCover.type.contains("equal to")){
+                        if(item.value < horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
+                                    if (caculateScore(schedules) < caculateScore(tempSolution)) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                        else if(item.value > horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
+                                        for (shiftFill in data.shifts){
+                                            if(shiftFill.id !in horizontalCover.shifts){
+                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
+                                                if(caculateScore(schedules) < caculateScore(tempSolution)) {
+                                                    return tempSolution
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (horizontalCover.type.contains("at most")){
+                        if(item.value > horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
+                                        for (shiftFill in data.shifts){
+                                            if(shiftFill.id !in horizontalCover.shifts){
+                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
+                                                if(caculateScore(schedules) < caculateScore(tempSolution)) {
+                                                    return tempSolution
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -334,7 +441,6 @@ open class Alns(val data: InputData) {
         }
         return schedules
     }
-
 
     private fun routewheel(index: Int): Int{
         if (index % 400 == 0){
@@ -405,8 +511,6 @@ open class Alns(val data: InputData) {
             val operatorIndex = routewheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
-            println("penalty: " + (caculateScore(currentSolution) - this.penalty))
-
             if (caculateScore(currentSolution) > caculateScore(this.bestSolution)){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
