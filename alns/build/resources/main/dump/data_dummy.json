@@ -1,4 +1,15 @@
 {
+  "objective": [
+    {
+      "id": "min-staff-working-time",
+      "scoreFormula": "formula(100, 44, 1)",
+      "description": "maximize working time of Staff (hours)",
+      "objectiveType": "staffTimeObj",
+      "priority": 1,
+      "toMaximize": 1,
+      "isHard": 1
+    }
+  ],
   "staffs":[
     {
       "id": "Staff_1",
