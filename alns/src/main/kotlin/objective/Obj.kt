@@ -1,6 +1,5 @@
 package com.ft.aio.template.adapter.output.web.scrippt.objective
 
-
 data class Objective(
     val id: String,
     val scoreFormula: String,

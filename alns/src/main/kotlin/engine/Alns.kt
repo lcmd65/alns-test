@@ -479,15 +479,9 @@ open class Alns(val data: InputData) {
 
     private fun shakeAndRepair(schedules: MutableMap<String, MutableMap<Int, String>>, number: Int): MutableMap<String, MutableMap<Int, String>>{
         when (number){
-            0 ->{
-                return randomSwapStaffShift(schedules)
-            }
-            1 ->{
-                return greedyCoverageEnhancement(schedules)
-            }
-            2 -> {
-                return greedyCoverageHorizontalEnhancement(schedules)
-            }
+            0 -> return randomSwapStaffShift(schedules)
+            1 -> return greedyCoverageEnhancement(schedules)
+            2 -> return greedyCoverageHorizontalEnhancement(schedules)
         }
         return schedules
     }

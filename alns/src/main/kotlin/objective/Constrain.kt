@@ -4,7 +4,7 @@ data class Constrain(
     val code: String,
     val scoreFormula: String,
     val description: String,
-    val objectiveType: String,
+    val constrainType: String,
     val priority: Int,
     val toMaximize: Boolean,
     val isHard: Boolean
