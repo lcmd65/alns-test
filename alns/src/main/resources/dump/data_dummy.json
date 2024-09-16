@@ -1,14 +1,15 @@
 {
-  "objectives": [
+  "objs": [
   ],
   "constrains": [
     {
       "id": "exactly-staff-working-time",
-      "scoreFormula": "formula(100, 44, 1)",
+      "scoreFormula": "formula(100, 44, 10, 1)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
       "priority": 10,
-      "toMaximize": 1,
+      "toMaximize": 0,
       "isHard": 1
     },
     {
@@ -16,30 +17,55 @@
       "scoreFormula": "formula(100, 5.5, 200, 1)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
       "priority": 2,
       "toMaximize": 0,
       "isHard": 1
     },
     {
-      "id": "unarchive-0.5-day",
+      "id": "un-archive-0.5-day",
       "scoreFormula": "formula(100, 6, 200, 1)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
+      "staffGroup": ["all_staffs"],
       "priority": 2,
       "toMaximize": 1,
       "isHard": 1
     }
   ],
-  "patternConstrain": [
+  "patternConstrains": [
     {
       "id": "undesired-after-off-day",
-      "scoreFormula": "formula(100, 1, 100, 1)",
-      "description": "maximize working time of Staff (hours)",
+      "description": "",
       "constrainType": "shiftPattern",
-      "shiftPattern": ["DO-"],
+      "shiftPatterns": ["DO-AF", "PH-AF"],
+      "staffGroup": ["all_staffs"],
       "priority": 2,
-      "toMaximize": 0,
-      "isHard": 1
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
+    },
+    {
+      "id": "undesired-afternoon-shift",
+      "description": "",
+      "constrainType": "shiftPattern",
+      "shiftPatterns": ["AF-AF-AF"],
+      "staffGroup": ["all_staffs"],
+      "priority": 2,
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
+    },
+    {
+      "id": "undesired-fixed-shift",
+      "description": "",
+      "constrainType": "shiftPattern",
+      "shiftPatterns": ["MO-AF"],
+      "staffGroup": ["FSG"],
+      "priority": 2,
+      "exist": 0,
+      "isHard": 0,
+      "penalty": 50
     }
   ],
   "staffs":[
@@ -741,6 +767,16 @@
       "name": "PH",
       "duration": 8,
       "shift-type": "nws"
+    }
+  ],
+  "shiftGroups": [
+    {
+      "id": "AF",
+      "shifts": ["A1", "A2"]
+    },
+    {
+      "id": "MO",
+      "shifts": ["M1", "M2", "M3"]
     }
   ],
   "horizontalCoverages": [
