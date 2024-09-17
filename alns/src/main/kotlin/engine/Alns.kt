@@ -39,7 +39,7 @@ open class Alns(var data: InputData) {
     }
 
     private fun createWeightOperators() {
-        for (index in 0..2) {
+        for (index in 0..3) {
             if (this.operatorWeight.get(index) != null){
                 this.operatorWeight.set(
                     index,
@@ -54,7 +54,7 @@ open class Alns(var data: InputData) {
     }
 
     private fun resetWeightOperators(){
-        for(index in 0..2) {
+        for(index in 0..3) {
             this.operatorWeight.set(
                 index,
                 0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
@@ -63,13 +63,14 @@ open class Alns(var data: InputData) {
     }
 
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.5)
-        this.operatorScore.set(1, 0.4)
-        this.operatorScore.set(2, 0.1)
+        this.operatorScore.set(0, 0.4)
+        this.operatorScore.set(1, 0.2)
+        this.operatorScore.set(2, 0.2)
+        this.operatorScore.set(3, 0.2)
     }
 
     private fun createOperatorTimes() {
-        for (index in 0..2) {
+        for (index in 0..3) {
             this.operatorTimes.set(index, 1.0)
         }
     }
@@ -313,6 +314,30 @@ open class Alns(var data: InputData) {
         }
         bestSchedule = scoreTemp.maxByOrNull { it.value }?.key!!
         return bestSchedule
+    }
+
+    private fun greedySwapEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>>{
+        var newSchedule = deepCopySolution(schedules)
+        var shiftSwap = ""
+        if (newSchedule.isNotEmpty()) {
+            data.staffs.forEach{ staff ->
+                for (week in 1 .. data.schedulePeriod){
+                    for(index1 in 1..7){
+                        shiftSwap = newSchedule[staff.id]?.get(index1 + 7* (week - 1)).toString()
+
+                        for (index2 in 1.. 7){
+                            var tempSchedule = deepCopySolution(newSchedule)
+                            tempSchedule[staff.id]?.set(index1 + 7* (week - 1), tempSchedule[staff.id]?.get(index2 + 7* (week - 1))!!)
+                            tempSchedule[staff.id]?.set(index2 + 7* (week - 1), shiftSwap)
+                            if (CommonCaculate(data, tempSchedule).totalScore() > CommonCaculate(data, newSchedule).totalScore()){
+                                return tempSchedule
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return newSchedule
     }
 
     private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
@@ -627,6 +652,7 @@ open class Alns(var data: InputData) {
             0 -> return randomSwapStaffShift(schedules)
             1 -> return greedyCoverageEnhancement(schedules)
             2 -> return greedyCoverageHorizontalEnhancement(schedules)
+            3 -> return greedySwapEnhancement(schedules)
         }
         return schedules
     }
