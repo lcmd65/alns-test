@@ -14,9 +14,9 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(var data: InputData) {
-    var numberIterations: Int = 1000
+    var numberIterations: Int = 2000
     var temperature: Double = 100.0
-    var alpha: Double = 0.95
+    var alpha: Double = 0.9
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
     var score: Double = 0.0
