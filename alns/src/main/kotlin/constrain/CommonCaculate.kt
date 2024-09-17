@@ -8,6 +8,69 @@ import kotlin.math.max
 
 class CommonCaculate (var data: InputData, var schedule: MutableMap<String, MutableMap<Int, String>>) {
 
+    fun createConstrainScore(){
+        for (constrain in data.constrains){
+            when(constrain.id) {
+
+                "exactly-staff-working-time" -> {
+                    var input : MutableMap<String, Double> = mutableMapOf()
+                    for (week in 1..  data.schedulePeriod) {
+
+                        for (staff in data.staffs) {
+                            var staffWokringTime : Double = 0.0
+                            for (day in 1 .. 7){
+                                staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                            }
+                            input.set(staff.id + week.toString(), staffWokringTime)
+                        }
+                    }
+                    constrain.caculateScore(input)
+                }
+
+                "archive-0.5-day" -> {
+                    var input : MutableMap<String, Double> = mutableMapOf()
+                    for (week in 1..  data.schedulePeriod) {
+
+                        for (staff in data.staffs) {
+                            var staffWorkingTime : Double = 0.0
+                            for (day in 1 .. 7){
+                                var temp = data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                                if (temp != 4){
+                                    staffWorkingTime += 1
+                                }
+                                else {
+                                    staffWorkingTime += 0.5
+                                }
+                            }
+                            input.set(staff.id + week.toString(), staffWorkingTime)
+                        }                    }
+                    constrain.caculateScore(input)
+                }
+
+                "un-archive-0.5-day" -> {
+                    var input : MutableMap<String, Double> = mutableMapOf()
+                    for (week in 1..  data.schedulePeriod) {
+
+                        for (staff in data.staffs) {
+                            var staffWorkingTime : Double = 0.0
+                            for (day in 1 .. 7){
+                                var temp = data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                                if (temp != 4){
+                                    staffWorkingTime += 1
+                                }
+                                else {
+                                    staffWorkingTime += 0.5
+                                }
+                            }
+                            input.set(staff.id + week.toString(), staffWorkingTime)
+                        }
+                    }
+                    constrain.caculateScore(input)
+                }
+            }
+        }
+    }
+
     private fun getShiftInfoFromCoverage(coverageId: String): String {
         return coverageId.take(2)
     }
@@ -141,8 +204,8 @@ class CommonCaculate (var data: InputData, var schedule: MutableMap<String, Muta
 
 
     fun score(): Double{
+        createConstrainScore()
         var score = -caculateScore(schedule)
-        CreateConObjs(data).createConstrainScore(schedule)
         for (constrain in data.constrains){
             score += constrain.score
         }

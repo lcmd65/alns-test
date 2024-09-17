@@ -32,17 +32,17 @@ open class Alns(val data: InputData) {
     var horizontalCoverageFullFill: MutableMap<String, MutableMap<Int, MutableMap<String, Int>>> = mutableMapOf()
 
     fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var newSchedule = deepCopySolution(schedule)
         for (constrain in data.constrains) {
             when (constrain.id) {
                 "exactly-staff-working-time" -> {
-
                     for (week in 1..  data.schedulePeriod) {
                         var input : MutableMap<String, Double> = mutableMapOf()
 
                         for (staff in data.staffs) {
                             var staffWokringTime : Double = 0.0
                             for (day in 1 .. 7){
-                                staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                                staffWokringTime += data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
                             }
                             input.set(staff.id, staffWokringTime)
                         }
@@ -54,12 +54,85 @@ open class Alns(val data: InputData) {
                                     countDuration.set(7, 0)
                                     countDuration.set(4, 0)
                                     for (day in 1 .. 7){
-                                        countDuration.set(data.shifts.find { it.id == schedule[key]?.get(day + 7*(week - 1))}?.duration!!,
-                                            countDuration.get(data.shifts.find { it.id == schedule[key]?.get(day + 7*(week - 1))}?.duration!!)!! + 1)
+                                        if (data.shifts.find { it.id == newSchedule[key]?.get(day + 7*(week - 1))}?.duration!! == 7){
+                                            if(newSchedule[key]?.get(day + 7*(week - 1))!! in data.shiftGroups.find{it.id == "AF"}?.shifts!!){
+                                                newSchedule[key]?.set(day + 7*(week - 1), "A1")
+                                            }
+                                            else if (newSchedule[key]?.get(day + 7*(week - 1))!! in data.shiftGroups.find{it.id == "MO"}?.shifts!!){
+                                                newSchedule[key]?.set(day + 7*(week - 1), "M1")
+                                            }
+                                        }
+                                        countDuration.set(data.shifts.find { it.id == newSchedule[key]?.get(day + 7*(week - 1))}?.duration!!,
+                                            countDuration.get(data.shifts.find { it.id == newSchedule[key]?.get(day + 7*(week - 1))}?.duration!!)!! + 1)
                                     }
-                                    //if (countDuration.get(4) == 0){
-                                        //var temp = schedule.toMutableMap()
-                                    //}
+                                    if (countDuration.get(4) == 0){
+                                        newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week)
+                                    }
+                                }
+                                else {
+                                    var countDuration : MutableMap<Int, Int> = mutableMapOf()
+                                    countDuration.set(8, 0)
+                                    countDuration.set(7, 0)
+                                    countDuration.set(4, 0)
+                                    for (day in 1 .. 7){
+                                        countDuration.set(data.shifts.find { it.id == newSchedule[key]?.get(day + 7*(week - 1))}?.duration!!,
+                                            countDuration.get(data.shifts.find { it.id == newSchedule[key]?.get(day + 7*(week - 1))}?.duration!!)!! + 1)
+                                    }
+                                    if (countDuration.get(8)!! < 2){
+                                        for (index in 1..2 - countDuration.get(8)!!){
+                                            newSchedule = greedySwapToMaxDurationShiftWithBestScore(newSchedule, key, week)
+                                        }
+                                    }
+                                    else if (countDuration.get(8)!! < 2){
+                                        for (index in 1..countDuration.get(8)!! - 2){
+                                            newSchedule = greedySwapToSevenHoursDurationShiftWithBestScore(newSchedule, key, week)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+                "archive-0.5-day" -> {
+                    for (week in 1..  data.schedulePeriod) {
+                        var numberOfHalfShift : MutableMap<String, Int> = mutableMapOf()
+                        for (staff in data.staffs) {
+                            numberOfHalfShift.set(staff.id, 0)
+                            for (day in 1 .. 7){
+                                 if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
+                                     numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
+                                 }
+                            }
+                        }
+                        for ((key, value) in numberOfHalfShift){
+                            if (value < 1) {
+                                newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week)
+                            }
+                            else if (value > 1){
+                                for (index in 1 .. value - 1){
+                                    newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                "un-archive-0.5-day" -> {
+                    for (week in 1..  data.schedulePeriod) {
+                        var numberOfHalfShift : MutableMap<String, Int> = mutableMapOf()
+                        for (staff in data.staffs) {
+                            numberOfHalfShift.set(staff.id, 0)
+                            for (day in 1 .. 7){
+                                if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
+                                    numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
+                                }
+                            }
+                        }
+                        for ((key, value) in numberOfHalfShift){
+                            if (value > 0){
+                                for (index in 1 .. value - 1){
+                                    newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
                                 }
                             }
                         }
@@ -67,8 +140,84 @@ open class Alns(val data: InputData) {
                 }
             }
         }
-        return schedule
+        return newSchedule
     }
+
+    private fun greedySwapAHalfShiftWithBestScore(schedule: MutableMap<String, MutableMap<Int, String>>, key: String, week: Int):  MutableMap<String, MutableMap<Int, String>>{
+        var listSchedule : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+        for (day in 1 .. data.schedulePeriod){
+            var shiftInfo = schedule[key]?.get(day + 7*(week - 1))!!
+            if (shiftInfo in data.shiftGroups.find{it.id == "AF" }?.shifts!!){
+                shiftInfo = "M3"
+            }
+            else if (shiftInfo in data.shiftGroups.find{it.id == "MO"}?.shifts!! && shiftInfo != "M3"){
+                shiftInfo = "M3"
+            }
+            var temp = deepCopySolution(schedule)
+            temp[key]?.set(day + 7*(week - 1), shiftInfo)
+            listSchedule.set(temp, CommonCaculate(data, temp).score())
+
+        }
+        val bestSchedule = listSchedule.maxByOrNull { it.value }?.key
+        return bestSchedule ?: schedule
+    }
+
+    private fun greedyDestroyAHalfShiftWithBestScore(schedule: MutableMap<String, MutableMap<Int, String>>, key: String, week: Int):  MutableMap<String, MutableMap<Int, String>>{
+        var listSchedule : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+        for (day in 1 .. data.schedulePeriod){
+            var shiftInfo = schedule[key]?.get(day + 7*(week - 1))!!
+            if (data.shifts.find { it.id == shiftInfo }!!.duration == 4) {
+                for (shift in data.shifts){
+                    if (shift.id != "DO" && shift.id != "PH" && shift.duration != 4){
+                        var temp = deepCopySolution(schedule)
+                        temp[key]?.set(day + 7*(week - 1), shift.id)
+                        listSchedule.set(temp, CommonCaculate(data, temp).score())
+                    }
+                }
+            }
+        }
+        val bestSchedule = listSchedule.maxByOrNull { it.value }?.key
+        return bestSchedule ?: schedule
+    }
+
+    private fun greedySwapToMaxDurationShiftWithBestScore(schedule: MutableMap<String, MutableMap<Int, String>>, key: String, week: Int):  MutableMap<String, MutableMap<Int, String>>{
+        var listSchedule : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+        for (day in 1 .. data.schedulePeriod){
+            var shiftInfo = schedule[key]?.get(day + 7*(week - 1))!!
+            if (shiftInfo in data.shiftGroups.find{it.id == "AF"}?.shifts!! && shiftInfo != "A1"){
+                shiftInfo = "A1"
+            }
+            else if (shiftInfo in data.shiftGroups.find{it.id == "MO"}?.shifts!! && shiftInfo != "M1"){
+                shiftInfo = "M1"
+            }
+            var temp = deepCopySolution(schedule)
+            temp[key]?.set(day + 7*(week - 1), shiftInfo)
+            listSchedule.set(temp, CommonCaculate(data, temp).score())
+
+        }
+        val bestSchedule = listSchedule.maxByOrNull { it.value }?.key
+        return bestSchedule ?: schedule
+    }
+
+    private fun greedySwapToSevenHoursDurationShiftWithBestScore(schedule: MutableMap<String, MutableMap<Int, String>>, key: String, week: Int):  MutableMap<String, MutableMap<Int, String>>{
+        var listSchedule : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+        for (day in 1 .. data.schedulePeriod){
+            var shiftInfo = schedule[key]?.get(day + 7*(week - 1))!!
+            if (shiftInfo in data.shiftGroups.find{it.id == "AF"}?.shifts!! && shiftInfo != "A2" && shiftInfo != "DO" && shiftInfo != "PH"){
+                shiftInfo = "A2"
+            }
+            else if (shiftInfo in data.shiftGroups.find{it.id == "MO"}?.shifts!! && shiftInfo != "M2" && shiftInfo != "DO" && shiftInfo != "PH"){
+                shiftInfo = "M2"
+            }
+            var temp = deepCopySolution(schedule)
+            temp[key]?.set(day + 7*(week - 1), shiftInfo)
+            listSchedule.set(temp, CommonCaculate(data, temp).score())
+
+        }
+        val bestSchedule = listSchedule.maxByOrNull { it.value }?.key
+        return bestSchedule ?: schedule
+    }
+
 
     private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
         var scores = 0
@@ -288,7 +437,7 @@ open class Alns(val data: InputData) {
             for (coverage in data.coverages) {
                 for (staff in data.staffs) {
                     if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.random().id)
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" }.random().id)
                     }
                 }
             }
@@ -297,7 +446,7 @@ open class Alns(val data: InputData) {
     }
 
     private fun randomDestroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        val mutableSchedule = schedules.toMutableMap()
+        val mutableSchedule = deepCopySolution(schedules)
         if (mutableSchedule.isNotEmpty()) {
 
             val randomScheduleStaff = mutableSchedule.keys.random()
@@ -315,7 +464,7 @@ open class Alns(val data: InputData) {
         for (staffId in repairedSchedule.keys) {
             for (dayId in repairedSchedule[staffId]!!.keys) {
                 if (repairedSchedule[staffId]?.get(dayId) == ""){
-                    repairedSchedule[staffId]?.set(dayId, data.shifts.random().id)
+                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" }.random().id)
                 }
             }
         }
@@ -536,6 +685,7 @@ open class Alns(val data: InputData) {
 
     open fun runAlns(){
         var currentSolution = inititalSolution()
+        println(currentSolution)
         this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
@@ -544,6 +694,7 @@ open class Alns(val data: InputData) {
             val operatorIndex = routewheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
+            println(currentSolution)
             if (CommonCaculate(data, currentSolution).score() < CommonCaculate(data, this.bestSolution).score()){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
