@@ -1,6 +1,6 @@
-package com.ft.aio.template.adapter.output.web.scrippt.objective
+package com.ft.aio.template.adapter.output.web.scrippt.constrain
 
-data class patternConstrain (
+data class PatternConstrain (
     var id: String,
     var description: String,
     var constrainType: String,
@@ -10,7 +10,7 @@ data class patternConstrain (
     var exist: Boolean,
     var isHard: Boolean,
     var pelnalty: Int,
-    var patternLists : List<String>
+    var patternLists : List<String> = listOf()
 ) {
     fun parsingPattern(shift: List<String>, shiftGroup: List<String>){
         shiftPatterns.forEach {

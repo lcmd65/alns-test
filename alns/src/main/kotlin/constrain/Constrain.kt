@@ -1,5 +1,4 @@
-package com.ft.aio.template.adapter.output.web.scrippt.objective
-
+package com.ft.aio.template.adapter.output.web.scrippt.constrain
 import com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutor
 import kotlin.math.max
 
@@ -19,7 +18,7 @@ data class Constrain(
     var midSearch: Boolean = true
 ){
     fun caculateScore(input: MutableMap<String, Double> ){
-        if (covertKotlinFlag == true) {
+        if (this.covertKotlinFlag == true) {
             if (midSearch){
                 for (gap in input.values) {
                     this.score += this.defaultValue - (gap - this.threshold) * this.step

@@ -39,8 +39,7 @@ class CreateConObjs (var data: InputData) {
                                 }
                             }
                             input.set(staff.id + week.toString(), staffWorkingTime)
-                        }
-                    }
+                        }                    }
                     constrain.caculateScore(input)
                 }
 

@@ -1,4 +1,4 @@
-package com.ft.aio.template.adapter.output.web.scrippt.objective
+package com.ft.aio.template.adapter.output.web.scrippt.constrain
 
 data class Objective(
     val id: String,
