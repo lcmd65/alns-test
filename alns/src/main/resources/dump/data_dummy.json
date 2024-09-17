@@ -9,8 +9,8 @@
       "constrainType": "staffTimeObj",
       "staffGroup": ["all_staffs"],
       "priority": 10,
-      "toMaximize": 0,
-      "isHard": 1
+      "toMaximize": false,
+      "isHard": true
     },
     {
       "id": "archive-0.5-day",
@@ -19,8 +19,8 @@
       "constrainType": "staffTimeObj",
       "staffGroup": ["all_staffs"],
       "priority": 2,
-      "toMaximize": 0,
-      "isHard": 1
+      "toMaximize": false,
+      "isHard": true
     },
     {
       "id": "un-archive-0.5-day",
@@ -29,8 +29,8 @@
       "constrainType": "staffTimeObj",
       "staffGroup": ["all_staffs"],
       "priority": 2,
-      "toMaximize": 1,
-      "isHard": 1
+      "toMaximize": true,
+      "isHard": true
     }
   ],
   "patternConstrains": [
@@ -41,8 +41,8 @@
       "shiftPatterns": ["DO-AF", "PH-AF"],
       "staffGroup": ["all_staffs"],
       "priority": 2,
-      "exist": 0,
-      "isHard": 0,
+      "exist": false,
+      "isHard": false,
       "penalty": 50
     },
     {
@@ -52,8 +52,8 @@
       "shiftPatterns": ["AF-AF-AF"],
       "staffGroup": ["all_staffs"],
       "priority": 2,
-      "exist": 0,
-      "isHard": 0,
+      "exist": false,
+      "isHard": false,
       "penalty": 50
     },
     {
@@ -63,8 +63,8 @@
       "shiftPatterns": ["MO-AF"],
       "staffGroup": ["FSG"],
       "priority": 2,
-      "exist": 0,
-      "isHard": 0,
+      "exist": false,
+      "isHard": false,
       "penalty": 50
     }
   ],

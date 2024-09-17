@@ -2,15 +2,13 @@ package com.ft.aio.template.adapter.output.web.scrippt.input
 
 import com.ft.aio.template.adapter.output.web.scrippt.coverage.Coverage
 import com.ft.aio.template.adapter.output.web.scrippt.coverage.HorizontalCoverage
-import com.ft.aio.template.adapter.output.web.scrippt.objective.Constrain
-import com.ft.aio.template.adapter.output.web.scrippt.objective.Objective
-import com.ft.aio.template.adapter.output.web.scrippt.objective.patternConstrain
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constrain
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.Objective
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain
 import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.shift.ShiftGroup
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
-
-import kotlin.random.Random
 
 
 data class InputData (
@@ -21,7 +19,7 @@ data class InputData (
     var horizontalCoverages: List<HorizontalCoverage>,
     var objs : List<Objective>,
     var constrains: List<Constrain>,
-    var patternConstrains: List<patternConstrain>,
+    var patternConstrains: List<PatternConstrain>,
     var schedulePeriod: Int = 4,
     var shiftGroups: List<ShiftGroup>
 )

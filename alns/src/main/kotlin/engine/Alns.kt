@@ -4,6 +4,7 @@ import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
 import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.CommonCaculate
 import java.nio.DoubleBuffer
 import kotlin.math.abs
 import kotlin.math.max
@@ -21,7 +22,6 @@ open class Alns(val data: InputData) {
     var limit: Double = 1e-3
     var deltaE: Double = 0.0
     var score: Double = 0.0
-    var schedulePeriod: Int = 4 // week
     var penalty: Double = Int.MAX_VALUE.toDouble()
     var probabilitiesOfOperator: MutableMap<Int, Double> = mutableMapOf()
     var operatorScore: MutableMap<Int, Double> = mutableMapOf()
@@ -35,19 +35,35 @@ open class Alns(val data: InputData) {
         for (constrain in data.constrains) {
             when (constrain.id) {
                 "exactly-staff-working-time" -> {
-                    var input : MutableMap<String, Double> = mutableMapOf()
+
                     for (week in 1..  data.schedulePeriod) {
+                        var input : MutableMap<String, Double> = mutableMapOf()
 
                         for (staff in data.staffs) {
                             var staffWokringTime : Double = 0.0
                             for (day in 1 .. 7){
                                 staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
                             }
-                            input.set(staff.id + week.toString(), staffWokringTime)
+                            input.set(staff.id, staffWokringTime)
+                        }
+                        for ((key, value) in input){
+                            if (value.toInt() != 44){
+                                if(key == "Staff_1" || key == "Staff_3" || key == "Staff_6"){
+                                    var countDuration : MutableMap<Int, Int> = mutableMapOf()
+                                    countDuration.set(8, 0)
+                                    countDuration.set(7, 0)
+                                    countDuration.set(4, 0)
+                                    for (day in 1 .. 7){
+                                        countDuration.set(data.shifts.find { it.id == schedule[key]?.get(day + 7*(week - 1))}?.duration!!,
+                                            countDuration.get(data.shifts.find { it.id == schedule[key]?.get(day + 7*(week - 1))}?.duration!!)!! + 1)
+                                    }
+                                    //if (countDuration.get(4) == 0){
+                                        //var temp = schedule.toMutableMap()
+                                    //}
+                                }
+                            }
                         }
                     }
-
-
                 }
             }
         }
@@ -58,7 +74,7 @@ open class Alns(val data: InputData) {
         var scores = 0
 
         // coverage
-        for (week in 1..this.schedulePeriod) {
+        for (week in 1..data.schedulePeriod) {
             for (coverage in data.coverages) {
                 if (coverage.type.contains("hard") && coverage.type.contains("equal to")) {
                     scores += abs(
@@ -225,7 +241,7 @@ open class Alns(val data: InputData) {
         coverageId: Int
     ): MutableMap<Int, MutableMap<String, Int>>{
         var horizontalMap : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
-        for (week in 1 .. this.schedulePeriod){
+        for (week in 1 .. data.schedulePeriod){
             var temp: MutableMap<String, Int> = mutableMapOf()
             val coverage = data.horizontalCoverages.find { it.id == coverageId }
             for (staff in data.staffs){
@@ -252,12 +268,12 @@ open class Alns(val data: InputData) {
         // create blank schedule for caculating
         for (staff in data.staffs) {
             schedule[staff.id] = mutableMapOf()
-            for (day in 1..7 * this.schedulePeriod){
+            for (day in 1..7 * data.schedulePeriod){
                 schedule[staff.id]?.set(day, "")
             }
         }
 
-        for (week in 1..this.schedulePeriod) {
+        for (week in 1..data.schedulePeriod) {
             for (coverage in data.coverages) {
                 for (staff in data.staffs) {
                     if (caculateCoverageFullfillment(schedule, coverage.id, coverage.day, week) < coverage.desireValue &&
@@ -313,7 +329,7 @@ open class Alns(val data: InputData) {
     }
 
     private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        for (week in 1.. schedulePeriod) {
+        for (week in 1.. data.schedulePeriod) {
             for (coverage in data.coverages) {
                 if (coverage.type.contains("equal to")){
                     val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
@@ -528,12 +544,13 @@ open class Alns(val data: InputData) {
             val operatorIndex = routewheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
-            if (CalculateScore(data, currentSolution).score() < CalculateScore(data, this.bestSolution).score()){
+            if (CommonCaculate(data, currentSolution).score() < CommonCaculate(data, this.bestSolution).score()){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
         }
+        this.bestSolution = adjustScheduleToConstrain(bestSolution)
 
-        this.penalty = CalculateScore(data, this.bestSolution).score()
+        this.penalty = CommonCaculate(data, this.bestSolution).score()
         this.score = Int.MAX_VALUE.toDouble() + this.penalty
         for (hcover in data.horizontalCoverages) {
             this.horizontalCoverageFullFill.set("h_cover_id " + hcover.id.toString(), caculateHorizontalCoverageFullfillment(bestSolution, hcover.id))
