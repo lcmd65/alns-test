@@ -202,13 +202,24 @@ class CommonCaculate (var data: InputData, var schedule: MutableMap<String, Muta
         return scores.toDouble()
     }
 
-
-    fun score(): Double{
-        createConstrainScore()
+    fun coverageScore():Double{
         var score = -caculateScore(schedule)
+        return score
+    }
+
+    fun constrainScore(): Double{
+        createConstrainScore()
+        var score = 0.0
         for (constrain in data.constrains){
             score += constrain.score
         }
+        return score
+    }
+
+    fun totalScore(): Double{
+        var score = 0.0
+        score += constrainScore()
+        score += coverageScore()
         return score
     }
 }
