@@ -20,7 +20,7 @@ data class InputData (
     var objs : List<Objective>,
     var constrains: List<Constrain>,
     var patternConstrains: List<PatternConstrain>,
-    var schedulePeriod: Int = 4,
+    var schedulePeriod: Int,
     var shiftGroups: List<ShiftGroup>
 )
 {
