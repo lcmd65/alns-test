@@ -23,7 +23,7 @@ fun main() {
     data.validateInputData()
 
     var optimizer = Alns(data)
-    optimizer.runAlns()
+    optimizer.runIteration()
 
     println("Optimize score " + optimizer.score)
     println("Penalty: " + optimizer.penalty)

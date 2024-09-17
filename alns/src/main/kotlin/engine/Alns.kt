@@ -29,7 +29,366 @@ open class Alns(var data: InputData) {
     var coverageFullFill: MutableMap<String, MutableMap<Int, String>> = mutableMapOf()
     var horizontalCoverageFullFill: MutableMap<String, MutableMap<Int, MutableMap<String, Int>>> = mutableMapOf()
 
-    fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+    private fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
+        for ((key, innerMap) in solution) {
+            val copiedInnerMap = innerMap.toMutableMap()
+            newSolution[key] = copiedInnerMap
+        }
+        return newSolution
+    }
+
+    private fun createWeightOperators() {
+        for (index in 0..2) {
+            if (this.operatorWeight.get(index) != null){
+                this.operatorWeight.set(
+                    index,
+                    this.operatorWeight.get(index)!! * 0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
+            }
+            else{
+                this.operatorWeight.set(
+                    index,
+                    0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
+            }
+        }
+    }
+
+    private fun resetWeightOperators(){
+        for(index in 0..2) {
+            this.operatorWeight.set(
+                index,
+                0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
+            )
+        }
+    }
+
+    private fun createScoreOperator() {
+        this.operatorScore.set(0, 0.5)
+        this.operatorScore.set(1, 0.4)
+        this.operatorScore.set(2, 0.1)
+    }
+
+    private fun createOperatorTimes() {
+        for (index in 0..2) {
+            this.operatorTimes.set(index, 1.0)
+        }
+    }
+
+    private fun calculateSimulatedAnealing(
+        currentScheduled: MutableMap<String, MutableMap<Int, String>>,
+        nextScheduled:MutableMap<String, MutableMap<Int, String>>
+    ): MutableMap<String, MutableMap<Int, String>> {
+        deltaE = CommonCaculate(data, currentScheduled).totalScore() - CommonCaculate(data, nextScheduled).totalScore()
+        if (deltaE < 0){
+            return nextScheduled
+        }
+        else {
+            if (temperature < limit) {
+                return currentScheduled
+            }
+            val probability = exp(deltaE / temperature)
+            val acceptanceVariable = Random.nextDouble(0.0, 1.0)
+
+            temperature *= alpha
+            if (probability < acceptanceVariable) {
+                return nextScheduled
+            }
+        }
+        return currentScheduled
+    }
+
+    private fun checkIfStaffInStaffGroup(
+        staff: Staff,
+        staffGroups: List<String>
+    ): Boolean {
+        var result = false
+        for (staffGroupId in staffGroups) {
+            val staffGroup = data.staffGroups.find { it.id == staffGroupId }
+
+            if (staffGroup != null) {
+                for (staffInfo in staffGroup.staffList) {
+                    if (staff.id == staffInfo) {
+                        result = true
+                        break
+                    }
+                }
+            }
+
+            if (result) {
+                break
+            }
+        }
+        return result
+    }
+
+    private fun caculateCoverageFullfillment(
+        schedules: MutableMap<String, MutableMap<Int, String>>,
+        coverageId: String,
+        dayId: Int,
+        week: Int
+    ): Int {
+        var coverage = data.coverages.find { it.id == coverageId && it.day == dayId }
+        var temp = 0
+        if (coverage != null){
+            for (staff in data.staffs){
+                if (schedules[staff.id]?.get(dayId + 7*( week - 1)) in coverage.shift && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                    temp += 1
+                }
+            }
+        }
+
+        return temp
+    }
+
+    private fun caculateHorizontalCoverageFullfillment(
+        schedules: MutableMap<String, MutableMap<Int, String>>,
+        coverageId: Int
+    ): MutableMap<Int, MutableMap<String, Int>>{
+        var horizontalMap : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
+        for (week in 1 .. data.schedulePeriod){
+            var temp: MutableMap<String, Int> = mutableMapOf()
+            val coverage = data.horizontalCoverages.find { it.id == coverageId }
+            for (staff in data.staffs){
+                temp.set(staff.id, 0)
+                if (coverage != null) {
+                    for (day in coverage.days) {
+                        if (coverage != null) {
+                            if (schedules[staff.id]?.get(day + 7*(week-1))!! in coverage.shifts && day in coverage.days) {
+                                temp.set(staff.id, temp.get(staff.id)!! + 1)
+                            }
+                        }
+                    }
+                }
+            }
+            horizontalMap.set(week, temp)
+        }
+        return horizontalMap
+    }
+
+    private fun initialSolution(): MutableMap<String, MutableMap<Int, String>> {
+        var schedule : MutableMap<String, MutableMap<Int, String>>
+        schedule = mutableMapOf()
+
+        // create blank schedule for caculating
+        for (staff in data.staffs) {
+            schedule[staff.id] = mutableMapOf()
+            for (day in 1..7 * data.schedulePeriod){
+                schedule[staff.id]?.set(day, "")
+            }
+        }
+
+        for (week in 1..data.schedulePeriod) {
+            for (coverage in data.coverages) {
+                for (staff in data.staffs) {
+                    if (caculateCoverageFullfillment(schedule, coverage.id, coverage.day, week) < coverage.desireValue &&
+                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
+                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
+                        schedule[staff.id]?.get(coverage.day + 7*(week - 1)) == ""
+                    ) {
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), coverage.shift.random())
+                    }
+                }
+            }
+            for (coverage in data.coverages) {
+                for (staff in data.staffs) {
+                    if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" }.random().id)
+                    }
+                }
+            }
+        }
+        return schedule
+    }
+
+    private fun randomDestroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        val mutableSchedule = deepCopySolution(schedules)
+        if (mutableSchedule.isNotEmpty()) {
+
+            val randomScheduleStaff = mutableSchedule.keys.random()
+            val randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
+            if (randomScheduleDay != null) {
+                mutableSchedule[randomScheduleStaff]?.set(randomScheduleDay.toInt(), "")
+            }
+        }
+        return mutableSchedule
+    }
+
+    private fun repairSolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var repairedSchedule = deepCopySolution(schedules)
+
+        for (staffId in repairedSchedule.keys) {
+            for (dayId in repairedSchedule[staffId]!!.keys) {
+                if (repairedSchedule[staffId]?.get(dayId) == ""){
+                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" }.random().id)
+                }
+            }
+        }
+        return repairedSchedule
+    }
+
+    private fun randomSwapStaffShift(currentSolution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var newSolution = randomDestroySolution(currentSolution)
+        newSolution = repairSolution(newSolution)
+        return newSolution
+    }
+
+    private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        var bestSchedule = deepCopySolution(schedules)
+        var scoreTemp : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+        for (week in 1.. data.schedulePeriod) {
+            data.coverages.forEach { coverage ->
+                if (coverage.type.contains("equal to")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+                    if (currentFulfillment < coverage.desireValue) {
+                        data.staffs.forEach { staff ->
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                coverage.shift.forEach { shift ->
+                                    val tempSolution =
+                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    scoreTemp.set(tempSolution, CommonCaculate(data, tempSolution).coverageScore())
+                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (currentFulfillment > coverage.desireValue) {
+                        data.staffs.forEach { staff ->
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                if (schedules[staff.id]?.get(coverage.day + 7 * (week - 1)) in coverage.shift) {
+                                    var tempSolution = deepCopySolution(schedules)
+                                    for (shiftFill in data.shifts){
+                                        if(shiftFill.id !in coverage.shift){
+                                            tempSolution[staff.id]?.set(coverage.day +7*(week - 1), shiftFill.id)
+                                            scoreTemp.set(tempSolution, CommonCaculate(data, tempSolution).coverageScore())
+                                            if(CommonCaculate(data, schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                                return tempSolution
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(coverage.type.contains("at least")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+                    if (currentFulfillment < coverage.desireValue) {
+                        var scoreTemp : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
+                        data.staffs.forEach { staff ->
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                coverage.shift.forEach { shift ->
+                                    var tempSolution = deepCopySolution(schedules)
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    scoreTemp.set(tempSolution, CommonCaculate(data, tempSolution).coverageScore())
+                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(coverage.type.contains("at most")){
+                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
+                    if (currentFulfillment > coverage.desireValue) {
+                        data.staffs.forEach { staff ->
+                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                                coverage.shift.forEach { shift ->
+                                    var tempSolution = deepCopySolution(schedules)
+                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                    scoreTemp.set(tempSolution, CommonCaculate(data, tempSolution).coverageScore())
+                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        bestSchedule = scoreTemp.maxByOrNull { it.value }?.key!!
+        return bestSchedule
+    }
+
+    private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+        data.horizontalCoverages.forEach { horizontalCover ->
+            val fullHorizontalCoverFullFill = caculateHorizontalCoverageFullfillment(schedules, horizontalCover.id)
+            for ((week, horizontalCoverFullFill) in fullHorizontalCoverFullFill){
+                for (item in horizontalCoverFullFill) {
+                    if (horizontalCover.type.contains("at least")){
+                        if (item.value < horizontalCover.desireValue) {
+                            for (shift in horizontalCover.shifts) {
+                                 horizontalCover.days.forEach { day ->
+                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
+                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (horizontalCover.type.contains("equal to")){
+                        if(item.value < horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
+                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                        return tempSolution
+                                    }
+                                }
+                            }
+                        }
+                        else if(item.value > horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
+                                        for (shiftFill in data.shifts){
+                                            if(shiftFill.id !in horizontalCover.shifts){
+                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
+                                                if(CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                                    return tempSolution
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (horizontalCover.type.contains("at most")){
+                        if(item.value > horizontalCover.desireValue){
+                            for (shift in horizontalCover.shifts){
+                                for (day in horizontalCover.days) {
+                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
+                                        for (shiftFill in data.shifts){
+                                            if(shiftFill.id !in horizontalCover.shifts){
+                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
+                                                if(CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
+                                                    return tempSolution
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return schedules
+    }
+
+    private fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         var newSchedule = deepCopySolution(schedule)
         for (constrain in data.constrains) {
             when (constrain.id) {
@@ -99,9 +458,9 @@ open class Alns(var data: InputData) {
                         for (staff in data.staffs) {
                             numberOfHalfShift.set(staff.id, 0)
                             for (day in 1 .. 7){
-                                 if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
-                                     numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
-                                 }
+                                if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
+                                    numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
+                                }
                             }
                         }
                         for ((key, value) in numberOfHalfShift){
@@ -213,373 +572,22 @@ open class Alns(var data: InputData) {
                 continue
             }
             else{
-            if (shiftInfo in data.shiftGroups.find{it.id == "AF"}?.shifts!! && shiftInfo != "A2" && shiftInfo != "DO" && shiftInfo != "PH"){
-                shiftInfo = "A2"
-            }
-            else if (shiftInfo in data.shiftGroups.find{it.id == "MO"}?.shifts!! && shiftInfo != "M2" && shiftInfo != "DO" && shiftInfo != "PH"){
-                shiftInfo = "M2"
-            }
-            var temp = deepCopySolution(schedule)
-            temp[key]?.set(day + 7*(week - 1), shiftInfo)
-            listSchedule.set(temp, CommonCaculate(data, temp).totalScore())
+                if (shiftInfo in data.shiftGroups.find{it.id == "AF"}?.shifts!! && shiftInfo != "A2" && shiftInfo != "DO" && shiftInfo != "PH"){
+                    shiftInfo = "A2"
+                }
+                else if (shiftInfo in data.shiftGroups.find{it.id == "MO"}?.shifts!! && shiftInfo != "M2" && shiftInfo != "DO" && shiftInfo != "PH"){
+                    shiftInfo = "M2"
+                }
+                var temp = deepCopySolution(schedule)
+                temp[key]?.set(day + 7*(week - 1), shiftInfo)
+                listSchedule.set(temp, CommonCaculate(data, temp).totalScore())
             }
         }
         val bestSchedule = listSchedule.maxByOrNull { it.value }?.key
         return bestSchedule ?: schedule
     }
 
-    private fun createWeightOperators() {
-        for (index in 0..2) {
-            if (this.operatorWeight.get(index) != null){
-                this.operatorWeight.set(
-                    index,
-                    this.operatorWeight.get(index)!! * 0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
-            }
-            else{
-                this.operatorWeight.set(
-                    index,
-                    0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!)
-            }
-        }
-    }
-
-    private fun resetWeightOperators(){
-        for(index in 0..2) {
-            this.operatorWeight.set(
-                index,
-                0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
-            )
-        }
-    }
-
-    private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.5)
-        this.operatorScore.set(1, 0.4)
-        this.operatorScore.set(2, 0.1)
-    }
-
-    private fun createOperatorTimes() {
-        for (index in 0..2) {
-            this.operatorTimes.set(index, 1.0)
-        }
-    }
-
-    private fun caculateSimulatedAnealing(
-        currentScheduled: MutableMap<String, MutableMap<Int, String>>,
-        nextScheduled:MutableMap<String, MutableMap<Int, String>>
-    ): MutableMap<String, MutableMap<Int, String>> {
-        deltaE = CommonCaculate(data, currentScheduled).totalScore() - CommonCaculate(data, nextScheduled).totalScore()
-        if (deltaE < 0){
-            return nextScheduled
-        }
-        else {
-            if (temperature < limit) {
-                return currentScheduled
-            }
-            val probability = exp(deltaE / temperature)
-            val acceptanceVariable = Random.nextDouble(0.0, 1.0)
-
-            temperature *= alpha
-            if (probability < acceptanceVariable) {
-                return nextScheduled
-            }
-        }
-        return currentScheduled
-    }
-
-    private fun getShiftInfoFromCoverage(coverageId: String): String {
-        return coverageId.take(2)
-    }
-
-    private fun checkIfStaffInStaffGroup(
-        staff: Staff,
-        staffGroups: List<String>
-    ): Boolean {
-        var result = false
-        for (staffGroupId in staffGroups) {
-            val staffGroup = data.staffGroups.find { it.id == staffGroupId }
-
-            if (staffGroup != null) {
-                for (staffInfo in staffGroup.staffList) {
-                    if (staff.id == staffInfo) {
-                        result = true
-                        break
-                    }
-                }
-            }
-
-            if (result) {
-                break
-            }
-        }
-        return result
-    }
-
-    private fun caculateCoverageFullfillment(
-        schedules: MutableMap<String, MutableMap<Int, String>>,
-        coverageId: String,
-        dayId: Int,
-        week: Int
-    ): Int {
-        val coverage = data.coverages.find { it.id == coverageId && it.day == dayId }
-        var temp = 0
-        if (coverage != null){
-            for (staff in data.staffs){
-                if (schedules[staff.id]?.get(dayId + 7*( week - 1)) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                    temp += 1
-                }
-            }
-        }
-
-        return temp
-    }
-
-    private fun caculateHorizontalCoverageFullfillment(
-        schedules: MutableMap<String, MutableMap<Int, String>>,
-        coverageId: Int
-    ): MutableMap<Int, MutableMap<String, Int>>{
-        var horizontalMap : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
-        for (week in 1 .. data.schedulePeriod){
-            var temp: MutableMap<String, Int> = mutableMapOf()
-            val coverage = data.horizontalCoverages.find { it.id == coverageId }
-            for (staff in data.staffs){
-                temp.set(staff.id, 0)
-                if (coverage != null) {
-                    for (day in coverage.days) {
-                        if (coverage != null) {
-                            if (schedules[staff.id]?.get(day + 7*(week-1))!! in coverage.shifts && day in coverage.days) {
-                                temp.set(staff.id, temp.get(staff.id)!! + 1)
-                            }
-                        }
-                    }
-                }
-            }
-            horizontalMap.set(week, temp)
-        }
-        return horizontalMap
-    }
-
-    private fun inititalSolution(): MutableMap<String, MutableMap<Int, String>> {
-        var schedule : MutableMap<String, MutableMap<Int, String>>
-        schedule = mutableMapOf()
-
-        // create blank schedule for caculating
-        for (staff in data.staffs) {
-            schedule[staff.id] = mutableMapOf()
-            for (day in 1..7 * data.schedulePeriod){
-                schedule[staff.id]?.set(day, "")
-            }
-        }
-
-        for (week in 1..data.schedulePeriod) {
-            for (coverage in data.coverages) {
-                for (staff in data.staffs) {
-                    if (caculateCoverageFullfillment(schedule, coverage.id, coverage.day, week) < coverage.desireValue &&
-                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
-                        checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
-                        schedule[staff.id]?.get(coverage.day + 7*(week - 1)) == ""
-                    ) {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), coverage.shift.random())
-                    }
-                }
-            }
-            for (coverage in data.coverages) {
-                for (staff in data.staffs) {
-                    if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" }.random().id)
-                    }
-                }
-            }
-        }
-        return schedule
-    }
-
-    private fun randomDestroySolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        val mutableSchedule = deepCopySolution(schedules)
-        if (mutableSchedule.isNotEmpty()) {
-
-            val randomScheduleStaff = mutableSchedule.keys.random()
-            val randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
-            if (randomScheduleDay != null) {
-                mutableSchedule[randomScheduleStaff]?.set(randomScheduleDay.toInt(), "")
-            }
-        }
-        return mutableSchedule
-    }
-
-    private fun repairSolution(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        var repairedSchedule = deepCopySolution(schedules)
-
-        for (staffId in repairedSchedule.keys) {
-            for (dayId in repairedSchedule[staffId]!!.keys) {
-                if (repairedSchedule[staffId]?.get(dayId) == ""){
-                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" }.random().id)
-                }
-            }
-        }
-        return repairedSchedule
-    }
-
-    private fun randomSwapStaffShift(currentSolution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        var newSolution = randomDestroySolution(currentSolution)
-        newSolution = repairSolution(newSolution)
-        return newSolution
-    }
-
-    private fun greedyCoverageEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        for (week in 1.. data.schedulePeriod) {
-            for (coverage in data.coverages) {
-                if (coverage.type.contains("equal to")){
-                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
-
-                    if (currentFulfillment < coverage.desireValue) {
-                        for (staff in data.staffs) {
-                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                for (shift in  coverage.shift) {
-                                    val tempSolution =
-                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                        return tempSolution
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (currentFulfillment > coverage.desireValue) {
-                        for (staff in data.staffs) {
-                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                if (schedules[staff.id]?.get(coverage.day + 7 * (week - 1)) in coverage.shift) {
-                                    val tempSolution =
-                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    for (shiftFill in data.shifts){
-                                        if(shiftFill.id !in coverage.shift){
-                                            tempSolution[staff.id]?.set(coverage.day +7*(week - 1), shiftFill.id)
-                                            if(CommonCaculate(data, schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                                return tempSolution
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if(coverage.type.contains("at least")){
-                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
-
-                    if (currentFulfillment < coverage.desireValue) {
-                        for (staff in data.staffs) {
-                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                for (shift in  coverage.shift) {
-                                    val tempSolution =
-                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                        return tempSolution
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if(coverage.type.contains("at most")){
-                    val currentFulfillment = caculateCoverageFullfillment(schedules, coverage.id, coverage.day, week)
-
-                    if (currentFulfillment > coverage.desireValue) {
-                        for (staff in data.staffs) {
-                            if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                for (shift in  coverage.shift) {
-                                    val tempSolution =
-                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                        return tempSolution
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return schedules
-    }
-
-    private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        for (horizontalCover in data.horizontalCoverages) {
-            val fullHorizontalCoverFullFill = caculateHorizontalCoverageFullfillment(schedules, horizontalCover.id)
-            for ((week, horizontalCoverFullFill) in fullHorizontalCoverFullFill){
-                for (item in horizontalCoverFullFill) {
-                    if (horizontalCover.type.contains("at least")){
-                        if (item.value < horizontalCover.desireValue) {
-                            for (shift in horizontalCover.shifts) {
-                                for (day in horizontalCover.days) {
-                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
-                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                        return tempSolution
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (horizontalCover.type.contains("equal to")){
-                        if(item.value < horizontalCover.desireValue){
-                            for (shift in horizontalCover.shifts){
-                                for (day in horizontalCover.days) {
-                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
-                                    if (CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                        return tempSolution
-                                    }
-                                }
-                            }
-                        }
-                        else if(item.value > horizontalCover.desireValue){
-                            for (shift in horizontalCover.shifts){
-                                for (day in horizontalCover.days) {
-                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
-                                        for (shiftFill in data.shifts){
-                                            if(shiftFill.id !in horizontalCover.shifts){
-                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
-                                                if(CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                                    return tempSolution
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (horizontalCover.type.contains("at most")){
-                        if(item.value > horizontalCover.desireValue){
-                            for (shift in horizontalCover.shifts){
-                                for (day in horizontalCover.days) {
-                                    if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
-                                        for (shiftFill in data.shifts){
-                                            if(shiftFill.id !in horizontalCover.shifts){
-                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
-                                                if(CommonCaculate(data,schedules).coverageScore() < CommonCaculate(data, tempSolution).coverageScore()) {
-                                                    return tempSolution
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return schedules
-    }
-
-    private fun routewheel(index: Int): Int{
+    private fun routeWheel(index: Int): Int{
         if (index % 400 == 0){
             resetWeightOperators()
         }
@@ -623,25 +631,16 @@ open class Alns(var data: InputData) {
         return schedules
     }
 
-    fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
-        val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
-        for ((key, innerMap) in solution) {
-            val copiedInnerMap = innerMap.toMutableMap()
-            newSolution[key] = copiedInnerMap
-        }
-        return newSolution
-    }
-
-    open fun runAlns(){
-        var currentSolution = inititalSolution()
+    fun runIteration(){
+        var currentSolution = initialSolution()
         this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
 
         for (index in 1..this.numberIterations) {
-            val operatorIndex = routewheel(index)
+            val operatorIndex = routeWheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
-            currentSolution = caculateSimulatedAnealing(currentSolution, nextSolution)
+            currentSolution = calculateSimulatedAnealing(currentSolution, nextSolution)
             if (CommonCaculate(data, currentSolution).totalScore() > CommonCaculate(data, this.bestSolution).totalScore()){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
