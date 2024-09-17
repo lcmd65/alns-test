@@ -71,10 +71,6 @@ class CommonCaculate (var data: InputData, var schedule: MutableMap<String, Muta
         }
     }
 
-    private fun getShiftInfoFromCoverage(coverageId: String): String {
-        return coverageId.take(2)
-    }
-
     private fun checkIfStaffInStaffGroup(
         staff: Staff,
         staffGroups: List<String>
@@ -109,7 +105,7 @@ class CommonCaculate (var data: InputData, var schedule: MutableMap<String, Muta
         var temp = 0
         if (coverage != null){
             for (staff in data.staffs){
-                if (schedules[staff.id]?.get(dayId + 7*( week - 1)) == getShiftInfoFromCoverage(coverageId) && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
+                if (schedules[staff.id]?.get(dayId + 7*( week - 1)) in coverage.shift && checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                     temp += 1
                 }
             }
