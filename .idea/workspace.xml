@@ -4,14 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54adbb02-94e4-4e06-b098-5255a4ef24e3" name="Changes" comment="[ADR-2614] fix alns">
+    <list default="true" id="54adbb02-94e4-4e06-b098-5255a4ef24e3" name="Changes" comment="[ADR-2614] update alns requirements">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/alns.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/alns.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/alns.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/alns.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/classes/kotlin/main/com/ft/aio/template/adapter/output/web/script/engine/Alns/Alns.class" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/classes/kotlin/main/com/ft/aio/template/adapter/output/web/script/engine/Alns/Alns.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/inputs/source-to-output.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/class-attributes.tab" afterDir="false" />
@@ -21,8 +24,7 @@
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/internal-name-to-source.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/proto.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/source-to-classes.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab" afterDir="false" />
@@ -35,12 +37,17 @@
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab_i" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/id-to-file.tab_i" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream.len" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.keystream.len" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.len" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.len" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.at" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.s" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/last-build.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/last-build.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +82,18 @@
                 <item name="alns" type="f1a62948:ProjectNode" />
                 <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
                 <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="alns" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="runtimeClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="alns" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="testCompileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
               </path>
             </expand>
             <select />
@@ -136,6 +155,16 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/lcmd65/alns-test&quot;,
     &quot;accountId&quot;: &quot;f2293a00-ba35-4d2e-bd3d-dd3840ceceb7&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;lcmd65&quot;,
+    &quot;repository&quot;: &quot;alns-test&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -164,13 +193,17 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Build alns.executor": "Run",
+    "Gradle.FormulaExecutorTest.executor": "Run",
+    "Gradle.FormulaExecutorTest.testExecutorKotlin.executor": "Run",
+    "Gradle.FormulaExecutorTest.testExtractValues.executor": "Run",
     "JUnit.All in alns-test.executor": "Run",
     "JUnit.All in alns.main.executor": "Run",
     "Kotlin.MainKt.executor": "Run",
     "Python.run (1).executor": "Run",
     "Python.run.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "test",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin",
     "node.js.detected.package.eslint": "true",
@@ -182,7 +215,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.32528734",
-    "settings.editor.selected.configurable": "project.propDebugger",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -198,21 +231,77 @@
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
-    <configuration name="All in alns-test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alns-test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="FormulaExecutorTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/alns" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutorTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
     </configuration>
-    <configuration name="All in alns.main" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alns.main" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="FormulaExecutorTest.testExecutorKotlin" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/alns" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutorTest.testExecutorKotlin&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="FormulaExecutorTest.testExtractValues" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/alns" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutorTest.testExtractValues&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
     </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ft.aio.template.adapter.output.web.scrippt.MainKt" />
@@ -244,36 +333,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Workspace" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lib-ai-lua-scripts/StarHub/Python-for-TS" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lib-ai-lua-scripts/StarHub/Python-for-TS/run.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.FormulaExecutorTest" />
+        <item itemvalue="Gradle.FormulaExecutorTest.testExtractValues" />
+        <item itemvalue="Gradle.FormulaExecutorTest.testExecutorKotlin" />
         <item itemvalue="Python.run (1)" />
-        <item itemvalue="Python.run" />
-        <item itemvalue="JUnit.All in alns.main" />
-        <item itemvalue="JUnit.All in alns-test" />
       </list>
     </recent_temporary>
   </component>
@@ -298,22 +364,8 @@
       <workItem from="1723444752756" duration="13148000" />
       <workItem from="1723514711569" duration="6431000" />
       <workItem from="1724652971593" duration="150528000" />
-    </task>
-    <task id="LOCAL-00001" summary="create Python for TS">
-      <option name="closed" value="true" />
-      <created>1723088169634</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1723088169634</updated>
-    </task>
-    <task id="LOCAL-00002" summary="add HDS objective in .lua format (Lua for TS)">
-      <option name="closed" value="true" />
-      <created>1723095921949</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1723095921949</updated>
+      <workItem from="1725944787950" duration="82805000" />
+      <workItem from="1726555787423" duration="849000" />
     </task>
     <task id="LOCAL-00003" summary="create running file">
       <option name="closed" value="true" />
@@ -563,7 +615,151 @@
       <option name="project" value="LOCAL" />
       <updated>1725871917860</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726048359618</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1726048359618</updated>
+    </task>
+    <task id="LOCAL-00035" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726115111138</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1726115111138</updated>
+    </task>
+    <task id="LOCAL-00036" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726115159263</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1726115159263</updated>
+    </task>
+    <task id="LOCAL-00037" summary="[ADR-2614] add gitignore">
+      <option name="closed" value="true" />
+      <created>1726115274285</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1726115274285</updated>
+    </task>
+    <task id="LOCAL-00038" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726116255779</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1726116255779</updated>
+    </task>
+    <task id="LOCAL-00039" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726116562738</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1726116562738</updated>
+    </task>
+    <task id="LOCAL-00040" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726118633126</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1726118633126</updated>
+    </task>
+    <task id="LOCAL-00041" summary="[ADR-2614] fix alns">
+      <option name="closed" value="true" />
+      <created>1726467847719</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1726467847719</updated>
+    </task>
+    <task id="LOCAL-00042" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726472071016</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1726472071016</updated>
+    </task>
+    <task id="LOCAL-00043" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726478047439</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1726478047439</updated>
+    </task>
+    <task id="LOCAL-00044" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726480133605</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1726480133605</updated>
+    </task>
+    <task id="LOCAL-00045" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726535747089</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1726535747089</updated>
+    </task>
+    <task id="LOCAL-00046" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726543958156</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1726543958156</updated>
+    </task>
+    <task id="LOCAL-00047" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726548045461</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1726548045461</updated>
+    </task>
+    <task id="LOCAL-00048" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726548242423</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1726548242423</updated>
+    </task>
+    <task id="LOCAL-00049" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726554481261</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1726554481261</updated>
+    </task>
+    <task id="LOCAL-00050" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726554516652</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1726554516661</updated>
+    </task>
+    <task id="LOCAL-00051" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726554915425</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1726554915429</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,14 +788,17 @@
     <MESSAGE value="[ADR-2614] create repo/ refactor" />
     <MESSAGE value="[ADR-2614] minor change" />
     <MESSAGE value="[ADR-2614] fix alns change" />
-    <option name="LAST_COMMIT_MESSAGE" value="[ADR-2614] fix alns change" />
+    <MESSAGE value="[ADR-2614] add gitignore" />
+    <MESSAGE value="[ADR-2614] fix alns" />
+    <MESSAGE value="[ADR-2614] update alns requirements" />
+    <option name="LAST_COMMIT_MESSAGE" value="[ADR-2614] update alns requirements" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/input/InputData.kt</url>
-          <line>21</line>
+          <line>28</line>
           <properties class="com.ft.aio.template.adapter.output.web.scrippt.input.InputData">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -615,14 +814,73 @@
           </properties>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/PatternConstrain.kt</url>
+          <line>2</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain" method="&lt;init&gt;">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>77</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.CommonCaculate" method="checkIfStaffInStaffGroup">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>101</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.CommonCaculate" method="caculateCoverageFullfillment">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>216</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="repairSolution">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>40</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="createWeightOperators">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>71</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="createOperatorTimes">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="18" />
         </breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
-          <line>281</line>
-          <option name="timeStamp" value="20" />
+          <line>147</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>217</line>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

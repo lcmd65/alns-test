@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="alns:main" external.linked.project.path="$MODULE_DIR$/../../alns" external.root.project.path="$MODULE_DIR$/../../alns" external.system.id="GRADLE" external.system.module.group="com.ft.aio.template.adapter.output.web.scrippt" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
+    <facet external-system-id="GRADLE" type="web" name="Web">
+      <configuration>
+        <webroots />
+      </configuration>
+    </facet>
     <facet external-system-id="GRADLE" type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 11" allPlatforms="JVM [11]" useProjectSettings="false" pureKotlinSourceFolders="$MODULE_DIR$/../../alns/src/main/kotlin;/Users/lechonminhdat/Documents/alns-test/alns/src/test/kotlin">
         <compilerSettings />
@@ -43,11 +48,24 @@
     </content>
     <orderEntry type="jdk" jdkName="22" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.10.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.poi:poi-ooxml:5.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.poi:poi:5.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.4" level="project" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.poi:poi-ooxml-lite:5.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.xmlbeans:xmlbeans:5.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.18.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-compress:1.21" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.virtuald:curvesapi:1.07" level="project" />
+    <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.15" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.zaxxer:SparseBitSet:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.5.1" level="project" />
