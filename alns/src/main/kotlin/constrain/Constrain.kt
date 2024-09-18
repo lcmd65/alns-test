@@ -7,6 +7,7 @@ data class Constrain(
     var scoreFormula: String,
     var description: String,
     var constrainType: String,
+    var staffGroup: List<String>,
     var priority: Int,
     var toMaximize: Boolean,
     var isHard: Boolean,
