@@ -1,5 +1,7 @@
 package com.ft.aio.template.adapter.output.web.scrippt.constrain
 
+import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
+
 data class PatternConstrain (
     var id: String,
     var description: String,
@@ -10,26 +12,25 @@ data class PatternConstrain (
     var exist: Boolean,
     var isHard: Boolean,
     var pelnalty: Int,
-    var patternLists : List<String> = listOf()
+    var patternLists : MutableMap<String, MutableList<String>> = mutableMapOf()
 ) {
-    fun parsingPattern(shift: List<String>, shiftGroup: List<String>){
-        shiftPatterns.forEach {
-            var pairs = parseAllPairs(it)
-            var pattern : List<String> = listOf()
-            for (item in pairs){
-                if (item in shiftGroup){
-                    for (item2 in pattern){
-
-                    }
-                }
+    fun parsingPattern() {
+        patternLists = mutableMapOf()
+        for(pattern in  shiftPatterns){
+            var pair = parseAllPairs(pattern)
+            if (patternLists == null){
+                patternLists.set(0.toString(), pair)
+            }
+            else {
+                patternLists.set((patternLists.size + 1).toString(), pair)
             }
         }
     }
 
-    fun parseAllPairs(input: String): List<String> {
-        val regex = Regex("""[A-Z]{2}""")
+    private fun parseAllPairs(input: String): MutableList<String> {
+        val regex = Regex("""([A-Z]{2}|\b[A-Z]\d\b)""")
         return regex.findAll(input)
             .map { it.value }
-            .toList()
+            .toMutableList()
     }
 }

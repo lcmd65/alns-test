@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54adbb02-94e4-4e06-b098-5255a4ef24e3" name="Changes" comment="[ADR-2614] update alns requirements">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/alns.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/alns.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/alns.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/alns.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/alns/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
@@ -43,11 +41,16 @@
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.at" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab.values.at" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/lookups.tab_i" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/last-build.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/cacheable/last-build.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/classpath-snapshot/shrunk-classpath-snapshot.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/kotlin/compileKotlin/local-state/build-history.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/build/resources/main/dump/data_dummy.json" beforeDir="false" afterPath="$PROJECT_DIR$/alns/build/resources/main/dump/data_dummy.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/constrain/PatternConstrain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/constrain/PatternConstrain.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/engine/CreateConObjs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/engine/CreateConObjs.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/output/output.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/kotlin/rule/RuleViolation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/kotlin/rule/RuleViolation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alns/src/main/resources/dump/data_dummy.json" beforeDir="false" afterPath="$PROJECT_DIR$/alns/src/main/resources/dump/data_dummy.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,35 +193,35 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build alns.executor": "Run",
-    "Gradle.FormulaExecutorTest.executor": "Run",
-    "Gradle.FormulaExecutorTest.testExecutorKotlin.executor": "Run",
-    "Gradle.FormulaExecutorTest.testExtractValues.executor": "Run",
-    "JUnit.All in alns-test.executor": "Run",
-    "JUnit.All in alns.main.executor": "Run",
-    "Kotlin.MainKt.executor": "Run",
-    "Python.run (1).executor": "Run",
-    "Python.run.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "test",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/Main.kt",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.32528734",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build alns.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.FormulaExecutorTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.FormulaExecutorTest.testExecutorKotlin.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.FormulaExecutorTest.testExtractValues.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in alns-test.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in alns.main.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/lechonminhdat/Documents/alns-test/alns/src/main/kotlin/Main.kt&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.32528734&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/alns/src/main/kotlin" />
@@ -365,23 +368,8 @@
       <workItem from="1723514711569" duration="6431000" />
       <workItem from="1724652971593" duration="150528000" />
       <workItem from="1725944787950" duration="82805000" />
-      <workItem from="1726555787423" duration="849000" />
-    </task>
-    <task id="LOCAL-00003" summary="create running file">
-      <option name="closed" value="true" />
-      <created>1723102869325</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1723102869325</updated>
-    </task>
-    <task id="LOCAL-00004" summary="create running file">
-      <option name="closed" value="true" />
-      <created>1723104096126</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1723104096126</updated>
+      <workItem from="1726555787423" duration="14086000" />
+      <workItem from="1726624756211" duration="3725000" />
     </task>
     <task id="LOCAL-00005" summary="minor change in lua file">
       <option name="closed" value="true" />
@@ -759,7 +747,23 @@
       <option name="project" value="LOCAL" />
       <updated>1726554915429</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726556869036</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1726556869037</updated>
+    </task>
+    <task id="LOCAL-00053" summary="[ADR-2614] update alns requirements">
+      <option name="closed" value="true" />
+      <created>1726557674325</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1726557674325</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -816,7 +820,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/PatternConstrain.kt</url>
-          <line>2</line>
+          <line>4</line>
           <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain" method="&lt;init&gt;">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -825,16 +829,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
-          <line>77</line>
-          <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.CommonCaculate" method="checkIfStaffInStaffGroup">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-function">
-          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
-          <line>101</line>
+          <line>111</line>
           <properties class="com.ft.aio.template.adapter.output.web.scrippt.constrain.CommonCaculate" method="caculateCoverageFullfillment">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -843,30 +838,30 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-function">
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>668</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="runIteration">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>650</line>
+          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="shakeAndRepair">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-function">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
           <line>216</line>
           <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="repairSolution">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-function">
-          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
-          <line>40</line>
-          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="createWeightOperators">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-function">
-          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
-          <line>71</line>
-          <properties class="com.ft.aio.template.adapter.output.web.scrippt.engine.Alns" method="createOperatorTimes">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="55" />
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
@@ -881,6 +876,31 @@
           <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
           <line>217</line>
           <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/engine/Alns.kt</url>
+          <line>651</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>95</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>85</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>152</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/alns/src/main/kotlin/constrain/CommonCaculate.kt</url>
+          <line>90</line>
+          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
