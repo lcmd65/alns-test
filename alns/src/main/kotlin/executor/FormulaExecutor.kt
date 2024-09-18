@@ -1,6 +1,7 @@
 package com.ft.aio.template.adapter.output.web.scrippt.executor
 
 import kotlin.math.max
+import kotlin.math.abs
 
 class FormulaExecutor {
 
@@ -13,7 +14,7 @@ class FormulaExecutor {
 
         var map: MutableMap<String, Double> = mutableMapOf()
         for ((key, gap) in input){
-            map.set(key, max(0.0,defaultValues - (gap - threshold)*step))
+            map.set(key, max(0.0,defaultValues - (abs(gap - threshold))*step))
         }
         return map
     }
