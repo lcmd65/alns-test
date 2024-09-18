@@ -2,7 +2,7 @@ package com.ft.aio.template.adapter.output.web.scrippt.constrain
 import com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutor
 import kotlin.math.max
 
-data class Constrain(
+data class Constraint(
     var id: String,
     var scoreFormula: String,
     var description: String,

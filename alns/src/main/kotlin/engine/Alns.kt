@@ -414,8 +414,7 @@ open class Alns(var data: InputData) {
         return schedules
     }
 
-    // adjust constrain
-    private fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+    fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         var newSchedule = deepCopySolution(schedule)
         for (constrain in data.constrains) {
             when (constrain.id) {
@@ -730,14 +729,6 @@ open class Alns(var data: InputData) {
             if (calculate.totalScore(currentSolution) > calculate.totalScore(this.bestSolution)){
                 this.bestSolution = deepCopySolution(currentSolution)
             }
-        }
-        println(this.bestSolution)
-        this.bestSolution = adjustScheduleToConstrain(this.bestSolution)
-
-        this.penalty = calculate.totalScore(this.bestSolution)
-        this.score = Int.MAX_VALUE.toDouble() + this.penalty
-        for (hcover in data.horizontalCoverages) {
-            this.horizontalCoverageFullFill.set("h_cover_id " + hcover.id.toString(), caculateHorizontalCoverageFullfillment(bestSolution, hcover.id))
         }
     }
 }

@@ -1,5 +1,5 @@
 package com.ft.aio.template.adapter.output.web.scrippt.rule
-import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constrain
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constraint
 import com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
 class RuleViolation(var data: InputData){
@@ -7,7 +7,7 @@ class RuleViolation(var data: InputData){
     var patternConstrainViolations: MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
     var constrainViolations:MutableMap<String, Int> = mutableMapOf()
 
-    fun checkConstrainViolation(constrain: Constrain, schedule: MutableMap<String, MutableMap<Int, String>>, week: Int, staff:String):Boolean{
+    fun checkConstrainViolation(constrain: Constraint, schedule: MutableMap<String, MutableMap<Int, String>>, week: Int, staff:String):Boolean{
         when (constrain.id){
             "exactly-staff-working-time" -> {
                 var number = 0.0
