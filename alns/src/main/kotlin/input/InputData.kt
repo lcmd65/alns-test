@@ -2,7 +2,7 @@ package com.ft.aio.template.adapter.output.web.scrippt.input
 
 import com.ft.aio.template.adapter.output.web.scrippt.coverage.Coverage
 import com.ft.aio.template.adapter.output.web.scrippt.coverage.HorizontalCoverage
-import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constrain
+import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constraint
 import com.ft.aio.template.adapter.output.web.scrippt.constrain.Objective
 import com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain
 import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
@@ -18,7 +18,7 @@ data class InputData (
     var coverages: List<Coverage>,
     var horizontalCoverages: List<HorizontalCoverage>,
     var objs : List<Objective>,
-    var constrains: List<Constrain>,
+    var constrains: List<Constraint>,
     var patternConstrains: List<PatternConstrain>,
     var schedulePeriod: Int,
     var shiftGroups: List<ShiftGroup>

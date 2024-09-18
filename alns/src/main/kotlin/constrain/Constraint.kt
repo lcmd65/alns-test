@@ -2,7 +2,7 @@ package com.ft.aio.template.adapter.output.web.scrippt.constrain
 import com.ft.aio.template.adapter.output.web.scrippt.executor.FormulaExecutor
 import kotlin.math.max
 
-data class Constrain(
+data class Constraint(
     var id: String,
     var scoreFormula: String,
     var description: String,
@@ -18,34 +18,37 @@ data class Constrain(
     var covertKotlinFlag: Boolean = false,
     var midSearch: Boolean = true
 ){
-    fun caculateScore(input: MutableMap<String, Double> ){
+    fun caculateScore(input: MutableMap<String, Double> ):Double{
+        var scores = 0.0
         if (this.covertKotlinFlag == true) {
             if (midSearch){
                 for (gap in input.values) {
-                    this.score += this.defaultValue - (gap - this.threshold) * this.step
+                    scores += this.defaultValue - (gap - this.threshold) * this.step
                 }
-                this.score /= input.values.size
+                scores /= input.values.size
             }
             else{
                 for (gap in input.values) {
-                    this.score = max(this.score, this.defaultValue - (gap - this.threshold) * this.step)
+                    scores = max(scores, this.defaultValue - (gap - this.threshold) * this.step)
                 }
             }
             for (gap in input.values) {
-                this.score = this.defaultValue - (gap - this.threshold) * this.step
+                scores = this.defaultValue - (gap - this.threshold) * this.step
             }
         }
         else {
+            midSearch = true
             var output = FormulaExecutor().executorKotlin(this.scoreFormula, input)
             if (midSearch){
                 for (value in output.values){
-                    this.score += value
+                    scores += value
                 }
-                this.score /= output.values.size
+                scores/= output.values.size
             }
             else {
-                this.score = output.values.max()
+                scores = output.values.max()
             }
         }
+        return scores
     }
 }
