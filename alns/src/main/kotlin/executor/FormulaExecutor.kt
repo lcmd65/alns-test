@@ -14,7 +14,7 @@ class FormulaExecutor {
 
         var map: MutableMap<String, Double> = mutableMapOf()
         for ((key, gap) in input){
-            map.set(key, max(0.0,defaultValues - (abs(gap - threshold))*step))
+            map.set(key, max(0.0,defaultValues - (abs(gap - threshold)) * step))
         }
         return map
     }
