@@ -64,10 +64,10 @@ open class Alns(var data: InputData) {
 
     private fun createScoreOperator() {
         this.operatorScore.set(0, 0.2)
-        this.operatorScore.set(1, 0.1)
-        this.operatorScore.set(2, 0.1)
-        this.operatorScore.set(3, 0.1)
-        this.operatorScore.set(4, 0.5)
+        this.operatorScore.set(1, 0.2)
+        this.operatorScore.set(2, 0.2)
+        this.operatorScore.set(3, 0.2)
+        this.operatorScore.set(4, 0.2)
     }
 
     private fun createOperatorTimes() {
@@ -176,6 +176,9 @@ open class Alns(var data: InputData) {
             schedule[staff.id] = mutableMapOf()
             for (day in 1..7 * data.schedulePeriod){
                 schedule[staff.id]?.set(day, "")
+                if (day % 7 == 0){
+                    schedule[staff.id]?.set(day, "DO")
+                }
             }
         }
 
@@ -194,7 +197,7 @@ open class Alns(var data: InputData) {
             for (coverage in data.coverages) {
                 for (staff in data.staffs) {
                     if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" }.random().id)
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" && it.id == "DO" }.random().id)
                     }
                 }
             }
@@ -221,6 +224,9 @@ open class Alns(var data: InputData) {
         for (staffId in repairedSchedule.keys) {
             for (dayId in repairedSchedule[staffId]!!.keys) {
                 if (repairedSchedule[staffId]?.get(dayId) == ""){
+                    if(staffId == "Staff_1" || staffId == "Staff_3" || staffId == "Staff_6"){
+                        repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" && it.id.contains("2")}.random().id)
+                    }
                     repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" }.random().id)
                 }
             }
@@ -481,11 +487,11 @@ open class Alns(var data: InputData) {
                 "archive-0.5-day" -> {
                     for (week in 1..  data.schedulePeriod) {
                         var numberOfHalfShift : MutableMap<String, Int> = mutableMapOf()
-                        for (staff in data.staffs) {
-                            numberOfHalfShift.set(staff.id, 0)
+                        for (staff in constrain.staffGroup) {
+                            numberOfHalfShift.set(staff, 0)
                             for (day in 1 .. 7){
-                                if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
-                                    numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
+                                if(data.shifts.find { it.id == newSchedule[staff]?.get(day + 7*(week - 1))}?.duration!! == 4){
+                                    numberOfHalfShift.set(staff, numberOfHalfShift.get(staff)!!+1)
                                 }
                             }
                         }
@@ -501,21 +507,20 @@ open class Alns(var data: InputData) {
                         }
                     }
                 }
-
                 "un-archive-0.5-day" -> {
                     for (week in 1..  data.schedulePeriod) {
                         var numberOfHalfShift : MutableMap<String, Int> = mutableMapOf()
-                        for (staff in data.staffs) {
-                            numberOfHalfShift.set(staff.id, 0)
+                        for (staff in constrain.staffGroup) {
+                            numberOfHalfShift.set(staff, 0)
                             for (day in 1 .. 7){
-                                if(data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7*(week - 1))}?.duration!! == 4){
-                                    numberOfHalfShift.set(staff.id, numberOfHalfShift.get(staff.id)!!+1)
+                                if(data.shifts.find { it.id == newSchedule[staff]?.get(day + 7*(week - 1))}?.duration!! == 4){
+                                    numberOfHalfShift.set(staff, numberOfHalfShift.get(staff)!!+1)
                                 }
                             }
                         }
                         for ((key, value) in numberOfHalfShift){
                             if (value > 0){
-                                for (index in 1 .. value - 1){
+                                for (index in 1 .. value){
                                     newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
                                 }
                             }
@@ -795,11 +800,13 @@ open class Alns(var data: InputData) {
                                 }
                             }
                             for ((key, value) in numberOfHalfShift) {
-                                if (value < 1) {
-                                    newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week)
-                                } else if (value > 1) {
-                                    for (index in 1..value - 1) {
-                                        newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
+                                if(value != 1) {
+                                    if (value < 1) {
+                                        newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week)
+                                    } else if (value > 1) {
+                                        for (index in 1..value - 1) {
+                                            newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
+                                        }
                                     }
                                 }
                             }
@@ -816,7 +823,7 @@ open class Alns(var data: InputData) {
                             }
                             for ((key, value) in numberOfHalfShift) {
                                 if (value > 0) {
-                                    for (index in 1..value - 1) {
+                                    for (index in 1..value) {
                                         newSchedule = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
                                     }
                                 }
@@ -852,12 +859,15 @@ open class Alns(var data: InputData) {
     }
 
     fun runIteration(){
-        var currentSolution = initialSolution()
+        var currentSolution = adjustScheduleToConstrain(initialSolution())
         this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
 
         for (index in 1..this.numberIterations) {
+            if (index % 400 == 0){
+                currentSolution = adjustScheduleToConstrain(currentSolution)
+            }
             val operatorIndex = routeWheel(index)
             var nextSolution = shakeAndRepair(currentSolution, operatorIndex)
             currentSolution = calculateSimulatedAnealing(currentSolution, nextSolution)
@@ -865,5 +875,6 @@ open class Alns(var data: InputData) {
                 this.bestSolution = deepCopySolution(currentSolution)
             }
         }
+        this.score = calculate.totalScore(this.bestSolution)
     }
 }

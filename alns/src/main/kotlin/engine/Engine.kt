@@ -28,6 +28,7 @@ class Engine(var data: InputData) {
         dump.set("penalty", optimizer.penalty)
         dump.set("solution", optimizer.bestSolution)
         var conScore : MutableMap<String, Constraint> = mutableMapOf()
+        CommonCaculate(data).createConstrainScore(optimizer.bestSolution)
         for (con in data.constrains){
             conScore.set(con.id, con)
         }

@@ -33,7 +33,6 @@ class CommonCaculate (var data: InputData) {
                                 input.set(staff, staffWokringTime)
                             }
                         }
-                        println(input)
                         scores += constrain.caculateScore(input)
                     }
                     scores /= data.schedulePeriod
@@ -63,7 +62,6 @@ class CommonCaculate (var data: InputData) {
                         }
                         scores += constrain.caculateScore(input)
                     }
-                    println(input)
                     scores /= data.schedulePeriod
                     constrain.score = scores
                 }
@@ -91,7 +89,6 @@ class CommonCaculate (var data: InputData) {
                         }
                         scores += constrain.caculateScore(input)
                     }
-                    println(input)
                     scores /= data.schedulePeriod
                     constrain.score = scores
                 }
