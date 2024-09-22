@@ -15,4 +15,5 @@ data class Coverage(
     var penalty: Int,
     var dayTypes: String,
     var id: String,
+    var priority: Int
 )

@@ -1,7 +1,13 @@
 package com.ft.aio.template.adapter.output.web.scrippt.rule
 import com.ft.aio.template.adapter.output.web.scrippt.constrain.Constraint
 import com.ft.aio.template.adapter.output.web.scrippt.constrain.PatternConstrain
+import com.ft.aio.template.adapter.output.web.scrippt.coverage.Coverage
+import com.ft.aio.template.adapter.output.web.scrippt.coverage.HorizontalCoverage
+import com.ft.aio.template.adapter.output.web.scrippt.engine.CommonCaculate
 import com.ft.aio.template.adapter.output.web.scrippt.input.InputData
+import kotlin.math.abs
+import kotlin.math.max
+
 class RuleViolation(var data: InputData){
 
     var patternConstrainViolations: MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
@@ -139,6 +145,147 @@ class RuleViolation(var data: InputData){
             ))
             patternConstrainViolations.set(constrain.priority, pair)
         }
+    }
 
+    fun checkAllViolation(constrain: Any, schedule: MutableMap<String, MutableMap<Int, String>>): Boolean{
+        var bool = true
+        if(constrain is Constraint) {
+            for (week in 1..data.schedulePeriod) {
+                var loopInformation: MutableList<String> = mutableListOf()
+                if (constrain.staffGroup.contains("all_staffs")) {
+                    loopInformation += data.staffs.map { it.id }
+                } else {
+                    loopInformation = constrain.staffGroup.toMutableList()
+                }
+
+                for (staff in loopInformation) {
+                    when (constrain.id) {
+                        "exactly-staff-working-time" -> {
+                            var number = 0.0
+                            for (day in 1..7) {
+                                number += data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!!
+                            }
+                            if (number != 44.0) {
+                                return false
+                            }
+                        }
+
+                        "archive-0.5-day" -> {
+                                var number = 0.0
+                                for (day in 1..7) {
+                                    if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 8 || data.shifts.find {
+                                            it.id == schedule[staff]?.get(
+                                                day + 7 * (week - 1)
+                                            )!!
+                                        }?.duration!! == 7) {
+                                        number += 1
+                                    } else if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 4) {
+                                        number += 0.5
+                                    }
+                                }
+                                if (number != 5.5) {
+                                    return false
+                                }
+                        }
+
+                        "un-archive-0.5-day" -> {
+                                var number = 0.0
+                                for (day in 1..7) {
+                                    if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 8 || data.shifts.find {
+                                            it.id == schedule[staff]?.get(
+                                                day + 7 * (week - 1)
+                                            )!!
+                                        }?.duration!! == 7) {
+                                        number += 1.0
+                                    } else if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 4) {
+                                        number += 0.5
+                                    }
+                                }
+                                if (number != 6.0) {
+                                    return false
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        else if(constrain is PatternConstrain){
+
+            constrain.parsingPattern()
+            for (staff in constrain.staffGroup){
+                for (week in 1.. data.schedulePeriod) {
+                    for (day in 1.. 7) {
+                        for (pattern in constrain.patternLists.values) {
+                            if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
+                                var violation = true
+                                for (index in 1..pattern.size - 1) {
+                                    if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
+                                        violation = false
+                                        break
+                                    }
+                                }
+                                if (violation) {
+                                    return false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(constrain is HorizontalCoverage){
+            var map = CommonCaculate(data).caculateHorizontalCoverageFullfillment(
+                schedule,
+                constrain.id
+            )
+            for (horizontalCoverage in map.values) {
+                if (constrain.type.contains("hard") && constrain.type.contains("equal to")) {
+                    for (valu in horizontalCoverage.values) {
+                            if(constrain.desireValue != valu){
+                                return false
+                            }
+                    }
+                }
+            }
+        }
+
+        else if(constrain is Coverage){
+            for (week in 1..data.schedulePeriod) {
+                var map = CommonCaculate(data).caculateCoverageFullfillment(
+                    schedule,
+                    constrain.id,
+                    constrain.day,
+                    week
+                )
+
+                if (constrain.type.contains("hard") && constrain.type.contains("equal to")) {
+                    if(
+                        constrain.desireValue !=
+                        CommonCaculate(data).caculateCoverageFullfillment(
+                                    schedule,
+                                    constrain.id,
+                                    constrain.day,
+                                    week
+                                )
+                    ) {
+                        return false
+                    }
+
+                } else if (constrain.type.contains("hard") && constrain.type.contains("at least")) {
+                    if(
+                        constrain.desireValue  > CommonCaculate(data).caculateCoverageFullfillment(
+                            schedule,
+                            constrain.id,
+                            constrain.day,
+                            week
+                        )
+                    ) {
+                        return false
+                    }
+                }
+            }
+        }
+
+        return bool
     }
 }

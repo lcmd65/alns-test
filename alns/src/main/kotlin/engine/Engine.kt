@@ -19,6 +19,9 @@ class Engine(var data: InputData) {
     fun printSolution() {
         println("Optimize score " + optimizer.score)
         println("Penalty: " + optimizer.penalty)
+        println("Constraint score: " + optimizer.constrainScore)
+        println("Coverage score: " + optimizer.coverageScore)
+        println("Pattern Constraint Score: " + optimizer.patternConstrainScore)
         println("Best Solution: " + optimizer.bestSolution)
     }
 

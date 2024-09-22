@@ -35,7 +35,6 @@ class CommonCaculate (var data: InputData) {
                         }
                         scores += constrain.caculateScore(input)
                     }
-                    scores /= data.schedulePeriod
                     constrain.score = scores
                 }
 
@@ -62,7 +61,6 @@ class CommonCaculate (var data: InputData) {
                         }
                         scores += constrain.caculateScore(input)
                     }
-                    scores /= data.schedulePeriod
                     constrain.score = scores
                 }
 
@@ -89,7 +87,6 @@ class CommonCaculate (var data: InputData) {
                         }
                         scores += constrain.caculateScore(input)
                     }
-                    scores /= data.schedulePeriod
                     constrain.score = scores
                 }
             }
@@ -120,7 +117,7 @@ class CommonCaculate (var data: InputData) {
         return result
     }
 
-    private fun caculateCoverageFullfillment(
+    fun caculateCoverageFullfillment(
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: String,
         dayId: Int,
@@ -139,7 +136,7 @@ class CommonCaculate (var data: InputData) {
         return temp
     }
 
-    private fun caculateHorizontalCoverageFullfillment(
+    fun caculateHorizontalCoverageFullfillment(
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: Int
     ): MutableMap<Int, MutableMap<String, Int>>{
@@ -164,9 +161,8 @@ class CommonCaculate (var data: InputData) {
         return horizontalMap
     }
 
-    private fun caculateScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
+    private fun calculateCoverageScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
         var scores = 0
-
         // coverage
         for (week in 1.. data.schedulePeriod) {
             for (coverage in data.coverages) {
@@ -204,6 +200,11 @@ class CommonCaculate (var data: InputData) {
             }
         }
 
+        return scores.toDouble()
+    }
+
+    private fun calculateHorizontalCoverageScore(schedules: MutableMap<String, MutableMap<Int, String>>): Double {
+        var scores = 0
         // horizontal coverage
         for (coverage in data.horizontalCoverages) {
             var fullHorizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
@@ -230,14 +231,19 @@ class CommonCaculate (var data: InputData) {
         var score = 0.0
         for ((priority, item) in numberViolation){
             for((key, value) in item) {
-                score -= data.patternConstrains.find { it.id == key }!!.pelnalty!! * value
+                score -= data.patternConstrains.find { it.id == key }!!.pelnalty!! * value * priority
             }
         }
         return score
     }
 
     fun coverageScore(schedule: MutableMap<String, MutableMap<Int, String>>):Double{
-        var score = -caculateScore(schedule)
+        var score = - calculateCoverageScore(schedule)
+        return score
+    }
+
+    fun horizontalCoverageScore(schedule: MutableMap<String, MutableMap<Int, String>>):Double{
+        var score = - calculateHorizontalCoverageScore(schedule)
         return score
     }
 
@@ -245,7 +251,7 @@ class CommonCaculate (var data: InputData) {
         createConstrainScore(schedule)
         var score = 0.0
         for (constrain in data.constrains){
-            score += constrain.score
+            score += constrain.score * constrain.priority
         }
         return score
     }
@@ -254,6 +260,7 @@ class CommonCaculate (var data: InputData) {
         var score = 0.0
         score += constrainScore(schedule)
         score += coverageScore(schedule)
+        score += horizontalCoverageScore(schedule)
         score += patternConstrainScore(schedule)
         return score
     }

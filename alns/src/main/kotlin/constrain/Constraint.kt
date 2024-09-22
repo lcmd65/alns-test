@@ -41,9 +41,8 @@ data class Constraint(
             var output = FormulaExecutor().executorKotlin(this.scoreFormula, input)
             if (midSearch){
                 for (value in output.values){
-                    scores += value
+                    scores -= 100 - value
                 }
-                scores/= output.values.size
             }
             else {
                 scores = output.values.max()
