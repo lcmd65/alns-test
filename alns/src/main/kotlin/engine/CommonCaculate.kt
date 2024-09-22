@@ -175,7 +175,7 @@ class CommonCaculate (var data: InputData) {
                                     coverage.day,
                                     week
                                 )
-                    ) * coverage.penalty
+                    ) * coverage.penalty * coverage.priority
                 } else if (coverage.type.contains("hard") && coverage.type.contains("at least")) {
                     scores += max(
                         0,
@@ -185,7 +185,7 @@ class CommonCaculate (var data: InputData) {
                             coverage.day,
                             week
                         )
-                    ) * coverage.penalty
+                    ) * coverage.penalty * coverage.priority
                 } else if (coverage.type.contains("soft") && coverage.type.contains("at least")) {
                     scores += max(
                         0,
@@ -195,7 +195,7 @@ class CommonCaculate (var data: InputData) {
                             coverage.day,
                             week
                         )
-                    ) * coverage.penalty
+                    ) * coverage.penalty * coverage.priority
                 }
             }
         }
@@ -211,11 +211,11 @@ class CommonCaculate (var data: InputData) {
             for (horizontalCoverage in fullHorizontalCoverage.values) {
                 if (coverage.type.contains("hard") && coverage.type.contains("equal to")) {
                     for (map in horizontalCoverage) {
-                        scores += abs(coverage.desireValue - map.value) * coverage.penalty
+                        scores += abs(coverage.desireValue - map.value) * coverage.penalty * coverage.priority
                     }
                 } else if (coverage.type.contains("soft") && coverage.type.contains("at least")) {
                     for (map in horizontalCoverage) {
-                        scores += max(0, coverage.desireValue - map.value) * coverage.penalty
+                        scores += max(0, coverage.desireValue - map.value) * coverage.penalty * coverage.priority
                     }
                 }
             }

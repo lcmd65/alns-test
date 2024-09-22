@@ -217,14 +217,19 @@ class RuleViolation(var data: InputData){
                     for (day in 1.. 7) {
                         for (pattern in constrain.patternLists.values) {
                             if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
-                                var violation = true
+                                var violation = false
                                 for (index in 1..pattern.size - 1) {
                                     if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
-                                        violation = false
+                                        violation = true
                                         break
                                     }
                                 }
-                                if (violation) {
+                                if (!violation) {
+                                    println( schedule[staff]?.get(day + 7 * (week - 1) )!!)
+                                    println( pattern[0])
+
+                                    println( schedule[staff]?.get(day + 7 * (week - 1) + pattern.size - 1)!!)
+                                    println( pattern[0 + pattern.size - 1])
                                     return false
                                 }
                             }
@@ -241,9 +246,9 @@ class RuleViolation(var data: InputData){
             for (horizontalCoverage in map.values) {
                 if (constrain.type.contains("hard") && constrain.type.contains("equal to")) {
                     for (valu in horizontalCoverage.values) {
-                            if(constrain.desireValue != valu){
-                                return false
-                            }
+                        if(constrain.desireValue != valu){
+                            return false
+                        }
                     }
                 }
             }
@@ -251,12 +256,6 @@ class RuleViolation(var data: InputData){
 
         else if(constrain is Coverage){
             for (week in 1..data.schedulePeriod) {
-                var map = CommonCaculate(data).caculateCoverageFullfillment(
-                    schedule,
-                    constrain.id,
-                    constrain.day,
-                    week
-                )
 
                 if (constrain.type.contains("hard") && constrain.type.contains("equal to")) {
                     if(

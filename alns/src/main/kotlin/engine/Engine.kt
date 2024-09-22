@@ -10,8 +10,6 @@ class Engine(var data: InputData) {
 
     fun init() {
         optimizer.runIteration()
-        optimizer.bestSolution = optimizer.adjustScheduleToConstrain(optimizer.bestSolution)
-
         optimizer.penalty = optimizer.calculate.totalScore(optimizer.bestSolution)
         optimizer.score = Int.MAX_VALUE.toDouble() + optimizer.penalty
     }
