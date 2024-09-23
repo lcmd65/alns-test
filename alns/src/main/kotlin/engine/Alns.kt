@@ -16,7 +16,7 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(var data: InputData) {
-    var numberIterations: Int = 1500
+    var numberIterations: Int = 2000
     var temperature: Double = 100.0
     var alpha: Double = 0.9
     var limit: Double = 1e-3
@@ -186,7 +186,6 @@ open class Alns(var data: InputData) {
         var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
 
-        // create blank schedule for caculating
         for (staff in data.staffs) {
             schedule[staff.id] = mutableMapOf()
             for (day in 1..7 * data.schedulePeriod){
@@ -205,14 +204,14 @@ open class Alns(var data: InputData) {
                         checkIfStaffInStaffGroup(staff, coverage.staffGroups) &&
                         schedule[staff.id]?.get(coverage.day + 7*(week - 1)) == ""
                     ) {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), coverage.shift.random())
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), coverage.shift.filterNot { it == "PH" || it == "DO" }.random())
                     }
                 }
             }
             for (coverage in data.coverages) {
                 for (staff in data.staffs) {
                     if (schedule[staff.id]?.get(coverage.day + +7*(week - 1)) == "") {
-                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" && it.id == "DO" }.random().id)
+                        schedule[staff.id]?.set(coverage.day + 7*(week - 1), data.shifts.filterNot { it.id == "PH" || it.id == "DO" }.random().id)
                     }
                 }
             }
@@ -240,11 +239,11 @@ open class Alns(var data: InputData) {
             for (dayId in repairedSchedule[staffId]!!.keys) {
                 if (repairedSchedule[staffId]?.get(dayId) == ""){
                     if(staffId == "Staff_1" || staffId == "Staff_3" || staffId == "Staff_6"){
-                        repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" && it.id.contains("2")}.random().id)
+                        repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" || it.id.contains("2")}.random().id)
                     }
                     else{
-                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" && it.id.contains("3") }.random().id)
-                        }
+                        repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" || it.id.contains("3") }.random().id)
+                    }
                 }
             }
         }
@@ -267,9 +266,8 @@ open class Alns(var data: InputData) {
                     if (currentFulfillment < coverage.desireValue) {
                         data.staffs.forEach { staff ->
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                coverage.shift.filterNot { it == "PH" && it == "DO" }.forEach { shift ->
-                                    val tempSolution =
-                                        schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
+                                coverage.shift.filterNot { it == "PH" || it == "DO" }.forEach { shift ->
+                                    val tempSolution = deepCopySolution(schedules)
                                     tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
                                     scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
                                     if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
@@ -286,7 +284,7 @@ open class Alns(var data: InputData) {
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                                 if (schedules[staff.id]?.get(coverage.day + 7 * (week - 1)) in coverage.shift) {
                                     var tempSolution = deepCopySolution(schedules)
-                                    for (shiftFill in data.shifts){
+                                    for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                         if(shiftFill.id !in coverage.shift && shiftFill.id != "PH" && shiftFill.id != "DO"){
                                             tempSolution[staff.id]?.set(coverage.day +7*(week - 1), shiftFill.id)
                                             scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
@@ -308,7 +306,7 @@ open class Alns(var data: InputData) {
                         var scoreTemp : MutableMap<MutableMap<String, MutableMap<Int, String>>, Double> = mutableMapOf()
                         data.staffs.forEach { staff ->
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                coverage.shift.filterNot { it == "PH" && it == "DO"}.forEach { shift ->
+                                coverage.shift.filterNot { it == "PH" || it == "DO"}.forEach { shift ->
                                     var tempSolution = deepCopySolution(schedules)
                                     tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
                                     scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
@@ -327,7 +325,7 @@ open class Alns(var data: InputData) {
                     if (currentFulfillment > coverage.desireValue) {
                         data.staffs.forEach { staff ->
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
-                                coverage.shift.filterNot { it == "PH" && it == "DO"}.forEach { shift ->
+                                coverage.shift.filterNot { it == "PH" || it == "DO"}.forEach { shift ->
                                     var tempSolution = deepCopySolution(schedules)
                                     tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
                                     scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
@@ -340,7 +338,6 @@ open class Alns(var data: InputData) {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -408,7 +405,7 @@ open class Alns(var data: InputData) {
                             for (shift in horizontalCover.shifts){
                                 for (day in horizontalCover.days) {
                                     if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
-                                        for (shiftFill in data.shifts){
+                                        for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                             if(shiftFill.id !in horizontalCover.shifts && shiftFill.id != "PH"){
                                                 val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
                                                 tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
@@ -429,7 +426,7 @@ open class Alns(var data: InputData) {
                             for (shift in horizontalCover.shifts){
                                 for (day in horizontalCover.days) {
                                     if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
-                                        for (shiftFill in data.shifts){
+                                        for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                             if(shiftFill.id !in horizontalCover.shifts && shiftFill.id != "PH"){
                                                 val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
                                                 tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
@@ -477,7 +474,7 @@ open class Alns(var data: InputData) {
         for (day in 1 .. 7){
             var shiftInfo = schedule[key]?.get(day + 7*(week - 1))!!
             if (data.shifts.find { it.id == shiftInfo }!!.duration == 4) {
-                for (shift in data.shifts){
+                for (shift in data.shifts.filterNot { it.id =="PH" }){
                     if (shift.id != "PH" && shift.duration != 4){
                         var temp = deepCopySolution(schedule)
                         temp[key]?.set(day + 7*(week - 1), shift.id)
@@ -504,7 +501,7 @@ open class Alns(var data: InputData) {
                 }
                 var temp = deepCopySolution(schedule)
                 temp[key]?.set(day + 7 * (week - 1), shiftInfo)
-                listSchedule.set(temp, calculate.totalScore(temp))
+                listSchedule[temp] = calculate.totalScore(temp)
             }
         }
         return listSchedule
@@ -683,6 +680,15 @@ open class Alns(var data: InputData) {
                                             }?.duration!!)!! + 1
                                         )
                                     }
+                                    if (countDuration.get(4)!! > 0){
+                                        for  (index in 1.. countDuration.get(4)!!) {
+                                            newSchedule = greedyDestroyAHalfShiftWithBestScore(
+                                                newSchedule,
+                                                staff,
+                                                week
+                                            ).maxByOrNull { it.value }?.key!!
+                                        }
+                                    }
                                     if (countDuration.get(8)!! < 2) {
                                         for (index in 1..2 - countDuration.get(8)!!) {
                                             var tempList = greedySwapToMaxDurationShiftWithBestScore(
@@ -857,7 +863,7 @@ open class Alns(var data: InputData) {
                 var maxFixIteration = 0
                 var listUpper = getHigherPriorityHardConstraint(constrain.priority, constrain.id)
                 var listUpperIncludeCurrent =  (listUpper + constrain).toMutableList()
-                while (maxFixIteration < 100 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
+                while (maxFixIteration < 200 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
 
                     when (constrain.id) {
                         "exactly-staff-working-time" -> {
@@ -897,7 +903,8 @@ open class Alns(var data: InputData) {
                                             if (countDuration.get(4) == 0) {
                                                 newSchedule = greedySwapAHalfShiftWithBestScore(temp, key, week).maxByOrNull { it.value }?.key!!
                                             }
-                                        } else {
+                                        }
+                                        else {
                                             var countDuration: MutableMap<Int, Int> = mutableMapOf()
                                             countDuration.set(8, 0)
                                             countDuration.set(7, 0)
@@ -911,6 +918,15 @@ open class Alns(var data: InputData) {
                                                         )
                                                     }?.duration!!)!! + 1
                                                 )
+                                            }
+                                            if (countDuration.get(4)!! > 0){
+                                                for  (index in 1.. countDuration.get(4)!!) {
+                                                    newSchedule = greedyDestroyAHalfShiftWithBestScore(
+                                                        temp,
+                                                        key,
+                                                        week
+                                                    ).maxByOrNull { it.value }?.key!!
+                                                }
                                             }
                                             if (countDuration.get(8)!! < 2) {
                                                 for (index in 1..2 - countDuration.get(8)!!) {
