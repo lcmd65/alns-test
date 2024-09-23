@@ -18,6 +18,7 @@ class Engine(var data: InputData) {
         println("Optimize score " + optimizer.score)
         println("Penalty: " + optimizer.penalty)
         println("Constraint score: " + optimizer.constrainScore)
+        println("H Coverage score: " + optimizer.horizontalCoverageScore)
         println("Coverage score: " + optimizer.coverageScore)
         println("Pattern Constraint Score: " + optimizer.patternConstrainScore)
         println("Best Solution: " + optimizer.bestSolution)
@@ -28,6 +29,8 @@ class Engine(var data: InputData) {
         dump.set("score", optimizer.score)
         dump.set("penalty", optimizer.penalty)
         dump.set("solution", optimizer.bestSolution)
+        dump.set("horizontal coverage", optimizer.horizontalCoverageScore)
+        dump.set("coverage", optimizer.coverageScore)
         var conScore : MutableMap<String, Constraint> = mutableMapOf()
         CommonCaculate(data).createConstrainScore(optimizer.bestSolution)
         for (con in data.constrains){

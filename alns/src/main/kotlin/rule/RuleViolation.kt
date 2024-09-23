@@ -174,13 +174,13 @@ class RuleViolation(var data: InputData){
                         "archive-0.5-day" -> {
                                 var number = 0.0
                                 for (day in 1..7) {
-                                    if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 8 || data.shifts.find {
-                                            it.id == schedule[staff]?.get(
-                                                day + 7 * (week - 1)
-                                            )!!
-                                        }?.duration!! == 7) {
+                                    if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 8 ||
+                                        data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 7)
+                                    {
                                         number += 1
-                                    } else if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 4) {
+                                    }
+                                    else if (data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1))!! }?.duration!! == 4)
+                                    {
                                         number += 0.5
                                     }
                                 }
