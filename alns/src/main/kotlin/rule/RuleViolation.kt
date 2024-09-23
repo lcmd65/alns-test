@@ -78,6 +78,7 @@ class RuleViolation(var data: InputData){
                     }
                 }
                 if(violation){
+                    return violation
                     break
                 }
             }
@@ -122,7 +123,7 @@ class RuleViolation(var data: InputData){
                                     var violation: Boolean
                                     if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
                                         violation = true
-                                        for (index in 1..pattern.size - 1) {
+                                        for (index in 1..<pattern.size) {
                                             if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
                                                 violation = false
                                                 break
@@ -225,11 +226,6 @@ class RuleViolation(var data: InputData){
                                     }
                                 }
                                 if (!violation) {
-                                    println( schedule[staff]?.get(day + 7 * (week - 1) )!!)
-                                    println( pattern[0])
-
-                                    println( schedule[staff]?.get(day + 7 * (week - 1) + pattern.size - 1)!!)
-                                    println( pattern[0 + pattern.size - 1])
                                     return false
                                 }
                             }

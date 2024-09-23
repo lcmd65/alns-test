@@ -37,7 +37,6 @@ data class Constraint(
             }
         }
         else {
-            midSearch = true
             var output = FormulaExecutor().executorKotlin(this.scoreFormula, input)
             if (midSearch){
                 for (value in output.values){

@@ -65,23 +65,30 @@ open class Alns(var data: InputData) {
         for(index in 0..4) {
             this.operatorWeight.set(
                 index,
-                0.2 + 0.8 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
+                0.4 + 0.6 * this.operatorScore?.get(index)!! / this.operatorTimes?.get(index)!!
             )
         }
     }
 
     private fun createScoreOperator() {
-        this.operatorScore.set(0, 0.2)
-        this.operatorScore.set(1, 0.2)
-        this.operatorScore.set(2, 0.2)
-        this.operatorScore.set(3, 0.2)
-        this.operatorScore.set(4, 0.2)
+        this.operatorScore[0] = 0.2
+        this.operatorScore[1] = 0.2
+        this.operatorScore[2] = 0.2
+        this.operatorScore[3] = 0.2
+        this.operatorScore[4] = 0.2
     }
 
     private fun createOperatorTimes() {
         for (index in 0..4) {
             this.operatorTimes.set(index, 1.0)
         }
+    }
+
+    private fun scoring(){
+        this.score = calculate.totalScore(this.bestSolution)
+        this.constrainScore = calculate.constrainScore(this.bestSolution)
+        this.coverageScore = calculate.coverageScore(this.bestSolution)
+        this.patternConstrainScore = calculate.patternConstrainScore(this.bestSolution)
     }
 
     private fun calculateSimulatedAnealing(
@@ -235,7 +242,9 @@ open class Alns(var data: InputData) {
                     if(staffId == "Staff_1" || staffId == "Staff_3" || staffId == "Staff_6"){
                         repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" && it.id.contains("2")}.random().id)
                     }
-                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" }.random().id)
+                    else{
+                    repairedSchedule[staffId]?.set(dayId, data.shifts.filterNot { it.id == "PH" && it.id.contains("3") }.random().id)
+                        }
                 }
             }
         }
@@ -478,7 +487,6 @@ open class Alns(var data: InputData) {
             }
         }
         return listSchedule
-
     }
 
     private fun greedySwapToMaxDurationShiftWithBestScore(schedule: MutableMap<String, MutableMap<Int, String>>, key: String, week: Int):  MutableMap<MutableMap<String, MutableMap<Int, String>>, Double>{
@@ -498,7 +506,6 @@ open class Alns(var data: InputData) {
                 temp[key]?.set(day + 7 * (week - 1), shiftInfo)
                 listSchedule.set(temp, calculate.totalScore(temp))
             }
-
         }
         return listSchedule
     }
@@ -576,7 +583,7 @@ open class Alns(var data: InputData) {
         for (week in 1 .. data.schedulePeriod){
             for (staff in data.staffs){
                 for(day in 1 .. 7){
-                    if (checkPatternViolation(newScheduled, week, day ,staff.id) == true){
+                    if (checkPatternViolation(newScheduled, week, day ,staff.id)){
                         return greedyFixedShiftPatternViolations(newScheduled, week, day, staff.id)
                     }
                 }
@@ -586,7 +593,7 @@ open class Alns(var data: InputData) {
         for (week in 1 .. data.schedulePeriod){
             for (staff in data.staffs){
                 for(day in 1 .. 7){
-                    if (checkConstrainViolation(newScheduled, week ,staff.id) == true){
+                    if (checkConstrainViolation(newScheduled, week ,staff.id)){
                         return greedyFixedConstraintViolations(newScheduled, week, staff.id)
                     }
                 }
@@ -601,7 +608,7 @@ open class Alns(var data: InputData) {
         for (constrain in data.patternConstrains) {
             constrain.parsingPattern()
             for (index in 1..constrain.patternLists.values.maxOf { it.size }) {
-                if (rule.checkPatternConstrainViolation(constrain, nextScheduled, week, day, staff) == true) {
+                if (rule.checkPatternConstrainViolation(constrain, nextScheduled, week, day, staff)) {
                     for (shift in data.shifts.filterNot { it.id == "PH" }) {
                         var temp = deepCopySolution(nextScheduled)
                         temp[staff]?.set(day + 7 * (week - 1) + index, shift.id)
@@ -712,7 +719,7 @@ open class Alns(var data: InputData) {
                                     if (value < 1) {
                                         newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week).maxByOrNull { it.value }?.key!!
                                     } else if (value > 1) {
-                                        for (index in 1..value - 1) {
+                                        for (index in 1..< value) {
                                             newSchedule = greedyDestroyAHalfShiftWithBestScore(
                                                 newSchedule,
                                                 key,
@@ -746,7 +753,7 @@ open class Alns(var data: InputData) {
                 }
             }
             else {
-                //TODO
+
             }
         }
         return newSchedule
@@ -918,7 +925,7 @@ open class Alns(var data: InputData) {
                                                         }
                                                     }
                                                 }
-                                            } else if (countDuration.get(8)!! < 2) {
+                                            } else if (countDuration.get(8)!! > 2) {
                                                 for (index in 1..countDuration.get(8)!! - 2) {
                                                     var tempList = greedySwapToSevenHoursDurationShiftWithBestScore(
                                                         temp,
@@ -1048,7 +1055,6 @@ open class Alns(var data: InputData) {
                     }
                     maxFixIteration += 1
                 }
-
             }
             else if (constrain is HorizontalCoverage) {
                 var maxFixIteration = 0
@@ -1082,9 +1088,6 @@ open class Alns(var data: InputData) {
             }
         }
         this.bestSolution = adjustScheduleToConstrain(this.bestSolution)
-        this.score = calculate.totalScore(this.bestSolution)
-        this.constrainScore = calculate.constrainScore(this.bestSolution)
-        this.coverageScore = calculate.coverageScore(this.bestSolution)
-        this.patternConstrainScore = calculate.patternConstrainScore(this.bestSolution)
+        scoring()
     }
 }

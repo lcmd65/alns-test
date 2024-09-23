@@ -11,7 +11,7 @@ data class PatternConstrain (
     var priority: Int,
     var exist: Boolean,
     var isHard: Boolean,
-    var pelnalty: Int,
+    var penalty: Int,
     var patternLists : MutableMap<String, MutableList<String>> = mutableMapOf()
 ) {
     fun parsingPattern() {
@@ -32,5 +32,11 @@ data class PatternConstrain (
         return regex.findAll(input)
             .map { it.value }
             .toMutableList()
+    }
+
+    fun printPattern(){
+        for(pattern in this.patternLists){
+            println(pattern)
+        }
     }
 }

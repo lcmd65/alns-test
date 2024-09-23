@@ -10,6 +10,8 @@ class CommonCaculate (var data: InputData) {
 
     fun createConstrainScore(schedule: MutableMap<String, MutableMap<Int, String>>){
         for (constrain in data.constrains){
+            constrain.covertKotlinFlag = false
+            constrain.midSearch = true
             when(constrain.id) {
                 "exactly-staff-working-time" -> {
                     var scores = 0.0
@@ -21,8 +23,9 @@ class CommonCaculate (var data: InputData) {
                                 for (day in 1 .. 7){
                                     staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
                                 }
-                                input.set(staff.id, staffWokringTime)
+                                input[staff.id] = staffWokringTime
                             }
+                            scores += constrain.caculateScore(input)
                         }
                         else {
                             for (staff in constrain.staffGroup) {
@@ -30,10 +33,10 @@ class CommonCaculate (var data: InputData) {
                                 for (day in 1..7) {
                                     staffWokringTime += data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1)) }?.duration!!
                                 }
-                                input.set(staff, staffWokringTime)
+                                input[staff] = staffWokringTime
                             }
+                            scores += constrain.caculateScore(input)
                         }
-                        scores += constrain.caculateScore(input)
                     }
                     constrain.score = scores
                 }
@@ -57,7 +60,7 @@ class CommonCaculate (var data: InputData) {
                                     staffWorkingTime += 0.5
                                 }
                             }
-                            input.set(staff, staffWorkingTime)
+                            input[staff] = staffWorkingTime
                         }
                         scores += constrain.caculateScore(input)
                     }
@@ -83,7 +86,7 @@ class CommonCaculate (var data: InputData) {
                                     staffWorkingTime += 0.5
                                 }
                             }
-                            input.set(staff, staffWorkingTime)
+                            input[staff] = staffWorkingTime
                         }
                         scores += constrain.caculateScore(input)
                     }
@@ -231,7 +234,7 @@ class CommonCaculate (var data: InputData) {
         var score = 0.0
         for ((priority, item) in numberViolation){
             for((key, value) in item) {
-                score -= data.patternConstrains.find { it.id == key }!!.pelnalty!! * value * priority
+                score -= data.patternConstrains.find { it.id == key }!!.penalty!! * value * priority
             }
         }
         return score

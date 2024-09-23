@@ -5,7 +5,7 @@
   "constrains": [
     {
       "id": "exactly-staff-working-time",
-      "scoreFormula": "formula(100, 44, 10, 1)",
+      "scoreFormula": "formula(100.0, 44.0, 10.0, 1,0)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
       "staffGroup": ["all_staffs"],
@@ -15,7 +15,7 @@
     },
     {
       "id": "archive-0.5-day",
-      "scoreFormula": "formula(100, 5.5, 200, 1)",
+      "scoreFormula": "formula(100.0, 5.5, 200.0, 1.0)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
       "staffGroup": ["Staff_1", "Staff_3", "Staff_6"],
@@ -25,7 +25,7 @@
     },
     {
       "id": "un-archive-0.5-day",
-      "scoreFormula": "formula(100, 6, 200, 1)",
+      "scoreFormula": "formula(100.0, 6.0, 200.0, 1.0)",
       "description": "maximize working time of Staff (hours)",
       "constrainType": "staffTimeObj",
       "staffGroup":  ["Staff_2", "Staff_4", "Staff_5", "Staff_7",  "Staff_8",  "Staff_9"],
@@ -173,7 +173,7 @@
       "day": 1,
       "dayTypes": "wd",
       "priority": 1,
-      "penalty": 10,
+      "penalty": 100,
       "type": ["hard", "equal to"]
     },
     {
