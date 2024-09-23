@@ -6,5 +6,6 @@ data class HorizontalCoverage (
     var type: MutableList<String>,
     var desireValue: Int = 0,
     var penalty: Int = 0,
-    var id: Int = 0
+    var id: Int = 0,
+    var priority: Int
 )

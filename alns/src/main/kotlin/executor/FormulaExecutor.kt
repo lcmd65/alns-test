@@ -1,5 +1,6 @@
 package com.ft.aio.template.adapter.output.web.scrippt.executor
 
+
 import kotlin.math.max
 import kotlin.math.abs
 
@@ -8,9 +9,9 @@ class FormulaExecutor {
     fun executorKotlin(formulaString: String, input: MutableMap<String, Double>): MutableMap<String, Double> {
 
         var values = extractValues(formulaString)
-        var defaultValues = values[1]
-        var threshold = values[2]
-        var step = values[3]
+        var defaultValues = values[0]
+        var threshold = values[1]
+        var step = values[2]
 
         var map: MutableMap<String, Double> = mutableMapOf()
         for ((key, gap) in input){
@@ -19,10 +20,11 @@ class FormulaExecutor {
         return map
     }
 
-    fun extractValues(input: String): List<Int> {
-        val regex = Regex("""\d+""")
+    fun extractValues(input: String): List<Double> {
+        var regex = """\b\d+\.\d+|\b\d+""".toRegex()
+
         return regex.findAll(input)
-            .map { it.value.toInt() }
+            .map { it.value.toDouble() }
             .toList()
     }
 }
