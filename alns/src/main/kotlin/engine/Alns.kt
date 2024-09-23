@@ -959,9 +959,6 @@ open class Alns(var data: InputData) {
                                     }
                                 }
                             }
-                            if (isViolationHigherConstraint(listUpper, temp)){
-                                newSchedule = temp
-                            }
                         }
 
                         "archive-0.5-day" -> {
@@ -995,9 +992,6 @@ open class Alns(var data: InputData) {
                                     }
                                 }
                             }
-                            if (isViolationHigherConstraint(listUpper, temp)){
-                                newSchedule = temp
-                            }
                         }
 
                         "un-archive-0.5-day" -> {
@@ -1023,9 +1017,6 @@ open class Alns(var data: InputData) {
                                         }
                                     }
                                 }
-                            }
-                            if (isViolationHigherConstraint(listUpper, temp)){
-                                newSchedule = temp
                             }
                         }
                     }
