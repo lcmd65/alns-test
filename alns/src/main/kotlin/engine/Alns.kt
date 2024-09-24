@@ -35,7 +35,6 @@ open class Alns(var data: InputData) {
     var calculate = CommonCaculate(data)
     var rule = RuleViolation(data)
 
-
     private fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
         for ((key, innerMap) in solution) {
