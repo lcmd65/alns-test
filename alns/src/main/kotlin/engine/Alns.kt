@@ -16,7 +16,7 @@ import kotlin.random.Random
 import kotlin.math.exp
 
 open class Alns(var data: InputData) {
-    private var numberIterations: Int = 100
+    private var numberIterations: Int = 1000
     private var temperature: Double = 100.0
     private var alpha: Double = 0.9
     private var limit: Double = 1e-3
@@ -34,7 +34,6 @@ open class Alns(var data: InputData) {
     var patternConstrainScore: Double = 0.0
     var calculate = CommonCaculate(data)
     var rule = RuleViolation(data)
-
 
     private fun deepCopySolution(solution: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         val newSolution = mutableMapOf<String, MutableMap<Int, String>>()
@@ -835,7 +834,7 @@ open class Alns(var data: InputData) {
         return true
     }
 
-    fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
+    private fun adjustScheduleToConstrain(schedule: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         var newSchedule = deepCopySolution(schedule)
 
         val constrainsWithPriority: MutableList<Pair<Any, Int>> = mutableListOf()
@@ -866,7 +865,6 @@ open class Alns(var data: InputData) {
 
         for ((constrain, prio) in constrainsWithPriority) {
             if (constrain is Constraint){
-                var temp = deepCopySolution(newSchedule)
                 var maxFixIteration = 0
                 var listUpper = getHigherPriorityHardConstraint(constrain.priority, constrain.id)
                 var listUpperIncludeCurrent =  (listUpper + constrain).toMutableList()
@@ -879,7 +877,7 @@ open class Alns(var data: InputData) {
                                 for (staff in data.staffs) {
                                     var staffWokringTime: Double = 0.0
                                     for (day in 1..7) {
-                                        staffWokringTime += data.shifts.find { it.id == temp[staff.id]?.get(day + 7 * (week - 1)) }?.duration!!
+                                        staffWokringTime += data.shifts.find { it.id == newSchedule[staff.id]?.get(day + 7 * (week - 1)) }?.duration!!
                                     }
                                     input[staff.id] = staffWokringTime
                                 }
@@ -887,33 +885,33 @@ open class Alns(var data: InputData) {
                                     if (value.toInt() != 44) {
                                         if (key == "Staff_1" || key == "Staff_3" || key == "Staff_6") {
                                             var countDuration: MutableMap<Int, Int> = mutableMapOf()
-                                            countDuration.set(8, 0)
-                                            countDuration.set(7, 0)
-                                            countDuration.set(4, 0)
-                                            countDuration.set(0, 0)
+                                            countDuration[8] = 0
+                                            countDuration[7] = 0
+                                            countDuration[4] = 0
+                                            countDuration[0] = 0
                                             for (day in 1..7) {
-                                                if (data.shifts.find { it.id == temp[key]?.get(day + 7 * (week - 1)) }?.duration!! == 7) {
-                                                    if (temp[key]?.get(day + 7 * (week - 1))!! in data.shiftGroups.find { it.id == "AF" }?.shifts!! ) {
-                                                        temp[key]?.set(day + 7 * (week - 1), "A1")
-                                                    } else if (temp[key]?.get(day + 7 * (week - 1))!! in data.shiftGroups.find { it.id == "MO" }?.shifts!!) {
-                                                        temp[key]?.set(day + 7 * (week - 1), "M1")
+                                                if (data.shifts.find { it.id == newSchedule[key]?.get(day + 7 * (week - 1)) }?.duration!! == 7) {
+                                                    if (newSchedule[key]?.get(day + 7 * (week - 1))!! in data.shiftGroups.find { it.id == "AF" }?.shifts!! ) {
+                                                        newSchedule[key]?.set(day + 7 * (week - 1), "A1")
+                                                    } else if (newSchedule[key]?.get(day + 7 * (week - 1))!! in data.shiftGroups.find { it.id == "MO" }?.shifts!!) {
+                                                        newSchedule[key]?.set(day + 7 * (week - 1), "M1")
                                                     }
                                                 }
-                                                countDuration.set(data.shifts.find { it.id == temp[key]?.get(day + 7 * (week - 1)) }?.duration!!,
+                                                countDuration.set(data.shifts.find { it.id == newSchedule[key]?.get(day + 7 * (week - 1)) }?.duration!!,
                                                     countDuration.get(data.shifts.find {
-                                                        it.id == temp[key]?.get(
+                                                        it.id == newSchedule[key]?.get(
                                                             day + 7 * (week - 1)
                                                         )
                                                     }?.duration!!)!! + 1
                                                 )
                                             }
                                             if (countDuration[4] == 0) {
-                                                newSchedule = greedySwapAHalfShiftWithBestScore(temp, key, week).maxByOrNull { it.value }?.key!!
+                                                newSchedule = greedySwapAHalfShiftWithBestScore(newSchedule, key, week).maxByOrNull { it.value }?.key!!
                                             }
                                             else if(countDuration[4]!! > 1 ){
-                                                for(index in 1..< countDuration[4]!!){
+                                                for(index in 1..< countDuration[4]!!-1){
                                                     newSchedule = greedyDestroyAHalfShiftWithBestScore(
-                                                        temp,
+                                                        newSchedule,
                                                         key,
                                                         week
                                                     ).maxByOrNull { it.value }?.key!!
@@ -932,20 +930,25 @@ open class Alns(var data: InputData) {
                                             countDuration[4] = 0
                                             countDuration[0] = 0
                                             for (day in 1..7) {
-                                                countDuration[data.shifts.find { it.id == temp[key]?.get(day + 7 * (week - 1)) }?.duration!!] =
-                                                    countDuration[data.shifts.find { it.id == temp[key]?.get(day + 7 * (week - 1)) }?.duration!!]!! + 1
+                                                countDuration[data.shifts.find { it.id == newSchedule[key]?.get(day + 7 * (week - 1)) }?.duration!!] =
+                                                    countDuration[data.shifts.find { it.id == newSchedule[key]?.get(day + 7 * (week - 1)) }?.duration!!]!! + 1
                                             }
 
                                             if (countDuration[4]!! > 0){
                                                 for  (index in 1.. countDuration[4]!!) {
                                                     var tempList = greedyDestroyAHalfShiftWithBestScore(
-                                                        temp,
+                                                        newSchedule,
                                                         key,
                                                         week
                                                     )
-                                                    for (finalSchedule in tempList.keys){
-                                                        if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                            newSchedule = finalSchedule
+                                                    if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                                        newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                                    }
+                                                    else {
+                                                        for (finalSchedule in tempList.keys) {
+                                                            if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                                newSchedule = finalSchedule
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -953,26 +956,36 @@ open class Alns(var data: InputData) {
                                             if (countDuration[8]!! < 2) {
                                                 for (index in 1..2 - countDuration[8]!!) {
                                                     var tempList = greedySwapToMaxDurationShiftWithBestScore(
-                                                        temp,
+                                                        newSchedule,
                                                         key,
                                                         week
                                                     )
-                                                    for (finalSchedule in tempList.keys){
-                                                        if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                            newSchedule = finalSchedule
+                                                    if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                                        newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                                    }
+                                                    else {
+                                                        for (finalSchedule in tempList.keys) {
+                                                            if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                                newSchedule = finalSchedule
+                                                            }
                                                         }
                                                     }
                                                 }
                                             } else if (countDuration[8]!! > 2) {
                                                 for (index in 1..countDuration[8]!! - 2) {
                                                     var tempList = greedySwapToSevenHoursDurationShiftWithBestScore(
-                                                        temp,
+                                                        newSchedule,
                                                         key,
                                                         week
                                                     )
-                                                    for (finalSchedule in tempList.keys){
-                                                        if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                            newSchedule = finalSchedule
+                                                    if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                                        newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                                    }
+                                                    else {
+                                                        for (finalSchedule in tempList.keys) {
+                                                            if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                                newSchedule = finalSchedule
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -989,25 +1002,35 @@ open class Alns(var data: InputData) {
                                 for (staff in constrain.staffGroup) {
                                     numberOfHalfShift.set(staff, 0)
                                     for (day in 1..7) {
-                                        if (data.shifts.find { it.id == temp[staff]?.get(day + 7 * (week - 1)) }?.duration!! == 4) {
+                                        if (data.shifts.find { it.id == newSchedule[staff]?.get(day + 7 * (week - 1)) }?.duration!! == 4) {
                                             numberOfHalfShift[staff] = numberOfHalfShift[staff]!! + 1
                                         }
                                     }
                                 }
                                 for ((key, value) in numberOfHalfShift) {
                                     if (value < 1) {
-                                        var tempList = greedySwapAHalfShiftWithBestScore(temp, key, week)
-                                        for (finalSchedule in tempList.keys){
-                                            if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                newSchedule = finalSchedule
+                                        var tempList = greedySwapAHalfShiftWithBestScore(newSchedule, key, week)
+                                        if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                            newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                        }
+                                        else {
+                                            for (finalSchedule in tempList.keys) {
+                                                if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                    newSchedule = finalSchedule
+                                                }
                                             }
                                         }
                                     } else if (value > 1) {
                                         for (index in 1..value - 1) {
-                                            var tempList = greedyDestroyAHalfShiftWithBestScore(temp, key, week)
-                                            for (finalSchedule in tempList.keys){
-                                                if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                    newSchedule = finalSchedule
+                                            var tempList = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
+                                            if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                                newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                            }
+                                            else {
+                                                for (finalSchedule in tempList.keys) {
+                                                    if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                        newSchedule = finalSchedule
+                                                    }
                                                 }
                                             }
                                         }
@@ -1022,7 +1045,7 @@ open class Alns(var data: InputData) {
                                 for (staff in constrain.staffGroup) {
                                     numberOfHalfShift[staff] = 0
                                     for (day in 1..7) {
-                                        if (data.shifts.find { it.id == temp[staff]?.get(day + 7 * (week - 1)) }?.duration!! == 4) {
+                                        if (data.shifts.find { it.id == newSchedule[staff]?.get(day + 7 * (week - 1)) }?.duration!! == 4) {
                                             numberOfHalfShift[staff] = numberOfHalfShift[staff]!! + 1
                                         }
                                     }
@@ -1030,10 +1053,15 @@ open class Alns(var data: InputData) {
                                 for ((key, value) in numberOfHalfShift) {
                                     if (value > 0) {
                                         for (index in 1..value) {
-                                            var tempList = greedyDestroyAHalfShiftWithBestScore(temp, key, week)
-                                            for (finalSchedule in tempList.keys){
-                                                if (isViolationHigherConstraint(listUpper, finalSchedule)){
-                                                    newSchedule = finalSchedule
+                                            var tempList = greedyDestroyAHalfShiftWithBestScore(newSchedule, key, week)
+                                            if (isViolationHigherConstraint(listUpper, tempList.maxByOrNull { it.value }?.key!!)){
+                                                newSchedule =  tempList.maxByOrNull { it.value }?.key!!
+                                            }
+                                            else {
+                                                for (finalSchedule in tempList.keys) {
+                                                    if (isViolationHigherConstraint(listUpper, finalSchedule)) {
+                                                        newSchedule = finalSchedule
+                                                    }
                                                 }
                                             }
                                         }
@@ -1100,6 +1128,69 @@ open class Alns(var data: InputData) {
             }
         }
         return newSchedule
+    }
+
+    private fun shiftPatternExhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+        var nextScheduled = deepCopySolution(schedule)
+        for (week in 1..data.schedulePeriod) {
+            for (staff in data.staffs) {
+                for (day in 1..7) {
+                    if (checkPatternViolation(nextScheduled, week, day, staff.id)) {
+                        for (constraint in data.patternConstrains) {
+                            var maxFixIteration = 0
+                            var listUpper = getHigherPriorityHardConstraint(constraint.priority, constraint.id)
+                            var listUpperIncludeCurrent = (listUpper + constraint).toMutableList()
+                            constraint.parsingPattern()
+                            for (index in 1..constraint.patternLists.values.maxOf { it.size }) {
+                                if (rule.checkPatternConstrainViolation(
+                                        constraint,
+                                        nextScheduled,
+                                        week,
+                                        day,
+                                        staff.id
+                                    )
+                                ) {
+                                    for (shift in data.shifts.filterNot { it.id == "PH" }) {
+                                        var temp = deepCopySolution(nextScheduled)
+                                        temp[staff.id]?.set(day + 7 * (week - 1) + index, shift.id)
+                                        if (rule.checkPatternConstrainViolation(
+                                                constraint,
+                                                temp,
+                                                week,
+                                                day,
+                                                staff.id
+                                            ) == false
+                                        ) {
+                                            if (calculate.patternConstrainScore(temp) >= calculate.patternConstrainScore(
+                                                    nextScheduled
+                                                )
+                                                && checkPatternViolation(temp, week, day, staff.id) == false
+                                                && (isViolationHigherConstraint(listUpper, temp))
+                                            ) {
+                                                nextScheduled = temp
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nextScheduled
+    }
+
+    private fun shakeHandExhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+        var nextScheduled = deepCopySolution(schedule)
+        for (week in 1..data.schedulePeriod) {
+            for (staff in data.staffs) {
+                for (day in 1..7) {
+
+                }
+            }
+        }
+        return nextScheduled
     }
 
     fun runIteration(){
