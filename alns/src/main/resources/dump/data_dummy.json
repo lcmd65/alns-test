@@ -1,5 +1,11 @@
 {
   "schedulePeriod": 4,
+  "startDate": {
+    "id": 1,
+    "day": 1,
+    "month": 12,
+    "year": 2024
+  },
   "objs": [
   ],
   "constrains": [
@@ -846,6 +852,36 @@
       "days": [1,2,3,4,5,6,7],
       "penalty": 100,
       "priority": 10
+    }
+  ],
+  "publicHolidays": [
+    {
+      "day": 2,
+      "month": 9
+    },
+    {
+      "day": 30,
+      "month": 4
+    },
+    {
+      "day": 1,
+      "month": 5
+    },
+    {
+      "day": 24,
+      "month": 12
+    },
+    {
+      "day": 25,
+      "month": 12
+    },
+    {
+      "day": 31,
+      "month": 12
+    },
+    {
+      "day": 1,
+      "month": 1
     }
   ]
 }

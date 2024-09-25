@@ -156,7 +156,7 @@ open class Alns(var data: InputData) {
         return temp
     }
 
-    private fun caculateHorizontalCoverageFullfillment(
+    private fun calculateHorizontalCoverageFulfillment(
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: Int
     ): MutableMap<Int, MutableMap<String, Int>>{
@@ -181,16 +181,23 @@ open class Alns(var data: InputData) {
         return horizontalMap
     }
 
+    fun isLeapYear(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
+
     private fun initialSolution(): MutableMap<String, MutableMap<Int, String>> {
         var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
 
+
         for (staff in data.staffs) {
             schedule[staff.id] = mutableMapOf()
             for (day in 1..7 * data.schedulePeriod){
-                schedule[staff.id]?.set(day, "")
-                if (day % 7 == 0){
-                    schedule[staff.id]?.set(day, "DO")
+                if (schedule[staff.id]?.get(day) != "PH"){
+                    schedule[staff.id]?.set(day, "")
+                    if (day % 7 == 0){
+                        schedule[staff.id]?.set(day, "DO")
+                    }
                 }
             }
         }
@@ -222,11 +229,16 @@ open class Alns(var data: InputData) {
         val mutableSchedule = deepCopySolution(schedules)
         if (mutableSchedule.isNotEmpty()) {
 
-            val randomScheduleStaff = mutableSchedule.keys.random()
-            val randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
+            var randomScheduleStaff = mutableSchedule.keys.random()
+            var randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
+            while(mutableSchedule[randomScheduleStaff]?.get(randomScheduleDay!!.toInt())!! == "PH"){
+                randomScheduleStaff = mutableSchedule.keys.random()
+                randomScheduleDay = mutableSchedule[randomScheduleStaff]?.keys?.random()
+            }
             if (randomScheduleDay != null) {
                 mutableSchedule[randomScheduleStaff]?.set(randomScheduleDay.toInt(), "")
             }
+
         }
         return mutableSchedule
     }
@@ -273,13 +285,16 @@ open class Alns(var data: InputData) {
                         data.staffs.forEach { staff ->
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                                 coverage.shift.filterNot { it == "PH" || it == "DO" }.forEach { shift ->
-                                    val tempSolution = deepCopySolution(schedules)
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
-                                    if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
-                                        calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                    {
-                                        return tempSolution
+                                    var tempSolution = deepCopySolution(schedules)
+                                    if (tempSolution[staff.id]?.get(coverage.day + 7 * (week - 1)) != "PH") {
+                                        tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                        scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
+                                        if ((calculate.coverageScore(schedules) < calculate.coverageScore(
+                                                tempSolution))
+                                            && calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
+                                        {
+                                            return tempSolution
+                                        }
                                     }
                                 }
                             }
@@ -292,12 +307,16 @@ open class Alns(var data: InputData) {
                                     var tempSolution = deepCopySolution(schedules)
                                     for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                         if(shiftFill.id !in coverage.shift && shiftFill.id != "PH" && shiftFill.id != "DO"){
-                                            tempSolution[staff.id]?.set(coverage.day +7*(week - 1), shiftFill.id)
-                                            scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
-                                            if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
-                                                calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                            {
-                                                return tempSolution
+                                            if (tempSolution[staff.id]?.get(coverage.day + 7 * (week - 1)) != "PH") {
+                                                tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shiftFill.id)
+                                                scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
+                                                if ((calculate.coverageScore(schedules) < calculate.coverageScore(
+                                                        tempSolution
+                                                    )) &&
+                                                    calculate.totalScore(schedules) < calculate.totalScore(tempSolution)
+                                                ) {
+                                                    return tempSolution
+                                                }
                                             }
                                         }
                                     }
@@ -314,12 +333,14 @@ open class Alns(var data: InputData) {
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                                 coverage.shift.filterNot { it == "PH" || it == "DO"}.forEach { shift ->
                                     var tempSolution = deepCopySolution(schedules)
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
-                                    if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
-                                        calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                    {
-                                        return tempSolution
+                                    if (tempSolution[staff.id]?.get(coverage.day + 7 * (week - 1)) != "PH") {
+                                        tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                        scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
+                                        if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
+                                            calculate.totalScore(schedules) < calculate.totalScore(tempSolution)
+                                        ) {
+                                            return tempSolution
+                                        }
                                     }
                                 }
                             }
@@ -333,12 +354,14 @@ open class Alns(var data: InputData) {
                             if (checkIfStaffInStaffGroup(staff, coverage.staffGroups)) {
                                 coverage.shift.filterNot { it == "PH" || it == "DO"}.forEach { shift ->
                                     var tempSolution = deepCopySolution(schedules)
-                                    tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
-                                    scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
-                                    if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
-                                        calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                    {
-                                        return tempSolution
+                                    if (tempSolution[staff.id]?.get(coverage.day + 7 * (week - 1)) != "PH") {
+                                        tempSolution[staff.id]?.set(coverage.day + 7 * (week - 1), shift)
+                                        scoreTemp.set(tempSolution, calculate.totalScore(tempSolution))
+                                        if ((calculate.coverageScore(schedules) < calculate.coverageScore(tempSolution)) &&
+                                            calculate.totalScore(schedules) < calculate.totalScore(tempSolution)
+                                        ) {
+                                            return tempSolution
+                                        }
                                     }
                                 }
                             }
@@ -359,13 +382,23 @@ open class Alns(var data: InputData) {
                 for (week in 1 .. data.schedulePeriod){
                     for(index1 in 1..7){
                         shiftSwap = newSchedule[staff.id]?.get(index1 + 7* (week - 1)).toString()
+                        if (shiftSwap != "PH") {
 
-                        for (index2 in 1.. 7){
-                            var tempSchedule = deepCopySolution(newSchedule)
-                            tempSchedule[staff.id]?.set(index1 + 7* (week - 1), tempSchedule[staff.id]?.get(index2 + 7* (week - 1))!!)
-                            tempSchedule[staff.id]?.set(index2 + 7* (week - 1), shiftSwap)
-                            if (CommonCaculate(data).totalScore(tempSchedule) > CommonCaculate(data).totalScore(newSchedule)){
-                                return tempSchedule
+                            for (index2 in 1..7) {
+                                var tempSchedule = deepCopySolution(newSchedule)
+                                if (tempSchedule[staff.id]?.get(index2 + 7 * (week - 1))!! != "PH") {
+                                    tempSchedule[staff.id]?.set(
+                                        index1 + 7 * (week - 1),
+                                        tempSchedule[staff.id]?.get(index2 + 7 * (week - 1))!!
+                                    )
+                                    tempSchedule[staff.id]?.set(index2 + 7 * (week - 1), shiftSwap)
+                                    if (CommonCaculate(data).totalScore(tempSchedule) > CommonCaculate(data).totalScore(
+                                            newSchedule
+                                        )
+                                    ) {
+                                        return tempSchedule
+                                    }
+                                }
                             }
                         }
                     }
@@ -377,20 +410,22 @@ open class Alns(var data: InputData) {
 
     private fun greedyCoverageHorizontalEnhancement(schedules: MutableMap<String, MutableMap<Int, String>>): MutableMap<String, MutableMap<Int, String>> {
         data.horizontalCoverages.forEach { horizontalCover ->
-            val fullHorizontalCoverFullFill = caculateHorizontalCoverageFullfillment(schedules, horizontalCover.id)
+            val fullHorizontalCoverFullFill = calculateHorizontalCoverageFulfillment(schedules, horizontalCover.id)
             for ((week, horizontalCoverFullFill) in fullHorizontalCoverFullFill){
                 for (item in horizontalCoverFullFill) {
                     if (horizontalCover.type.contains("at least")){
                         if (item.value < horizontalCover.desireValue) {
                             for (shift in horizontalCover.shifts) {
                                  horizontalCover.days.forEach { day ->
-                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
-                                    if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(tempSolution)) )//&&
-                                        //calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                    {
-                                        return tempSolution
-                                    }
+                                     var tempSolution = deepCopySolution(schedules)
+                                     if (tempSolution[item.key]?.get(day + 7 * (week - 1)) != "PH") {
+                                         tempSolution[item.key]?.set(day + 7 * (week - 1), shift)
+                                         if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(
+                                                 tempSolution
+                                             ))) {
+                                             return tempSolution
+                                         }
+                                     }
                                 }
                             }
                         }
@@ -399,11 +434,15 @@ open class Alns(var data: InputData) {
                         if(item.value < horizontalCover.desireValue){
                             for (shift in horizontalCover.shifts){
                                 for (day in horizontalCover.days) {
-                                    val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                    tempSolution[item.key]?.set(day + 7*(week - 1), shift)
-                                    if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(tempSolution)) )//&&
-                                        //calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
+                                    var tempSolution = deepCopySolution(schedules)
+                                    if (tempSolution[item.key]?.get(day + 7 * (week - 1)) != "PH") {
+                                        tempSolution[item.key]?.set(day + 7 * (week - 1), shift)
+                                        if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(
+                                                tempSolution
+                                        )))//&&
+                                            //calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
                                         return tempSolution
+                                    }
                                 }
                             }
                         }
@@ -413,12 +452,14 @@ open class Alns(var data: InputData) {
                                     if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
                                         for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                             if(shiftFill.id !in horizontalCover.shifts && shiftFill.id != "PH"){
-                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
-                                                if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(tempSolution))) //&&
+                                                var tempSolution = deepCopySolution(schedules)
+                                                if (tempSolution[item.key]?.get(day + 7 * (week - 1)) != "PH") {
+                                                    tempSolution[item.key]?.set(day + 7 * (week - 1), shiftFill.id)
+                                                    if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(
+                                                            tempSolution
+                                                        )))//&&
                                                     //calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                                {
-                                                    return tempSolution
+                                                        return tempSolution
                                                 }
                                             }
                                         }
@@ -434,12 +475,14 @@ open class Alns(var data: InputData) {
                                     if (schedules[item.key]?.get(day + 7*(week - 1)) in horizontalCover.shifts){
                                         for (shiftFill in data.shifts.filterNot { it.id == "PH" }){
                                             if(shiftFill.id !in horizontalCover.shifts && shiftFill.id != "PH"){
-                                                val tempSolution = schedules.mapValues { (_, shifts) -> shifts.toMutableMap() }.toMutableMap()
-                                                tempSolution[item.key]?.set(day +7*(week - 1), shiftFill.id)
-                                                if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(tempSolution)))// &&
+                                                var tempSolution = deepCopySolution(schedules)
+                                                if (tempSolution[item.key]?.get(day + 7 * (week - 1)) != "PH") {
+                                                    tempSolution[item.key]?.set(day + 7 * (week - 1), shiftFill.id)
+                                                    if ((calculate.horizontalCoverageScore(schedules) < calculate.horizontalCoverageScore(
+                                                            tempSolution
+                                                        )))//&&
                                                     //calculate.totalScore(schedules) < calculate.totalScore(tempSolution))
-                                                {
-                                                    return tempSolution
+                                                        return tempSolution
                                                 }
                                             }
                                         }
@@ -868,7 +911,7 @@ open class Alns(var data: InputData) {
                 var maxFixIteration = 0
                 var listUpper = getHigherPriorityHardConstraint(constrain.priority, constrain.id)
                 var listUpperIncludeCurrent =  (listUpper + constrain).toMutableList()
-                while (maxFixIteration < 300 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
+                while (maxFixIteration < 500 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
 
                     when (constrain.id) {
                         "exactly-staff-working-time" -> {
@@ -1130,7 +1173,39 @@ open class Alns(var data: InputData) {
         return newSchedule
     }
 
-    private fun shiftPatternExhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+    private fun adjustPublicHolidays(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+        var schedules = deepCopySolution(schedule)
+        for (staff in data.staffs) {
+            var currentMonth = data.startDate.month
+            var currentDay = data.startDate.day
+            val totalDays = 7 * data.schedulePeriod
+            var daysProcessed = 0
+            while (daysProcessed < totalDays) {
+                val daysInMonth = when (currentMonth) {
+                    2 -> if (isLeapYear(data.startDate.year)) 29 else 28
+                    4, 6, 9, 11 -> 30
+                    else -> 31
+                }
+
+                if (currentDay > daysInMonth) {
+                    currentDay = 1
+                    currentMonth += 1
+
+                    if (currentMonth > 12) currentMonth = 1
+                }
+
+                val isHoliday = data.publicHolidays.any { it.day == currentDay && it.month == currentMonth }
+                if (isHoliday) {
+                    schedules[staff.id]?.set(daysProcessed + 1, "PH")
+                }
+                currentDay += 1
+                daysProcessed += 1
+            }
+        }
+        return schedules
+    }
+
+    private fun shiftPatternEnhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
         var nextScheduled = deepCopySolution(schedule)
         for (week in 1..data.schedulePeriod) {
             for (staff in data.staffs) {
@@ -1153,19 +1228,19 @@ open class Alns(var data: InputData) {
                                     for (shift in data.shifts.filterNot { it.id == "PH" }) {
                                         var temp = deepCopySolution(nextScheduled)
                                         temp[staff.id]?.set(day + 7 * (week - 1) + index, shift.id)
-                                        if (rule.checkPatternConstrainViolation(
+                                        if (!rule.checkPatternConstrainViolation(
                                                 constraint,
                                                 temp,
                                                 week,
                                                 day,
                                                 staff.id
-                                            ) == false
+                                            )
                                         ) {
                                             if (calculate.patternConstrainScore(temp) >= calculate.patternConstrainScore(
                                                     nextScheduled
                                                 )
-                                                && checkPatternViolation(temp, week, day, staff.id) == false
-                                                && (isViolationHigherConstraint(listUpper, temp))
+                                                && !checkPatternViolation(temp, week, day, staff.id)
+                                                && isViolationHigherConstraint(listUpper, temp)
                                             ) {
                                                 nextScheduled = temp
                                             }
@@ -1181,7 +1256,7 @@ open class Alns(var data: InputData) {
         return nextScheduled
     }
 
-    private fun shakeHandExhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+    private fun shakeHandEnhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
         var nextScheduled = deepCopySolution(schedule)
         for (week in 1..data.schedulePeriod) {
             for (staff in data.staffs) {
@@ -1194,7 +1269,8 @@ open class Alns(var data: InputData) {
     }
 
     fun runIteration(){
-        var currentSolution = adjustScheduleToConstrain(initialSolution())
+        var currentSolution = initialSolution()
+        currentSolution = adjustPublicHolidays(currentSolution)
         this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
