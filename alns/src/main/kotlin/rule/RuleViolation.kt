@@ -63,25 +63,28 @@ class RuleViolation(var data: InputData){
             }
         }
         return false
+
     }
 
     fun checkPatternConstrainViolation(constrain: PatternConstrain, schedule: MutableMap<String, MutableMap<Int, String>>, week: Int, day: Int, staff: String):Boolean{
         var violation: Boolean = false
         constrain.parsingPattern()
         for (pattern in constrain.patternLists.values) {
-            if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
-                violation = true
-                for (index in 1..pattern.size - 1) {
-                    if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
-                        violation = false
+            try {
+                if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
+                    violation = true
+                    for (index in 1..<pattern.size) {
+                        if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
+                            violation = false
+                            break
+                        }
+                    }
+                    if (violation) {
+                        return violation
                         break
                     }
                 }
-                if(violation){
-                    return violation
-                    break
-                }
-            }
+            } catch(exception: Exception) {}
         }
         return violation
     }
@@ -215,20 +218,23 @@ class RuleViolation(var data: InputData){
             constrain.parsingPattern()
             for (staff in constrain.staffGroup){
                 for (week in 1.. data.schedulePeriod) {
-                    for (day in 1.. 7) {
+                    for (day in 1.. 7- constrain.patternLists.values.maxOf { it.size }) {
                         for (pattern in constrain.patternLists.values) {
-                            if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
-                                var violation = false
-                                for (index in 1..pattern.size - 1) {
-                                    if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
-                                        violation = true
-                                        break
+                            try {
+                                if (schedule[staff]?.get(day + 7 * (week - 1))!! == pattern[0]) {
+                                    var violation = false
+                                    for (index in 1..pattern.size - 1) {
+                                        if (schedule[staff]?.get(day + 7 * (week - 1) + index)!! != pattern[0 + index]) {
+                                            violation = true
+                                            break
+                                        }
+                                    }
+                                    if (!violation) {
+                                        return false
                                     }
                                 }
-                                if (!violation) {
-                                    return false
-                                }
                             }
+                            catch (exception: Exception){}
                         }
                     }
                 }

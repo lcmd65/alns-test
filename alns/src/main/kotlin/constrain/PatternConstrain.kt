@@ -35,8 +35,8 @@ data class PatternConstrain (
     }
 
     fun printPattern(){
-        for(pattern in this.patternLists){
-            println(pattern)
+        for(pattern in this.patternLists.values){
+            println(pattern[0])
         }
     }
 }
