@@ -181,17 +181,25 @@ open class Alns(var data: InputData) {
         return horizontalMap
     }
 
+    fun isLeapYear(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
+
     private fun initialSolution(): MutableMap<String, MutableMap<Int, String>> {
         var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
 
+
         for (staff in data.staffs) {
             schedule[staff.id] = mutableMapOf()
             for (day in 1..7 * data.schedulePeriod){
-                schedule[staff.id]?.set(day, "")
-                if (day % 7 == 0){
-                    schedule[staff.id]?.set(day, "DO")
+                if (schedule[staff.id]?.get(day) != "PH"){
+                    schedule[staff.id]?.set(day, "")
+                    if (day % 7 == 0){
+                        schedule[staff.id]?.set(day, "DO")
+                    }
                 }
+
             }
         }
 
@@ -1130,6 +1138,38 @@ open class Alns(var data: InputData) {
         return newSchedule
     }
 
+    private fun adjustPublicHolidays(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
+        var schedules = deepCopySolution(schedule)
+        for (staff in data.staffs) {
+            var currentMonth = data.startDate.month
+            var currentDay = data.startDate.day
+            val totalDays = 7 * data.schedulePeriod
+            var daysProcessed = 0
+            while (daysProcessed < totalDays) {
+                val daysInMonth = when (currentMonth) {
+                    2 -> if (isLeapYear(data.startDate.year)) 29 else 28
+                    4, 6, 9, 11 -> 30
+                    else -> 31
+                }
+
+                if (currentDay > daysInMonth) {
+                    currentDay = 1
+                    currentMonth += 1
+
+                    if (currentMonth > 12) currentMonth = 1
+                }
+
+                val isHoliday = data.publicHolidays.any { it.day == currentDay && it.month == currentMonth }
+                if (isHoliday) {
+                    schedule[staff.id]?.set(daysProcessed + 1, "PH")
+                }
+                currentDay += 1
+                daysProcessed += 1
+            }
+        }
+        return schedules
+    }
+
     private fun shiftPatternExhancement(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
         var nextScheduled = deepCopySolution(schedule)
         for (week in 1..data.schedulePeriod) {
@@ -1194,7 +1234,7 @@ open class Alns(var data: InputData) {
     }
 
     fun runIteration(){
-        var currentSolution = adjustScheduleToConstrain(initialSolution())
+        var currentSolution = initialSolution()
         this.bestSolution = deepCopySolution(currentSolution)
         createScoreOperator()
         createOperatorTimes()
@@ -1208,6 +1248,7 @@ open class Alns(var data: InputData) {
             }
         }
         this.bestSolution = adjustScheduleToConstrain(this.bestSolution)
+        this.bestSolution = adjustPublicHolidays(this.bestSolution)
         scoring()
     }
 }

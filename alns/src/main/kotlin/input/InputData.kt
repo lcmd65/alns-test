@@ -9,9 +9,14 @@ import com.ft.aio.template.adapter.output.web.scrippt.shift.Shift
 import com.ft.aio.template.adapter.output.web.scrippt.shift.ShiftGroup
 import com.ft.aio.template.adapter.output.web.scrippt.staff.Staff
 import com.ft.aio.template.adapter.output.web.scrippt.staff.StaffGroup
+import com.ft.aio.template.adapter.output.web.scrippt.utils.Day
+import com.ft.aio.template.adapter.output.web.scrippt.utils.Holiday
 
 
 data class InputData (
+    var schedulePeriod: Int,
+    var startDate: Day,
+    var publicHolidays: List<Holiday>,
     var staffs: List<Staff>,
     var staffGroups: List<StaffGroup>,
     var shifts: List<Shift>,
@@ -20,7 +25,6 @@ data class InputData (
     var objs : List<Objective>,
     var constrains: List<Constraint>,
     var patternConstrains: List<PatternConstrain>,
-    var schedulePeriod: Int,
     var shiftGroups: List<ShiftGroup>
 )
 {
@@ -50,11 +54,3 @@ data class InputData (
         return true
     }
 }
-
-
-
-
-
-
-
-
