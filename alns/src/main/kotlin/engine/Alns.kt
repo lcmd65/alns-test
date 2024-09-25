@@ -911,7 +911,7 @@ open class Alns(var data: InputData) {
                 var maxFixIteration = 0
                 var listUpper = getHigherPriorityHardConstraint(constrain.priority, constrain.id)
                 var listUpperIncludeCurrent =  (listUpper + constrain).toMutableList()
-                while (maxFixIteration < 300 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
+                while (maxFixIteration < 500 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)) {
 
                     when (constrain.id) {
                         "exactly-staff-working-time" -> {

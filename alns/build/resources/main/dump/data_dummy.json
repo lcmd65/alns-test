@@ -856,6 +856,18 @@
   ],
   "publicHolidays": [
     {
+      "day": 2,
+      "month": 9
+    },
+    {
+      "day": 30,
+      "month": 4
+    },
+    {
+      "day": 1,
+      "month": 5
+    },
+    {
       "day": 24,
       "month": 12
     },
