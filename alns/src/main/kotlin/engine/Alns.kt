@@ -17,7 +17,7 @@ import kotlin.math.exp
 
 open class Alns(var data: InputData) {
     private var numberIterations: Int = 1000
-    private var temperature: Double = 100.0
+    private var temperature: Double = 1000.0
     private var alpha: Double = 0.9
     private var limit: Double = 1e-3
     private var deltaE: Double = 0.0
@@ -188,7 +188,6 @@ open class Alns(var data: InputData) {
     private fun initialSolution(): MutableMap<String, MutableMap<Int, String>> {
         var schedule : MutableMap<String, MutableMap<Int, String>>
         schedule = mutableMapOf()
-
 
         for (staff in data.staffs) {
             schedule[staff.id] = mutableMapOf()
@@ -628,7 +627,7 @@ open class Alns(var data: InputData) {
         var newScheduled = deepCopySolution(schedules)
         for (week in 1 .. data.schedulePeriod){
             for (staff in data.staffs){
-                for(day in 1 .. 7){
+                for(day in 1 .. 4){
                     if (checkPatternViolation(newScheduled, week, day ,staff.id)){
                         return greedyFixedShiftPatternViolations(newScheduled, week, day, staff.id)
                     }
@@ -816,7 +815,7 @@ open class Alns(var data: InputData) {
 
     private fun checkPatternViolation(schedules: MutableMap<String, MutableMap<Int, String>>, week: Int, day: Int, staff: String): Boolean{
         for (constrain in data.patternConstrains){
-            if (rule.checkPatternConstrainViolation(constrain, schedules, week, day, staff) == true) {
+            if (rule.checkPatternConstrainViolation(constrain, schedules, week, day, staff)) {
                 return true
             }
         }
@@ -885,7 +884,9 @@ open class Alns(var data: InputData) {
         for (item in data.constrains.filter { it.isHard }) {
             constrainsWithPriority.add(Pair(item, item.priority))
         }
-        for (item in data.patternConstrains.filter { it.isHard }) {
+        for (item in data.patternConstrains
+            //.filter { it.isHard }
+        ) {
             constrainsWithPriority.add(Pair(item, item.priority))
         }
         for (item in data.coverages.filter { it.type.contains("hard") }) {
@@ -1123,7 +1124,7 @@ open class Alns(var data: InputData) {
                 constrain.parsingPattern()
                 while (maxFixIteration < 100 && !isViolationHigherConstraint(listUpperIncludeCurrent, newSchedule)){
                     for (week in 1..data.schedulePeriod) {
-                        for (day in 1..7) {
+                        for (day in 1..7 - 3) {
                             for (staff in constrain.staffGroup) {
                                 for (index in 1..constrain.patternLists.values.maxOf { it.size }) {
                                     if (rule.checkPatternConstrainViolation(
@@ -1136,16 +1137,18 @@ open class Alns(var data: InputData) {
                                     ) {
                                         for (shift in data.shifts.filterNot { it.id == "PH" }) {
                                             var temp = deepCopySolution(newSchedule)
-                                            temp[staff]?.set(day + 7 * (week - 1) + index, shift.id)
-                                            if (!rule.checkPatternConstrainViolation(
-                                                    constrain,
-                                                    temp,
-                                                    week,
-                                                    day,
-                                                    staff
-                                                ) && isViolationHigherConstraint(listUpper, newSchedule)
-                                            ) {
-                                                newSchedule = temp
+                                            if (temp[staff]?.get(day + 7 * (week - 1) + index) != "PH"){
+                                                temp[staff]?.set(day + 7 * (week - 1) + index, shift.id)
+                                                if (!rule.checkPatternConstrainViolation(
+                                                        constrain,
+                                                        temp,
+                                                        week,
+                                                        day,
+                                                        staff
+                                                    ) && isViolationHigherConstraint(listUpper, newSchedule)
+                                                ) {
+                                                    newSchedule = temp
+                                                }
                                             }
                                         }
                                     }
@@ -1175,7 +1178,7 @@ open class Alns(var data: InputData) {
 
     private fun adjustPublicHolidays(schedule: MutableMap<String, MutableMap<Int, String>>) :MutableMap<String, MutableMap<Int, String>> {
         var schedules = deepCopySolution(schedule)
-        for (staff in data.staffs) {
+        for (staff in data.staffGroups.find{ it.id == "OPH" }!!.staffList) {
             var currentMonth = data.startDate.month
             var currentDay = data.startDate.day
             val totalDays = 7 * data.schedulePeriod
@@ -1196,7 +1199,7 @@ open class Alns(var data: InputData) {
 
                 val isHoliday = data.publicHolidays.any { it.day == currentDay && it.month == currentMonth }
                 if (isHoliday) {
-                    schedules[staff.id]?.set(daysProcessed + 1, "PH")
+                    schedules[staff]?.set(daysProcessed + 1, "PH")
                 }
                 currentDay += 1
                 daysProcessed += 1
@@ -1285,5 +1288,9 @@ open class Alns(var data: InputData) {
         }
         this.bestSolution = adjustScheduleToConstrain(this.bestSolution)
         scoring()
+    }
+
+    fun runIteration2(){
+        var currentSolution = deepCopySolution(this.bestSolution)
     }
 }
