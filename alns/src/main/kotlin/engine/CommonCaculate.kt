@@ -15,25 +15,25 @@ class CommonCaculate (var data: InputData) {
             when(constrain.id) {
                 "exactly-staff-working-time" -> {
                     var scores = 0.0
-                    var input : MutableMap<String, Double> = mutableMapOf()
+                    val input : MutableMap<String, Double> = mutableMapOf()
                     for (week in 1..  data.schedulePeriod) {
                         if (constrain.staffGroup.contains("all_staffs")){
                             for (staff in data.staffs){
-                                var staffWokringTime : Double = 0.0
+                                var staffWorkingTime = 0.0
                                 for (day in 1 .. 7){
-                                    staffWokringTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
+                                    staffWorkingTime += data.shifts.find { it.id == schedule[staff.id]?.get(day + 7*(week - 1))}?.duration!!
                                 }
-                                input[staff.id] = staffWokringTime
+                                input[staff.id] = staffWorkingTime
                             }
                             scores += constrain.caculateScore(input)
                         }
                         else {
                             for (staff in constrain.staffGroup) {
-                                var staffWokringTime: Double = 0.0
+                                var staffWorkingTime = 0.0
                                 for (day in 1..7) {
-                                    staffWokringTime += data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1)) }?.duration!!
+                                    staffWorkingTime += data.shifts.find { it.id == schedule[staff]?.get(day + 7 * (week - 1)) }?.duration!!
                                 }
-                                input[staff] = staffWokringTime
+                                input[staff] = staffWorkingTime
                             }
                             scores += constrain.caculateScore(input)
                         }
@@ -43,20 +43,20 @@ class CommonCaculate (var data: InputData) {
 
                 "archive-0.5-day" -> {
                     var scores = 0.0
-                    var input : MutableMap<String, Double> = mutableMapOf()
+                    val input : MutableMap<String, Double> = mutableMapOf()
                     for (week in 1..  data.schedulePeriod) {
 
                         for (staff in constrain.staffGroup) {
-                            var staffWorkingTime : Double = 0.0
+                            var staffWorkingTime = 0.0
                             for (day in 1 .. 7){
-                                var temp = data.shifts.find { it.id == schedule[staff]?.get(day + 7*(week - 1))}?.duration!!
+                                val temp = data.shifts.find { it.id == schedule[staff]?.get(day + 7*(week - 1))}?.duration!!
                                 if (temp != 4 && temp != 0){
                                     staffWorkingTime += 1
                                 }
                                 else if (temp == 0){
                                     staffWorkingTime += 0
                                 }
-                                else if (temp == 4){
+                                else {
                                     staffWorkingTime += 0.5
                                 }
                             }
@@ -69,20 +69,20 @@ class CommonCaculate (var data: InputData) {
 
                 "un-archive-0.5-day" -> {
                     var scores = 0.0
-                    var input : MutableMap<String, Double> = mutableMapOf()
+                    val input : MutableMap<String, Double> = mutableMapOf()
                     for (week in 1..  data.schedulePeriod) {
 
                         for (staff in constrain.staffGroup) {
-                            var staffWorkingTime : Double = 0.0
+                            var staffWorkingTime = 0.0
                             for (day in 1 .. 7){
-                                var temp = data.shifts.find { it.id == schedule[staff]?.get(day + 7*(week - 1))}?.duration!!
+                                val temp = data.shifts.find { it.id == schedule[staff]?.get(day + 7*(week - 1))}?.duration!!
                                 if (temp != 4 && temp != 0){
                                     staffWorkingTime += 1
                                 }
                                 else if (temp == 0){
                                     staffWorkingTime += 0
                                 }
-                                else if (temp == 4){
+                                else {
                                     staffWorkingTime += 0.5
                                 }
                             }
@@ -143,18 +143,16 @@ class CommonCaculate (var data: InputData) {
         schedules: MutableMap<String, MutableMap<Int, String>>,
         coverageId: Int
     ): MutableMap<Int, MutableMap<String, Int>>{
-        var horizontalMap : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
+        val horizontalMap : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
         for (week in 1 .. data.schedulePeriod){
-            var temp: MutableMap<String, Int> = mutableMapOf()
+            val temp: MutableMap<String, Int> = mutableMapOf()
             val coverage = data.horizontalCoverages.find { it.id == coverageId }
             for (staff in data.staffs){
-                temp.set(staff.id, 0)
+                temp[staff.id] = 0
                 if (coverage != null) {
                     for (day in coverage.days) {
-                        if (coverage != null) {
-                            if (schedules[staff.id]?.get(day + 7*(week-1))!! in coverage.shifts && day in coverage.days) {
-                                temp.set(staff.id, temp.get(staff.id)!! + 1)
-                            }
+                        if (schedules[staff.id]?.get(day + 7*(week-1))!! in coverage.shifts && day in coverage.days) {
+                            temp[staff.id] = temp[staff.id]!! + 1
                         }
                     }
                 }
@@ -210,7 +208,7 @@ class CommonCaculate (var data: InputData) {
         var scores = 0
         // horizontal coverage
         for (coverage in data.horizontalCoverages) {
-            var fullHorizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
+            val fullHorizontalCoverage = caculateHorizontalCoverageFullfillment(schedules, coverage.id)
             for (horizontalCoverage in fullHorizontalCoverage.values) {
                 if (coverage.type.contains("hard") && coverage.type.contains("equal to")) {
                     for (map in horizontalCoverage) {
@@ -228,25 +226,25 @@ class CommonCaculate (var data: InputData) {
     }
 
     fun patternConstrainScore(schedule: MutableMap<String, MutableMap<Int, String>>): Double{
-        var ruleViolation = RuleViolation(data)
+        val ruleViolation = RuleViolation(data)
         ruleViolation.calculateNumberPatternViolation(schedule)
-        var numberViolation = ruleViolation.patternConstrainViolations
+        val numberViolation = ruleViolation.patternConstrainViolations
         var score = 0.0
         for ((priority, item) in numberViolation){
             for((key, value) in item) {
-                score -= data.patternConstrains.find { it.id == key }!!.penalty!! * value * priority
+                score -= data.patternConstrains.find { it.id == key }!!.penalty * value * priority
             }
         }
         return score
     }
 
     fun coverageScore(schedule: MutableMap<String, MutableMap<Int, String>>):Double{
-        var score = - calculateCoverageScore(schedule)
+        val score = - calculateCoverageScore(schedule)
         return score
     }
 
     fun horizontalCoverageScore(schedule: MutableMap<String, MutableMap<Int, String>>):Double{
-        var score = - calculateHorizontalCoverageScore(schedule)
+        val score = - calculateHorizontalCoverageScore(schedule)
         return score
     }
 
